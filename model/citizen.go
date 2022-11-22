@@ -3,16 +3,16 @@ package model
 import "time"
 
 type Citizen struct {
-	CitizenID uint    `gorm:"primaryKey;autoIncrement"`
-	Address   Address `gorm:"foreignKey:AddressId"`
-	AddressId uint
-	Name      string    `gorm:"size:50;not null"`
-	Nik       string    `gorm:"size:16;not null"`
-	Dob       string    `gorm:"size:50;not null"`
-	Gender    string    `gorm:"size:15;not null"`
-	Email     string    `gorm:"size:50;not null"`
-	Password  string    `gorm:"not null"`
-	Image     string    `gorm:"size:50;"`
+	CitizenID uint      `gorm:"primaryKey;autoIncrement" json:"citizen_id"`
+	Address   Address   `gorm:"foreignKey:AddressId"`
+	AddressId uint      `json:"address_id"`
+	Name      string    `gorm:"size:50;not null" json:"name"`
+	Nik       string    `gorm:"size:16;not null" json:"nik"`
+	Dob       string    `gorm:"size:50;not null" json:"dob"`
+	Gender    string    `gorm:"size:15;not null" json:"gender"`
+	Email     string    `gorm:"size:50;not null" json:"email"`
+	Password  string    `gorm:"not null" json:"password"`
+	Image     string    `gorm:"size:50;" json:"image"`
 	CreatedAT time.Time `json:"created_at"`
 	UpdatedAT time.Time `json:"updated_at"`
 }
