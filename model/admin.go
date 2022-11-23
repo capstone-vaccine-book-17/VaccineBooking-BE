@@ -11,6 +11,6 @@ type Admin struct {
 	RoleId             uint             `json:"role_id"`
 	MedicalFacilitysId uint             `json:"medical_facilitys_id"`
 	Username           string           `gorm:"size:50;not null" json:"username"`
-	Password           string           `gorm:"size:50;not null" json:"password"`
+	Password           string           `gorm:"size:100;not null" json:"password"`
 	CreatedAT          time.Time        `json:"created_at"`
 }

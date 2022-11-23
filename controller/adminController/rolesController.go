@@ -2,30 +2,15 @@ package adminController
 
 import (
 	"capstone_vaccine/dto/adminDto"
-	"capstone_vaccine/service/adminService"
 	"capstone_vaccine/utils"
 	"net/http"
 
 	"github.com/labstack/echo"
 )
 
-type AdminController interface{}
-
-type adminController struct {
-	adminServ adminService.AdminService
-}
-
-func NewAdminController(adminService adminService.AdminService) *adminController {
-	return &adminController{
-		adminServ: adminService,
-	}
-}
-
-// TODO ADMIN CONTROLLER HERE
-
-// TODO LOGIN ADMIN
-func (u *adminController) LoginAdmin(c echo.Context) error {
-	var payloads adminDto.LoginDTO
+// TODO CREATE ROLES
+func (u *adminController) CreateRoles(c echo.Context) error {
+	var payloads adminDto.RoleDTO
 
 	if err := c.Bind(&payloads); err != nil {
 		return err
@@ -38,7 +23,7 @@ func (u *adminController) LoginAdmin(c echo.Context) error {
 		})
 	}
 
-	res, err := u.adminServ.LoginAdmin(payloads)
+	res, err := u.adminServ.CreateRoles(payloads)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, utils.Response{
@@ -48,7 +33,7 @@ func (u *adminController) LoginAdmin(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, utils.Response{
-		Message: "login success",
+		Message: "create role success",
 		Code:    http.StatusOK,
 		Data:    res,
 	})

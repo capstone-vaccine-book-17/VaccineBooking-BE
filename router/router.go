@@ -6,6 +6,9 @@ import (
 	"capstone_vaccine/repository/adminRepository"
 	"capstone_vaccine/service/adminService"
 	"capstone_vaccine/utils"
+	"os"
+
+	"github.com/labstack/echo/middleware"
 
 	"github.com/go-playground/validator"
 
@@ -27,8 +30,16 @@ func New(e *echo.Echo, db *gorm.DB) {
 	adminController := adminController.NewAdminController(adminService)
 
 	// TODO ADMIN ROUTE
+
 	v1 := e.Group("/v1")
+	v1.Use(middleware.JWT([]byte(os.Getenv("JWT_KEY"))))
+
 	// TODO AUTH ADMIN
+	e.POST("/auth/login", adminController.LoginAdmin)
 
 	// TODO ROLES
+
+	v1_roles := v1.Group("/role")
+
+	v1_roles.POST("/", adminController.CreateRoles)
 }
