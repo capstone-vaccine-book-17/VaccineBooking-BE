@@ -31,10 +31,4 @@ func New(e *echo.Echo, db *gorm.DB) {
 	// TODO AUTH ADMIN
 
 	// TODO ROLES
-
-	// ===== CONTOH PENGGUNAANNYA =======
-
-	// v1_roles := v1.Group("/role")
-
-	// v1_roles.POST("/", adminController.CreateRoles)
 }
