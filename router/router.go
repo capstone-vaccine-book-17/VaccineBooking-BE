@@ -40,6 +40,5 @@ func New(e *echo.Echo, db *gorm.DB) {
 	// TODO ROLES
 
 	v1_roles := v1.Group("/role")
-
-	v1_roles.POST("/", adminController.CreateRoles)
+	v1_roles.POST("/", adminController.CreateRoles, m.Authorization)
 }

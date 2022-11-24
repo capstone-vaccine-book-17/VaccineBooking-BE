@@ -2,7 +2,9 @@ package adminController
 
 import (
 	"capstone_vaccine/dto/adminDto"
+	"capstone_vaccine/middleware"
 	"capstone_vaccine/utils"
+	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo"
@@ -15,7 +17,7 @@ func (u *adminController) CreateRoles(c echo.Context) error {
 	if err := c.Bind(&payloads); err != nil {
 		return err
 	}
-
+	fmt.Println(middleware.ClaimData(c, "roleID"))
 	if err := c.Validate(payloads); err != nil {
 		return c.JSON(http.StatusBadRequest, utils.Response{
 			Message: err.Error(),
