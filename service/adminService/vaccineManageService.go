@@ -46,3 +46,10 @@ func (s *adminService) ViewAllVaccine() ([]adminDto.VaccineDTO, error) {
 
 	return vaccine, nil
 }
+
+func(s *adminService) UpdateVaccine(updateReq adminDto.VaccineRequest) (adminDto.VaccineDTO, error){
+	temp :=adminDto.VaccineRequest{}
+
+	
+
+}

@@ -21,6 +21,9 @@ type AdminRepository interface {
 
 	// TODO ViewAllVaccine
 	ViewAllVaccine() ([]adminDto.VaccineDTO, error)
+
+	// TODO UpdateVaccine
+	UpdateVaccine(updateReq adminDto.VaccineRequest) (adminDto.VaccineDTO, error)
 }
 
 type adminRepository struct {
