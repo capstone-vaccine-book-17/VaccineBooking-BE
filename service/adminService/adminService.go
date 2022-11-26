@@ -15,6 +15,9 @@ type AdminService interface {
 
 	// TODO ROLES
 	CreateRoles(payloads adminDto.RoleDTO) (adminDto.RoleDTO, error)
+
+	// TODO CreateVaccine
+	CreateVaccine(input adminDto.VaccineRequest) (adminDto.VaccineDTO, error)
 }
 
 type adminService struct {
