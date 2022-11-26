@@ -27,3 +27,22 @@ func (s *adminService) CreateVaccine(input adminDto.VaccineRequest) (adminDto.Va
 	}
 	return res, nil
 }
+
+func (s *adminService) ViewAllVaccine() ([]adminDto.VaccineDTO, error) {
+	var vaccine []adminDto.VaccineDTO
+
+	res, err := s.adminRepository.ViewAllVaccine()
+
+	if err != nil {
+		return nil, err
+	}
+	for _, v := range res {
+		vaccine = append(vaccine, adminDto.VaccineDTO{
+			Name:    v.Name,
+			Kuota:   v.Kuota,
+			Expired: v.Expired,
+		})
+	}
+
+	return vaccine, nil
+}

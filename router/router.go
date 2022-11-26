@@ -46,4 +46,6 @@ func New(e *echo.Echo, db *gorm.DB) {
 
 	v1_manageVaccine := v1.Group(("/vaccine"))
 	v1_manageVaccine.POST("/new", adminController.CreateVaccine)
+
+	v1_manageVaccine.GET("/view", adminController.ViewAllVaccine)
 }

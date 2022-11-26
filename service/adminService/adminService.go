@@ -18,6 +18,9 @@ type AdminService interface {
 
 	// TODO CreateVaccine
 	CreateVaccine(input adminDto.VaccineRequest) (adminDto.VaccineDTO, error)
+
+	// TODO ViewAllVaccine
+	ViewAllVaccine() ([]adminDto.VaccineDTO, error)
 }
 
 type adminService struct {

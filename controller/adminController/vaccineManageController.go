@@ -43,3 +43,20 @@ func (u *adminController) CreateVaccine(c echo.Context) error {
 		Data:    res,
 	})
 }
+
+func (u *adminController) ViewAllVaccine(c echo.Context) error {
+
+	res, err := u.adminServ.ViewAllVaccine()
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, utils.Response{
+			Message: err.Error(),
+			Code:    http.StatusBadRequest,
+		})
+	}
+
+	return c.JSON(http.StatusOK, utils.Response{
+		Message: "success",
+		Code:    http.StatusOK,
+		Data:    res,
+	})
+}

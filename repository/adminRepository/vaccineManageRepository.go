@@ -27,3 +27,13 @@ func (u *adminRepository) CreateVaccine(input adminDto.VaccineRequest) (adminDto
 
 	return temp, nil
 }
+
+func (u *adminRepository) ViewAllVaccine ()([]adminDto.VaccineDTO,error){
+	vaccine :=[]adminDto.VaccineDTO{}
+
+	if err := u.db.Model(&model.VaccineVarietie{}).Find(&vaccine).Error;err !=nil{
+		return nil,err
+	}
+
+	return vaccine,nil
+}
