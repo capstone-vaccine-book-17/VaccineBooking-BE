@@ -34,6 +34,8 @@ func New(e *echo.Echo, db *gorm.DB) {
 	v1 := e.Group("/v1")
 	v1.Use(middleware.JWT([]byte(os.Getenv("JWT_KEY"))))
 
+	v1.GET("/", adminController.GetDashboard)
+
 	// TODO AUTH ADMIN
 	e.POST("/auth/login", adminController.LoginAdmin)
 
@@ -41,4 +43,14 @@ func New(e *echo.Echo, db *gorm.DB) {
 
 	v1_roles := v1.Group("/role")
 	v1_roles.POST("/", adminController.CreateRoles, m.Authorization)
+
+	v1_session := v1.Group("/session")
+	{
+		v1_session.POST("/", adminController.CreateSession)
+		v1_session.GET("/", adminController.GetAllSession)
+		v1_session.GET("/:id", adminController.GetSessionById)
+		v1_session.PUT("/:id", adminController.UpdateSession)
+		v1_session.DELETE("/:id", adminController.DeleteSession)
+	}
+
 }
