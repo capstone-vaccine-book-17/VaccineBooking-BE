@@ -17,6 +17,19 @@ func (u *adminRepository) CountKuota(vaccineID uint) (adminDto.CountKuota, error
 	return result, nil
 }
 
+// TODO AUTOMATIC UPDATE STATUS SESSION
+func (u *adminRepository) AutoUpdateSession(dateR, timeR string) error {
+
+	if err := u.db.Model(&model.Session{}).Where("date = ? AND end_time = ? AND status='process'", dateR, timeR).Updates(&model.Session{
+		Status:    "selesai",
+		UpdatedAT: time.Now(),
+	}).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // TODO CREATE SESSION
 func (u *adminRepository) CreateSession(payloads adminDto.SessionRequest) (adminDto.SessionDTO, error) {
 
