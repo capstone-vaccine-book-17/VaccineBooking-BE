@@ -42,13 +42,12 @@ func New(e *echo.Echo, db *gorm.DB) {
 	v1_roles := v1.Group("/role")
 	v1_roles.POST("/", adminController.CreateRoles, m.Authorization)
 
-	// TODO CRUD Manage Vaccine
+	v1_manageVaccine := v1.Group("/vaccine")
+	{
+		v1_manageVaccine.POST("/create", adminController.CreateVaccine)
+		v1_manageVaccine.GET("/view", adminController.ViewAllVaccine)
+		v1_manageVaccine.PUT("/update/:id", adminController.UpdateVaccine)
+		v1_manageVaccine.DELETE("/delete/:id", adminController.DeleteVaccine)
+	}
 
-	v1_manageVaccine := v1.Group(("/vaccine"))
-	v1_manageVaccine.POST("/new", adminController.CreateVaccine)
-
-	v1_manageVaccine.GET("/view", adminController.ViewAllVaccine)
-	v1_manageVaccine.DELETE("/delete/:id", adminController.DeleteVaccine)
-	v1_manageVaccine.PUT("/update/:id", adminController.UpdateVaccine)
-	v1_manageVaccine.GET("/:id", adminController.GetVaccineById)
 }

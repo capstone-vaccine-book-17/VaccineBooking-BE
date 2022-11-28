@@ -6,9 +6,10 @@ import (
 	"time"
 )
 
-func (u *adminRepository) CreateVaccine(input adminDto.VaccineRequest) (adminDto.VaccineDTO, error) {
+// TODO CREATE Vaccine
+func (u *adminRepository) CreateVaccine(input adminDto.VaccineRequest) (adminDto.VaccineResponse, error) {
 
-	temp := adminDto.VaccineDTO{
+	temp := adminDto.VaccineResponse{
 		Name:    input.Name,
 		Kuota:   input.Kuota,
 		Expired: input.Expired,
@@ -28,6 +29,7 @@ func (u *adminRepository) CreateVaccine(input adminDto.VaccineRequest) (adminDto
 	return temp, nil
 }
 
+// TODO View All Vaccine
 func (u *adminRepository) ViewAllVaccine() ([]adminDto.VaccineDTO, error) {
 	vaccine := []adminDto.VaccineDTO{}
 
@@ -38,20 +40,10 @@ func (u *adminRepository) ViewAllVaccine() ([]adminDto.VaccineDTO, error) {
 	return vaccine, nil
 }
 
-// TODO GET Vaccine BY ID
-func (u *adminRepository) GetVaccineById(payloads adminDto.VaccineRequest) (adminDto.VaccineDTO, error) {
-	vaccine := adminDto.VaccineDTO{}
+// TODO Update Vaccine
+func (u *adminRepository) UpdateVaccine(payloads adminDto.VaccineDTO) (adminDto.VaccineDTO, error) {
 
-	if err := u.db.Model(&model.VaccineVarietie{}).Where("vaccine_id = ?", payloads.VaccineID).Find(&vaccine).Error; err != nil {
-		return vaccine, err
-	}
-
-	return vaccine, nil
-}
-
-func (u *adminRepository) UpdateVaccine(payloads adminDto.VaccineRequest) (adminDto.VaccineRequest, error) {
-
-	temp := adminDto.VaccineRequest{
+	temp := adminDto.VaccineDTO{
 		VaccineID: payloads.VaccineID,
 		Name:      payloads.Name,
 		Kuota:     payloads.Kuota,
@@ -70,48 +62,12 @@ func (u *adminRepository) UpdateVaccine(payloads adminDto.VaccineRequest) (admin
 	return temp, nil
 }
 
-// // TODO DELETE SESSION
-// func (u *adminRepository) DeleteSession(payloads adminDto.SessionWithStatusDTO) error {
-// 	if err := u.db.Where("session_id", payloads.SessionId).Delete(&model.Session{}).Error; err != nil {
-// 		return err
-// 	}
+// TODO DELETE Vaccine
+func (u adminRepository) DeleteVaccine(data adminDto.VaccineDTO) error {
 
-// 	return nil
-// }
-
-// func (u *adminRepository) UpdateVaccine(updateReq adminDto.VaccineRequest) (adminDto.VaccineDTO, error) {
-// 	temp := adminDto.VaccineDTO{
-// 		Name:    updateReq.Name,
-// 		Kuota:   updateReq.Kuota,
-// 		Expired: updateReq.Expired,
-// 	}
-
-// 	if err := u.db.Model(&model.VaccineVarietie{}).Where("vaccine_id = ?", updateReq.VaccineID).Updates(&model.VaccineVarietie{
-// 		Name:      updateReq.Name,
-// 		Kuota:     updateReq.Kuota,
-// 		Expired:   updateReq.Expired,
-// 		UpdatedAT: time.Now(),
-// 	}).Error; err != nil {
-// 		return temp, err
-// 	}
-
-// 	return temp, nil
-
-// }
-
-// TODO DELETE KANDIDAT
-func (u adminRepository) DeleteVaccine(data adminDto.VaccineRequest) ([]model.VaccineVarietie, error) {
-	vaccine := []model.VaccineVarietie{}
-
-	qry := u.db.Where("vaccine_id = ?", data.VaccineID).Delete(&vaccine)
-
-	if qry.Error != nil {
-		return nil, qry.Error
+	if err := u.db.Where("vaccine_id = ?", data.VaccineID).Delete(&model.VaccineVarietie{}).Error; err != nil {
+		return err
 	}
 
-	if err := u.db.Model(&model.VaccineVarietie{}).Find(&vaccine).Error; err != nil {
-		return nil, err
-	}
-
-	return vaccine, nil
+	return nil
 }

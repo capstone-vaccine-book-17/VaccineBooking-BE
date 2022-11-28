@@ -14,3 +14,9 @@ type VaccineRequest struct {
 	Kuota              int    `json:"kuota" validate:"required"`
 	Expired            string `json:"expired" validate:"required"`
 }
+
+type VaccineResponse struct {
+	Name    string `json:"name" validate:"required"`
+	Kuota   int    `json:"kuota" validate:"required"`
+	Expired string `json:"expired" validate:"required"`
+}
