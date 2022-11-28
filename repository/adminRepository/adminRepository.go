@@ -22,8 +22,14 @@ type AdminRepository interface {
 	// TODO ViewAllVaccine
 	ViewAllVaccine() ([]adminDto.VaccineDTO, error)
 
+	// TODO GET SESSION BY ID
+	GetVaccineById(payloads adminDto.VaccineRequest) (adminDto.VaccineDTO, error)
+
 	// TODO UpdateVaccine
-	UpdateVaccine(updateReq adminDto.VaccineRequest) (adminDto.VaccineDTO, error)
+	UpdateVaccine(payloads adminDto.VaccineRequest) (adminDto.VaccineRequest, error)
+
+	// TODO DeleteVaccine
+	DeleteVaccine(data adminDto.VaccineRequest) ([]model.VaccineVarietie, error)
 }
 
 type adminRepository struct {

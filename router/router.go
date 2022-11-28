@@ -48,4 +48,7 @@ func New(e *echo.Echo, db *gorm.DB) {
 	v1_manageVaccine.POST("/new", adminController.CreateVaccine)
 
 	v1_manageVaccine.GET("/view", adminController.ViewAllVaccine)
+	v1_manageVaccine.DELETE("/delete/:id", adminController.DeleteVaccine)
+	v1_manageVaccine.PUT("/update/:id", adminController.UpdateVaccine)
+	v1_manageVaccine.GET("/:id", adminController.GetVaccineById)
 }

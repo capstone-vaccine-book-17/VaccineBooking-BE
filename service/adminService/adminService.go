@@ -3,6 +3,7 @@ package adminService
 import (
 	"capstone_vaccine/dto/adminDto"
 	"capstone_vaccine/middleware"
+	"capstone_vaccine/model"
 	"capstone_vaccine/repository/adminRepository"
 	"errors"
 
@@ -22,8 +23,14 @@ type AdminService interface {
 	// TODO ViewAllVaccine
 	ViewAllVaccine() ([]adminDto.VaccineDTO, error)
 
+	// TODO GET SESSION BY ID
+	GetVaccineById(payloads adminDto.VaccineRequest) (adminDto.VaccineDTO, error)
+
 	// TODO UpdateVaccine
-	UpdateVaccine(updateReq adminDto.VaccineRequest) (adminDto.VaccineDTO, error)
+	UpdateVaccine(payloads adminDto.VaccineRequest) (adminDto.VaccineRequest, error)
+
+	// TODO DeleteVaccine
+	DeleteVaccine(data adminDto.VaccineRequest) ([]model.VaccineVarietie, error)
 }
 
 type adminService struct {
