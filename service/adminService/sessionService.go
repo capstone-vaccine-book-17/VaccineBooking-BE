@@ -53,9 +53,9 @@ func (s *adminService) GetAllSession() ([]adminDto.SessionWithStatusDTO, error) 
 	// loop data from session and check if date and time same with convDate,convTime or not
 	for i := range res {
 
-		if res[i].Date == convDate {
-			if res[i].EndTime == convTime {
-				err := s.adminRepository.AutoUpdateSession(convDate, convTime)
+		if res[i].Date <= convDate {
+			if res[i].EndTime <= convTime {
+				err := s.adminRepository.AutoUpdateSession(res[i].Date, res[i].EndTime)
 				if err != nil {
 					return res, err
 				}
