@@ -53,4 +53,9 @@ func New(e *echo.Echo, db *gorm.DB) {
 		v1_session.DELETE("/:id", adminController.DeleteSession)
 	}
 
+	v1_booking := v1.Group("/booking")
+	{
+		v1_booking.POST("/", adminController.CreateBooking)
+	}
+
 }

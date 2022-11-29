@@ -26,6 +26,9 @@ type AdminService interface {
 	GetSessionById(payloads adminDto.SessionWithStatusDTO) (adminDto.SessionWithStatusDTO, error)
 	UpdateSession(payloads adminDto.SessionRequestUpdate) (adminDto.SessionRequestUpdate, error)
 	DeleteSession(payloads adminDto.SessionWithStatusDTO) error
+
+	// TODO BOOKING
+	CreateBooking(payloads adminDto.BookingDto) (adminDto.BookingDto, error)
 }
 
 type adminService struct {

@@ -30,6 +30,12 @@ type AdminRepository interface {
 	GetSessionById(payloads adminDto.SessionWithStatusDTO) (adminDto.SessionWithStatusDTO, error)
 	UpdateSession(payloads adminDto.SessionRequestUpdate) (adminDto.SessionRequestUpdate, error)
 	DeleteSession(payloads adminDto.SessionWithStatusDTO) error
+
+	// TODO BOOKING
+	CreateCitizenBook(nik, nama, address string) (model.Citizen, error)
+	CreateBooking(payloads adminDto.BookingDto) (adminDto.BookingDto, error)
+	GetMaxQueue(session_id uint) (adminDto.MaxQueue, error)
+	UpdateSessionBooking(session_id uint, kuota string) error
 }
 
 type adminRepository struct {
