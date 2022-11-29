@@ -51,6 +51,7 @@ func New(e *echo.Echo, db *gorm.DB) {
 		v1_session.GET("/:id", adminController.GetSessionById)
 		v1_session.PUT("/:id", adminController.UpdateSession)
 		v1_session.DELETE("/:id", adminController.DeleteSession)
+	}
 
 	v1_manageVaccine := v1.Group("/vaccine")
 	{
