@@ -30,6 +30,18 @@ type AdminRepository interface {
 	GetSessionById(payloads adminDto.SessionWithStatusDTO) (adminDto.SessionWithStatusDTO, error)
 	UpdateSession(payloads adminDto.SessionRequestUpdate) (adminDto.SessionRequestUpdate, error)
 	DeleteSession(payloads adminDto.SessionWithStatusDTO) error
+
+	// TODO CreateVaccine
+	CreateVaccine(input adminDto.VaccineRequest) (adminDto.VaccineResponse, error)
+
+	// TODO ViewAllVaccine
+	ViewAllVaccine() ([]adminDto.VaccineDTO, error)
+
+	// TODO UpdateVaccine
+	UpdateVaccine(payloads adminDto.VaccineDTO) (adminDto.VaccineDTO, error)
+
+	// TODO DeleteVaccine
+	DeleteVaccine(data adminDto.VaccineDTO) error
 }
 
 type adminRepository struct {
