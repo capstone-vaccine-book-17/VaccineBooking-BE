@@ -61,4 +61,9 @@ func New(e *echo.Echo, db *gorm.DB) {
 		v1_manageVaccine.DELETE("/delete/:id", adminController.DeleteVaccine)
 	}
 
+	v1_profile := v1.Group("/profile")
+	{
+		v1_profile.GET("/", adminController.GetProfile)
+	}
+
 }
