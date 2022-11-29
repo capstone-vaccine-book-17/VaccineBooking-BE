@@ -26,7 +26,7 @@ type AdminService interface {
 	GetSessionById(payloads adminDto.SessionWithStatusDTO) (adminDto.SessionWithStatusDTO, error)
 	UpdateSession(payloads adminDto.SessionRequestUpdate) (adminDto.SessionRequestUpdate, error)
 	DeleteSession(payloads adminDto.SessionWithStatusDTO) error
-  
+
 	// TODO CreateVaccine
 	CreateVaccine(input adminDto.VaccineRequest) (adminDto.VaccineResponse, error)
 
@@ -38,6 +38,13 @@ type AdminService interface {
 
 	// TODO DeleteVaccine
 	DeleteVaccine(data adminDto.VaccineDTO) error
+
+	// TODO BOOKING
+	CreateBooking(payloads adminDto.BookingDto) (adminDto.BookingDto, error)
+	UpdateBooking(payloads adminDto.UpdateBooking) (adminDto.UpdateBooking, error)
+	GetAllBooking() ([]adminDto.BookingAllDto, error)
+	GetBookingById(payloads adminDto.BookingAllDto) (adminDto.BookingAllDto, error)
+	DeleteBooking(payloads adminDto.BookingAllDto) error
 }
 
 type adminService struct {
