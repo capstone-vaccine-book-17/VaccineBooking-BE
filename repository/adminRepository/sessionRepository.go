@@ -3,6 +3,7 @@ package adminRepository
 import (
 	"capstone_vaccine/dto/adminDto"
 	"capstone_vaccine/model"
+	"strconv"
 	"time"
 )
 
@@ -42,13 +43,13 @@ func (u *adminRepository) CreateSession(payloads adminDto.SessionRequest) (admin
 		EndTime:   payloads.EndTime,
 		Date:      payloads.Date,
 	}
-
+	convKuota := strconv.Itoa(payloads.Kuota)
 	if err := u.db.Create(&model.Session{
 		Name:               payloads.Name,
 		MedicalFacilitysId: payloads.MedicalFacilitysId,
 		VaccineId:          payloads.VaccineId,
 		StartTime:          payloads.StartTime,
-		Kuota:              payloads.Kuota,
+		Kuota:              convKuota,
 		Dosis:              payloads.Dosis,
 		EndTime:            payloads.EndTime,
 		Date:               payloads.Date,
@@ -96,12 +97,12 @@ func (u *adminRepository) UpdateSession(payloads adminDto.SessionRequestUpdate) 
 		Dosis:     payloads.Dosis,
 		EndTime:   payloads.EndTime,
 	}
-
+	convKuota := strconv.Itoa(payloads.Kuota)
 	if err := u.db.Model(&model.Session{}).Where("session_id = ?", payloads.SessionId).Updates(&model.Session{
 		Name:      temp.Name,
 		VaccineId: payloads.VaccineId,
 		StartTime: payloads.StartTime,
-		Kuota:     payloads.Kuota,
+		Kuota:     convKuota,
 		Dosis:     payloads.Dosis,
 		EndTime:   payloads.EndTime,
 		UpdatedAT: time.Now(),
