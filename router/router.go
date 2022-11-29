@@ -55,7 +55,11 @@ func New(e *echo.Echo, db *gorm.DB) {
 
 	v1_booking := v1.Group("/booking")
 	{
+		v1_booking.GET("/", adminController.GetAllBooking)
 		v1_booking.POST("/", adminController.CreateBooking)
+		v1_booking.PUT("/:id", adminController.UpdateBooking)
+		v1_booking.GET("/:id", adminController.GetBookingById)
+		v1_booking.DELETE("/:id", adminController.DeleteBooking)
 	}
 
 }

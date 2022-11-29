@@ -68,3 +68,51 @@ func (s *adminService) CreateBooking(payloads adminDto.BookingDto) (adminDto.Boo
 
 	return res, nil
 }
+
+// TODO UPDATE BOOKING
+func (s *adminService) UpdateBooking(payloads adminDto.UpdateBooking) (adminDto.UpdateBooking, error) {
+	res, err := s.adminRepository.UpdateBooking(payloads)
+
+	if err != nil {
+		return res, err
+	}
+
+	return res, nil
+}
+
+// TODO GET ALL BOOKING
+func (s *adminService) GetAllBooking() ([]adminDto.BookingAllDto, error) {
+	res, err := s.adminRepository.GetAllBooking()
+
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+// TODO GET BOOKING BY ID
+func (s *adminService) GetBookingById(payloads adminDto.BookingAllDto) (adminDto.BookingAllDto, error) {
+	res, err := s.adminRepository.GetBookingById(payloads)
+
+	if res.BookingId < 1 {
+		return res, errors.New("record not found")
+	}
+
+	if err != nil {
+		return res, err
+	}
+
+	return res, nil
+}
+
+// TODO DELETE BOOKING
+func (s *adminService) DeleteBooking(payloads adminDto.BookingAllDto) error {
+	err := s.adminRepository.DeleteBooking(payloads)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

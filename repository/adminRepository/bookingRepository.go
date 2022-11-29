@@ -73,3 +73,52 @@ func (u *adminRepository) UpdateSessionBooking(session_id uint, kuota string) er
 
 	return nil
 }
+
+// TODO UPDATE BOOKING
+func (u *adminRepository) UpdateBooking(payloads adminDto.UpdateBooking) (adminDto.UpdateBooking, error) {
+
+	if err := u.db.Model(&model.Booking{}).Where("booking_id = ?", payloads.BookingId).Updates(&model.Booking{
+		Status:    payloads.Status,
+		UpdatedAT: time.Now(),
+	}).Error; err != nil {
+		return payloads, err
+	}
+
+	return payloads, nil
+}
+
+// TODO GET ALL BOOKING
+func (u *adminRepository) GetAllBooking() ([]adminDto.BookingAllDto, error) {
+
+	booking := []adminDto.BookingAllDto{}
+
+	if err := u.db.Model(&model.Booking{}).Select("citizens.name as citizen_name,citizens.nik,sessions.dosis,sessions.date,sessions.start_time,sessions.end_time,bookings.queue, bookings.booking_id,bookings.status").
+		Joins("join citizens on citizens.citizen_id = bookings.citizen_id").Joins("join sessions on sessions.session_id = bookings.session_id").Find(&booking).Error; err != nil {
+		return nil, err
+	}
+
+	return booking, nil
+}
+
+// TODO GET BOOKING BY ID
+func (u *adminRepository) GetBookingById(payloads adminDto.BookingAllDto) (adminDto.BookingAllDto, error) {
+
+	var booking adminDto.BookingAllDto
+
+	if err := u.db.Model(&model.Booking{}).Select("citizens.name as citizen_name,citizens.nik,sessions.dosis,sessions.date,sessions.start_time,sessions.end_time,bookings.queue, bookings.booking_id,bookings.status").
+		Where("bookings.booking_id = ?", payloads.BookingId).
+		Joins("join citizens on citizens.citizen_id = bookings.citizen_id").Joins("join sessions on sessions.session_id = bookings.session_id").Find(&booking).Error; err != nil {
+		return booking, err
+	}
+
+	return booking, nil
+}
+
+// TODO DELETE BOOKING
+func (u *adminRepository) DeleteBooking(payloads adminDto.BookingAllDto) error {
+	if err := u.db.Where("booking_id", payloads.BookingId).Delete(&model.Booking{}).Error; err != nil {
+		return err
+	}
+
+	return nil
+}

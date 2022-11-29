@@ -29,6 +29,10 @@ type AdminService interface {
 
 	// TODO BOOKING
 	CreateBooking(payloads adminDto.BookingDto) (adminDto.BookingDto, error)
+	UpdateBooking(payloads adminDto.UpdateBooking) (adminDto.UpdateBooking, error)
+	GetAllBooking() ([]adminDto.BookingAllDto, error)
+	GetBookingById(payloads adminDto.BookingAllDto) (adminDto.BookingAllDto, error)
+	DeleteBooking(payloads adminDto.BookingAllDto) error
 }
 
 type adminService struct {
