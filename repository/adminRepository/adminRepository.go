@@ -4,7 +4,9 @@ import (
 	"capstone_vaccine/dto/adminDto"
 	"capstone_vaccine/model"
 	"errors"
+	"time"
 
+	"github.com/leekchan/accounting"
 	"gorm.io/gorm"
 )
 
@@ -15,6 +17,19 @@ type AdminRepository interface {
 
 	// TODO ROLES
 	CreateRoles(payloads adminDto.RoleDTO) (adminDto.RoleDTO, error)
+
+	// TODO DASHBOARD
+
+	GetDashboard() (adminDto.CountDashboard, error)
+
+	// TODO SESSION
+	CountKuota(vaccineID uint) (adminDto.CountKuota, error)
+	AutoUpdateSession(dateR, timeR string) error
+	CreateSession(payloads adminDto.SessionRequest) (adminDto.SessionDTO, error)
+	GetAllSession() ([]adminDto.SessionWithStatusDTO, error)
+	GetSessionById(payloads adminDto.SessionWithStatusDTO) (adminDto.SessionWithStatusDTO, error)
+	UpdateSession(payloads adminDto.SessionRequestUpdate) (adminDto.SessionRequestUpdate, error)
+	DeleteSession(payloads adminDto.SessionWithStatusDTO) error
 
 	// TODO CreateVaccine
 	CreateVaccine(input adminDto.VaccineRequest) (adminDto.VaccineResponse, error)
@@ -53,4 +68,42 @@ func (u *adminRepository) LoginAdmin(payloads adminDto.LoginDTO) (model.Admin, e
 	}
 
 	return admin, nil
+}
+
+// TODO DASHBOARD ADMIN
+func (u *adminRepository) GetDashboard() (adminDto.CountDashboard, error) {
+	dto := adminDto.CountDashboard{}
+	var (
+		vaccineAvail      int
+		bookingToday      int64
+		bookingRegistered int64
+		convDate          string
+	)
+	today := time.Now()
+	date := today.Format("2006-01-02")
+	convDate = string(date)
+
+	// QUERY GET VACCINE AVAILABLE
+	if err := u.db.Model(&model.VaccineVarietie{}).Select("sum(kuota) as vaccine_available").Where("expired <= ?", convDate).Find(&vaccineAvail).Error; err != nil {
+		return dto, err
+	}
+
+	// QUERY GET BOOKING TODAY
+	if err := u.db.Model(&model.Booking{}).Where("created_at like ?", "%"+convDate+"%").Count(&bookingToday).Error; err != nil {
+		return dto, err
+	}
+
+	// QUERY GET ALL BOOKING
+	if err := u.db.Model(&model.Booking{}).Count(&bookingRegistered).Error; err != nil {
+		return dto, err
+	}
+
+	// USING FORMAT MONEY FROM leekchan/accounting
+	ac := accounting.Accounting{Precision: 0}
+
+	dto.VaccineAvailable = ac.FormatMoney(vaccineAvail)
+	dto.BookingToday = ac.FormatMoney(bookingToday)
+	dto.BookingsRegistered = ac.FormatMoney(bookingRegistered)
+
+	return dto, nil
 }

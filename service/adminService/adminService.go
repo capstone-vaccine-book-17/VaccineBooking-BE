@@ -16,6 +16,17 @@ type AdminService interface {
 	// TODO ROLES
 	CreateRoles(payloads adminDto.RoleDTO) (adminDto.RoleDTO, error)
 
+	// TODO DASHBOARD
+
+	GetDashboard() (adminDto.CountDashboard, error)
+
+	// TODO SESSION
+	CreateSession(payloads adminDto.SessionRequest) (adminDto.SessionDTO, error)
+	GetAllSession() ([]adminDto.SessionWithStatusDTO, error)
+	GetSessionById(payloads adminDto.SessionWithStatusDTO) (adminDto.SessionWithStatusDTO, error)
+	UpdateSession(payloads adminDto.SessionRequestUpdate) (adminDto.SessionRequestUpdate, error)
+	DeleteSession(payloads adminDto.SessionWithStatusDTO) error
+  
 	// TODO CreateVaccine
 	CreateVaccine(input adminDto.VaccineRequest) (adminDto.VaccineResponse, error)
 
@@ -67,4 +78,16 @@ func (s *adminService) LoginAdmin(payloads adminDto.LoginDTO) (adminDto.LoginJWT
 	}
 
 	return temp, nil
+}
+
+// TODO DASHBOARD
+// TODO GET DASHBOARD
+func (s *adminService) GetDashboard() (adminDto.CountDashboard, error) {
+	res, err := s.adminRepository.GetDashboard()
+
+	if err != nil {
+		return res, err
+	}
+
+	return res, nil
 }
