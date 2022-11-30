@@ -12,11 +12,14 @@ import (
 
 type AdminRepository interface {
 	// TODO AUTH
-
+	RegisterAdmin(payloads adminDto.RegisterAdminDto) (adminDto.RegisterAdminDto, error)
 	LoginAdmin(payloads adminDto.LoginDTO) (model.Admin, error)
 
 	// TODO ROLES
 	CreateRoles(payloads adminDto.RoleDTO) (adminDto.RoleDTO, error)
+
+	// TODO MEDICAL FACILITYS
+	CreateMedical(payloads adminDto.MedicalDto) (adminDto.MedicalDto, error)
 
 	// TODO DASHBOARD
 
@@ -66,6 +69,22 @@ func (u *adminRepository) LoginAdmin(payloads adminDto.LoginDTO) (model.Admin, e
 	}
 
 	return admin, nil
+}
+
+// TODO REGISTER ADMIN
+func (u *adminRepository) RegisterAdmin(payloads adminDto.RegisterAdminDto) (adminDto.RegisterAdminDto, error) {
+
+	if err := u.db.Create(&model.Admin{
+		RoleId:             payloads.RoleId,
+		MedicalFacilitysId: payloads.MedicalId,
+		Username:           payloads.Username,
+		Password:           payloads.Password,
+		CreatedAT:          time.Now(),
+	}).Error; err != nil {
+		return payloads, err
+	}
+
+	return payloads, nil
 }
 
 // TODO DASHBOARD ADMIN
