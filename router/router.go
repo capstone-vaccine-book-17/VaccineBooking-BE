@@ -39,6 +39,15 @@ func New(e *echo.Echo, db *gorm.DB) {
 	// TODO AUTH ADMIN
 	e.POST("/auth/login", adminController.LoginAdmin)
 
+	// TODO REGISTER
+	v1.POST("/register", adminController.RegisterAdmin, m.Authorization)
+
+	// TODO MEDICAL FACILITYS
+	v1_medical := v1.Group("/medical")
+	{
+		v1_medical.POST("/", adminController.CreateMedical, m.Authorization)
+	}
+
 	// TODO ROLES
 
 	v1_roles := v1.Group("/role")

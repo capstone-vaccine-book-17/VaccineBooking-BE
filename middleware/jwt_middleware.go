@@ -37,7 +37,7 @@ func Authorization(next echo.HandlerFunc) echo.HandlerFunc {
 		roleID, _ := ClaimData(c, "roleID")
 
 		conv := fmt.Sprintf("%v", roleID)
-		if conv != "2" {
+		if conv != "1" {
 			return c.JSON(http.StatusForbidden, utils.Response{
 				Message: "you dont have permission to access",
 				Code:    http.StatusForbidden,
