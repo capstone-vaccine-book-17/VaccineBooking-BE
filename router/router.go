@@ -64,6 +64,7 @@ func New(e *echo.Echo, db *gorm.DB) {
 	v1_profile := v1.Group("/profile")
 	{
 		v1_profile.GET("/", adminController.GetProfile)
+		v1_profile.PUT("/update", adminController.UpdateProfile)
 	}
 
 }

@@ -40,7 +40,8 @@ type AdminService interface {
 	DeleteVaccine(data adminDto.VaccineDTO) error
 
 	// TODO Profile
-	GetProfile()([]adminDto.ProfilDTO,error)
+	GetProfile(payloads adminDto.ProfileRequest)([]adminDto.ProfilDTO,error)
+	UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.ProfileRequest,error)
 }
 
 type adminService struct {

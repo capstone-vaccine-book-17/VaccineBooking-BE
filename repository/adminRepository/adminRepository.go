@@ -44,7 +44,8 @@ type AdminRepository interface {
 	DeleteVaccine(data adminDto.VaccineDTO) error
 
 	// TODO Profile
-	GetProfile() ([]adminDto.ProfilDTO, error)
+	GetProfile(payload adminDto.ProfileRequest) ([]adminDto.ProfilDTO, error)
+	UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.ProfileRequest,error)
 }
 
 type adminRepository struct {
