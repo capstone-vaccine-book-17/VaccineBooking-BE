@@ -6,6 +6,7 @@ import (
 	"capstone_vaccine/utils"
 	"context"
 	"net/http"
+	"os"
 
 	"github.com/cloudinary/cloudinary-go"
 	"github.com/cloudinary/cloudinary-go/api/uploader"
@@ -94,7 +95,7 @@ func (u *adminController) UpdateProfile(c echo.Context) error {
 }
 
 func (u *adminController) UpdateImage(c echo.Context) error {
-	cld, _ := cloudinary.NewFromURL("cloudinary://593273685751979:K3Apu1EGSQfIoi9Tzn3zzdGdd6A@dst6d6bj6")
+	cld, _ := cloudinary.NewFromURL(os.Getenv("CLOUDINARY_URL"))
 	medicalID, _ := middleware.ClaimData(c, "medicalID")
 	conv_medicalID := medicalID.(float64)
 	conv := uint(conv_medicalID)
