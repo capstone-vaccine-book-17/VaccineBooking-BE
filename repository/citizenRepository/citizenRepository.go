@@ -12,6 +12,9 @@ type CitizenRepository interface {
 	// TODO AUTH
 	LoginCitizen(payloads citizenDto.LoginDto) (model.Citizen, error)
 	RegisterCitizen(payloads citizenDto.RegisterDto) (citizenDto.RegisterDto, error)
+
+	//TODO Profile
+	GetProfile(payloads citizenDto.ProfileReq) (citizenDto.ProfileDTO, error)
 }
 
 type citizenRepository struct {

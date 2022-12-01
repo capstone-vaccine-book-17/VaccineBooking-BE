@@ -40,6 +40,9 @@ func New(e *echo.Echo, db *gorm.DB) {
 	v1 := e.Group("/v1")
 	v1.Use(middleware.JWT([]byte(os.Getenv("JWT_KEY"))))
 
+	v2 := e.Group("/v2")
+	v2.Use(middleware.JWT([]byte(os.Getenv("JWT_KEY"))))
+
 	v1.GET("/", adminController.GetDashboard)
 
 	// TODO AUTH ADMIN
@@ -90,4 +93,11 @@ func New(e *echo.Echo, db *gorm.DB) {
 	// Citizen Auth
 	e.POST("/signup", citizenController.RegisterCitizen)
 	e.POST("/signin", citizenController.LoginCitizen)
+
+	//profile
+	v2_profile := v2.Group("/profile")
+	{
+		v2_profile.GET("/", citizenController.GetProfile)
+	}
+
 }

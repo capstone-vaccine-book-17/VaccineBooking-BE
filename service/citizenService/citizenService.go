@@ -12,6 +12,9 @@ type CitizenService interface {
 	// TODO AUTH
 	LoginCitizen(payloads citizenDto.LoginDto) (citizenDto.LoginJWT, error)
 	RegisterCitizen(payloads citizenDto.RegisterDto) (citizenDto.RegisterDto, error)
+
+	//TODO Profile
+	GetProfile(payloads citizenDto.ProfileReq) (citizenDto.ProfileDTO, error)
 }
 
 type citizenService struct {
