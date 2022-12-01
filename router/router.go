@@ -2,9 +2,12 @@ package router
 
 import (
 	"capstone_vaccine/controller/adminController"
+	"capstone_vaccine/controller/citizenController"
 	m "capstone_vaccine/middleware"
 	"capstone_vaccine/repository/adminRepository"
+	"capstone_vaccine/repository/citizenRepository"
 	"capstone_vaccine/service/adminService"
+	"capstone_vaccine/service/citizenService"
 	"capstone_vaccine/utils"
 	"os"
 
@@ -22,12 +25,15 @@ func New(e *echo.Echo, db *gorm.DB) {
 
 	// TODO REPOSITORY
 	adminRepository := adminRepository.NewAdminRepository(db)
+	citizenRepository := citizenRepository.NewCitizenRepository(db)
 
 	// TODO SERVICE
 	adminService := adminService.NewAdminService(adminRepository)
+	citizenService := citizenService.NewCitizenService(citizenRepository)
 
 	// TODO CONTROLLER
 	adminController := adminController.NewAdminController(adminService)
+	citizenController := citizenController.NewCitizenController(citizenService)
 
 	// TODO ADMIN ROUTE
 
@@ -38,6 +44,15 @@ func New(e *echo.Echo, db *gorm.DB) {
 
 	// TODO AUTH ADMIN
 	e.POST("/auth/login", adminController.LoginAdmin)
+
+	// TODO REGISTER
+	v1.POST("/register", adminController.RegisterAdmin, m.Authorization)
+
+	// TODO MEDICAL FACILITYS
+	v1_medical := v1.Group("/medical")
+	{
+		v1_medical.POST("/", adminController.CreateMedical, m.Authorization)
+	}
 
 	// TODO ROLES
 
@@ -68,4 +83,18 @@ func New(e *echo.Echo, db *gorm.DB) {
 		v1_profile.PUT("/image", adminController.UpdateImage)
 	}
 
+	v1_booking := v1.Group("/booking")
+	{
+		v1_booking.GET("/", adminController.GetAllBooking)
+		v1_booking.POST("/", adminController.CreateBooking)
+		v1_booking.PUT("/:id", adminController.UpdateBooking)
+		v1_booking.GET("/:id", adminController.GetBookingById)
+		v1_booking.DELETE("/:id", adminController.DeleteBooking)
+	}
+
+	// TODO CITIZEN ROUTE
+
+	// Citizen Auth
+	e.POST("/signup", citizenController.RegisterCitizen)
+	e.POST("/signin", citizenController.LoginCitizen)
 }

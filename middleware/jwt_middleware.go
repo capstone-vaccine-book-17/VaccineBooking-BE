@@ -23,6 +23,16 @@ func CreateToken(adminID uint, roleID uint, medicalID uint, username string) (st
 	return token.SignedString([]byte(os.Getenv("JWT_KEY")))
 }
 
+func CreateTokenCitizen(citizenID uint, nik string) (string, error) {
+	claims := jwt.MapClaims{}
+	claims["citizenID"] = citizenID
+	claims["nik"] = nik
+	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return token.SignedString([]byte(os.Getenv("JWT_KEY")))
+}
+
 func ClaimData(c echo.Context, field string) (interface{}, error) {
 
 	user := c.Get("user").(*jwt.Token)
@@ -37,7 +47,7 @@ func Authorization(next echo.HandlerFunc) echo.HandlerFunc {
 		roleID, _ := ClaimData(c, "roleID")
 
 		conv := fmt.Sprintf("%v", roleID)
-		if conv != "2" {
+		if conv != "1" {
 			return c.JSON(http.StatusForbidden, utils.Response{
 				Message: "you dont have permission to access",
 				Code:    http.StatusForbidden,

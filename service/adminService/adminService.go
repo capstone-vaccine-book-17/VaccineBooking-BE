@@ -4,6 +4,7 @@ import (
 	"capstone_vaccine/dto/adminDto"
 	"capstone_vaccine/middleware"
 	"capstone_vaccine/repository/adminRepository"
+	"capstone_vaccine/utils"
 	"errors"
 
 	"golang.org/x/crypto/bcrypt"
@@ -11,10 +12,14 @@ import (
 
 type AdminService interface {
 	// TODO AUTH
+	RegisterAdmin(payloads adminDto.RegisterAdminDto) (adminDto.RegisterAdminDto, error)
 	LoginAdmin(payloads adminDto.LoginDTO) (adminDto.LoginJWT, error)
 
 	// TODO ROLES
 	CreateRoles(payloads adminDto.RoleDTO) (adminDto.RoleDTO, error)
+
+	// TODO MEDICAL FACILITYS
+	CreateMedical(payloads adminDto.MedicalDto) (adminDto.MedicalDto, error)
 
 	// TODO DASHBOARD
 
@@ -26,7 +31,7 @@ type AdminService interface {
 	GetSessionById(payloads adminDto.SessionWithStatusDTO) (adminDto.SessionWithStatusDTO, error)
 	UpdateSession(payloads adminDto.SessionRequestUpdate) (adminDto.SessionRequestUpdate, error)
 	DeleteSession(payloads adminDto.SessionWithStatusDTO) error
-  
+
 	// TODO CreateVaccine
 	CreateVaccine(input adminDto.VaccineRequest) (adminDto.VaccineResponse, error)
 
@@ -43,6 +48,12 @@ type AdminService interface {
 	GetProfile(payloads adminDto.ProfileRequest)([]adminDto.ProfilDTO,error)
 	UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.ProfileRequest,error)
 	UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO,error)
+	// TODO BOOKING
+	CreateBooking(payloads adminDto.BookingDto) (adminDto.BookingDto, error)
+	UpdateBooking(payloads adminDto.UpdateBooking) (adminDto.UpdateBooking, error)
+	GetAllBooking() ([]adminDto.BookingAllDto, error)
+	GetBookingById(payloads adminDto.BookingAllDto) (adminDto.BookingAllDto, error)
+	DeleteBooking(payloads adminDto.BookingAllDto) error
 }
 
 type adminService struct {
@@ -56,6 +67,27 @@ func NewAdminService(adminRepo adminRepository.AdminRepository) *adminService {
 }
 
 // TODO ADMIN SERVICE HERE
+
+// TODO REGISTER ADMIN
+func (s *adminService) RegisterAdmin(payloads adminDto.RegisterAdminDto) (adminDto.RegisterAdminDto, error) {
+
+	// encrypt password
+	pw, err := utils.HashBcrypt(payloads.Password)
+
+	if err != nil {
+		return payloads, err
+	}
+
+	payloads.Password = pw
+
+	res, err := s.adminRepository.RegisterAdmin(payloads)
+
+	if err != nil {
+		return res, err
+	}
+
+	return res, nil
+}
 
 // TODO LOGIN ADMIN
 func (s *adminService) LoginAdmin(payloads adminDto.LoginDTO) (adminDto.LoginJWT, error) {

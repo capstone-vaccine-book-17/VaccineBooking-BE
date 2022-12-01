@@ -9,5 +9,7 @@ type Booking struct {
 	Session   Session   `gorm:"foreignKey:SessionId"`
 	SessionId uint      `json:"session_id"`
 	CreatedAT time.Time `json:"created_at"`
-	Queue     string    `json:"queue"`
+	UpdatedAT time.Time `json:"updated_at"`
+	Queue     int       `json:"queue"`
+	Status    string    `json:"status"`
 }

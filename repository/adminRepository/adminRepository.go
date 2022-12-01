@@ -12,11 +12,14 @@ import (
 
 type AdminRepository interface {
 	// TODO AUTH
-
+	RegisterAdmin(payloads adminDto.RegisterAdminDto) (adminDto.RegisterAdminDto, error)
 	LoginAdmin(payloads adminDto.LoginDTO) (model.Admin, error)
 
 	// TODO ROLES
 	CreateRoles(payloads adminDto.RoleDTO) (adminDto.RoleDTO, error)
+
+	// TODO MEDICAL FACILITYS
+	CreateMedical(payloads adminDto.MedicalDto) (adminDto.MedicalDto, error)
 
 	// TODO DASHBOARD
 
@@ -48,6 +51,15 @@ type AdminRepository interface {
 	UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.Address,error)
 	GetAdmin(payloads adminDto.ProfileRequest) (adminDto.Address, error)
 	UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO,error)
+	// TODO BOOKING
+	CreateCitizenBook(nik, nama, address string) (model.Citizen, error)
+	CreateBooking(payloads adminDto.BookingDto) (adminDto.BookingDto, error)
+	GetMaxQueue(session_id uint) (adminDto.MaxQueue, error)
+	UpdateSessionBooking(session_id uint, kuota string) error
+	UpdateBooking(payloads adminDto.UpdateBooking) (adminDto.UpdateBooking, error)
+	GetAllBooking() ([]adminDto.BookingAllDto, error)
+	GetBookingById(payloads adminDto.BookingAllDto) (adminDto.BookingAllDto, error)
+	DeleteBooking(payloads adminDto.BookingAllDto) error
 }
 
 type adminRepository struct {
@@ -74,6 +86,22 @@ func (u *adminRepository) LoginAdmin(payloads adminDto.LoginDTO) (model.Admin, e
 	}
 
 	return admin, nil
+}
+
+// TODO REGISTER ADMIN
+func (u *adminRepository) RegisterAdmin(payloads adminDto.RegisterAdminDto) (adminDto.RegisterAdminDto, error) {
+
+	if err := u.db.Create(&model.Admin{
+		RoleId:             payloads.RoleId,
+		MedicalFacilitysId: payloads.MedicalId,
+		Username:           payloads.Username,
+		Password:           payloads.Password,
+		CreatedAT:          time.Now(),
+	}).Error; err != nil {
+		return payloads, err
+	}
+
+	return payloads, nil
 }
 
 // TODO DASHBOARD ADMIN
