@@ -13,7 +13,7 @@ func (s *adminService) CreateSession(payloads adminDto.SessionRequest) (adminDto
 	kuota, _ := s.adminRepository.CountKuota(payloads.VaccineId)
 	if kuota.TotalS >= kuota.TotalV {
 		return dto, errors.New("kuota vaksin yang di input melebihi batas")
-	} else if payloads.Kuota+kuota.TotalS >= kuota.TotalV {
+	} else if payloads.Kuota+kuota.TotalS > kuota.TotalV {
 		return dto, errors.New("kuota vaksin yang di input melebihi batas")
 	}
 
