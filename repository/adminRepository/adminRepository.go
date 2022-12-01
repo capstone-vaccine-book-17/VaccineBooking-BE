@@ -45,7 +45,9 @@ type AdminRepository interface {
 
 	// TODO Profile
 	GetProfile(payload adminDto.ProfileRequest) ([]adminDto.ProfilDTO, error)
-	UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.ProfileRequest,error)
+	UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.Address,error)
+	GetAdmin(payloads adminDto.ProfileRequest) (adminDto.Address, error)
+	UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO,error)
 }
 
 type adminRepository struct {

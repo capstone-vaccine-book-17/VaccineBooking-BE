@@ -42,6 +42,7 @@ type AdminService interface {
 	// TODO Profile
 	GetProfile(payloads adminDto.ProfileRequest)([]adminDto.ProfilDTO,error)
 	UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.ProfileRequest,error)
+	UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO,error)
 }
 
 type adminService struct {

@@ -16,7 +16,9 @@ type ProfileRequest struct {
 	Address            string `json:"address"`
 	Username           string `json:"username"`
 	Password           string `json:"password"`
+	NewPassword        string `json:"new_password"`
 }
 type Address struct {
 	AddressID string `json:"address_id"`
+	Password  string `json:"password"`
 }
