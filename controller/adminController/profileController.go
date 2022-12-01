@@ -11,7 +11,6 @@ import (
 	"github.com/cloudinary/cloudinary-go"
 	"github.com/cloudinary/cloudinary-go/api/uploader"
 	"github.com/labstack/echo"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // TODO Get Profile
@@ -46,12 +45,7 @@ func (u *adminController) GetProfile(c echo.Context) error {
 	})
 }
 
-func HashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-	return string(bytes), err
-}
-
-// TODO Update Profile
+// TODO Update Profile & Change Password
 func (u *adminController) UpdateProfile(c echo.Context) error {
 
 	adminID, _ := middleware.ClaimData(c, "adminID")
@@ -67,7 +61,7 @@ func (u *adminController) UpdateProfile(c echo.Context) error {
 	if err := c.Bind(&payloads); err != nil {
 		return err
 	}
-	hash, _ := HashPassword(payloads.NewPassword)
+	hash, _ := utils.HashBcrypt(payloads.NewPassword)
 
 	temp := adminDto.ProfileRequest{
 		AdminID:            conv_,
@@ -79,6 +73,7 @@ func (u *adminController) UpdateProfile(c echo.Context) error {
 		NewPassword:        hash,
 		Password:           payloads.Password,
 	}
+
 	_, err := u.adminServ.UpdateProfile(temp)
 
 	if err != nil {
@@ -94,7 +89,9 @@ func (u *adminController) UpdateProfile(c echo.Context) error {
 	})
 }
 
+// Upload Image
 func (u *adminController) UpdateImage(c echo.Context) error {
+
 	cld, _ := cloudinary.NewFromURL(os.Getenv("CLOUDINARY_URL"))
 	medicalID, _ := middleware.ClaimData(c, "medicalID")
 	conv_medicalID := medicalID.(float64)

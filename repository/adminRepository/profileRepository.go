@@ -15,6 +15,7 @@ func (u *adminRepository) GetProfile(payloads adminDto.ProfileRequest) ([]adminD
 
 	return profile, nil
 }
+
 func (u *adminRepository) GetAdmin(payloads adminDto.ProfileRequest) (adminDto.Address, error) {
 	profile := adminDto.Address{}
 
@@ -25,6 +26,7 @@ func (u *adminRepository) GetAdmin(payloads adminDto.ProfileRequest) (adminDto.A
 
 }
 
+// TODO Update Profile & Change Password
 func (u *adminRepository) UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.Address, error) {
 
 	temp := adminDto.ProfileRequest{
@@ -66,7 +68,8 @@ func (u *adminRepository) UpdateProfile(payloads adminDto.ProfileRequest) (admin
 	return profile, nil
 }
 
-func (u *adminRepository) UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO,error) {
+// TODO Upload Image
+func (u *adminRepository) UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO, error) {
 
 	res := adminDto.ProfilDTO{
 		Image: payloads.Image,
@@ -78,5 +81,5 @@ func (u *adminRepository) UpdateImage(payloads adminDto.ProfileRequest) (adminDt
 		return res, err
 
 	}
-	return res,nil
+	return res, nil
 }

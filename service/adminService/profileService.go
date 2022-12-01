@@ -7,6 +7,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// TODO Get Profile Admin
 func (s *adminService) GetProfile(payloads adminDto.ProfileRequest) ([]adminDto.ProfilDTO, error) {
 
 	var profile []adminDto.ProfilDTO
@@ -29,6 +30,7 @@ func (s *adminService) GetProfile(payloads adminDto.ProfileRequest) ([]adminDto.
 	return profile, nil
 }
 
+// TODO Update Profile & Change Password
 func (s *adminService) UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.ProfileRequest, error) {
 
 	dto := adminDto.ProfileRequest{
@@ -45,13 +47,9 @@ func (s *adminService) UpdateProfile(payloads adminDto.ProfileRequest) (adminDto
 
 	if err := bcrypt.CompareHashAndPassword([]byte(new.Password), []byte(payloads.Password)); err != nil {
 
-		return dto, errors.New(" password incorrect")
+		return dto, errors.New("password incorrect")
 
 	}
-
-	// temp, _ := s.adminRepository.UpdateProfile(payloads)
-	// // hash, _ := HashPassword(temp.NewPassword)
-
 	_, err := s.adminRepository.UpdateProfile(dto)
 
 	if err != nil {
@@ -61,6 +59,7 @@ func (s *adminService) UpdateProfile(payloads adminDto.ProfileRequest) (adminDto
 	return dto, nil
 }
 
+// TODO Uploud Image
 func (s *adminService) UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO, error) {
 
 	temp := adminDto.ProfileRequest{
@@ -77,6 +76,6 @@ func (s *adminService) UpdateImage(payloads adminDto.ProfileRequest) (adminDto.P
 		return out, err
 	}
 
-	return out, nil 	
+	return out, nil
 
 }
