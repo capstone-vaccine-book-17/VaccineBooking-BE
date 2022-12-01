@@ -45,7 +45,7 @@ func (s *adminService) UpdateProfile(payloads adminDto.ProfileRequest) (adminDto
 
 	if err := bcrypt.CompareHashAndPassword([]byte(new.Password), []byte(payloads.Password)); err != nil {
 
-		return dto, errors.New("username or password incorrect")
+		return dto, errors.New(" password incorrect")
 
 	}
 
@@ -77,6 +77,6 @@ func (s *adminService) UpdateImage(payloads adminDto.ProfileRequest) (adminDto.P
 		return out, err
 	}
 
-	return out, nil
+	return out, nil 	
 
 }

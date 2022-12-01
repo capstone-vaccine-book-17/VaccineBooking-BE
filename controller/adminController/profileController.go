@@ -4,8 +4,11 @@ import (
 	"capstone_vaccine/dto/adminDto"
 	"capstone_vaccine/middleware"
 	"capstone_vaccine/utils"
+	"context"
 	"net/http"
 
+	"github.com/cloudinary/cloudinary-go"
+	"github.com/cloudinary/cloudinary-go/api/uploader"
 	"github.com/labstack/echo"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -91,9 +94,22 @@ func (u *adminController) UpdateProfile(c echo.Context) error {
 }
 
 func (u *adminController) UpdateImage(c echo.Context) error {
+	cld, _ := cloudinary.NewFromURL("cloudinary://593273685751979:K3Apu1EGSQfIoi9Tzn3zzdGdd6A@dst6d6bj6")
 	medicalID, _ := middleware.ClaimData(c, "medicalID")
 	conv_medicalID := medicalID.(float64)
 	conv := uint(conv_medicalID)
+
+	fileHeader, _ := c.FormFile("image")
+
+	file, _ := fileHeader.Open()
+
+	ctx := context.Background()
+
+	result, err := cld.Upload.Upload(ctx, file, uploader.UploadParams{})
+
+	if err != nil {
+		return err
+	}
 
 	var payloads adminDto.ProfileRequest
 
@@ -101,10 +117,9 @@ func (u *adminController) UpdateImage(c echo.Context) error {
 		return err
 	}
 
-	temp :=adminDto.ProfileRequest{
+	temp := adminDto.ProfileRequest{
 		MedicalFacilitysId: conv,
-		Image: payloads.Image,
-
+		Image:              result.SecureURL,
 	}
 	res, err := u.adminServ.UpdateImage(temp)
 
@@ -116,8 +131,8 @@ func (u *adminController) UpdateImage(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, utils.Response{
-		Message: "Update Image Berhasil dilakukan",
+		Message: "Successfully uploaded the file",
 		Code:    http.StatusOK,
-		Data: res.Image,
+		Data:    res.Image,
 	})
 }
