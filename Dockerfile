@@ -1,13 +1,13 @@
-FROM golang:alpine
-
-RUN apk update && apk add --no-cache git
+FROM golang:latest as wvac
 
 WORKDIR /app
-
 COPY . .
 
-RUN go mod tidy
+RUN go build -tags netgo -o wvac-be .
 
-RUN go build -o /wvac-be
+FROM alpine:latest
+
+COPY --from=wvac /app/wvac-be .
+COPY --from=wvac /app/.env .
 
 CMD ["/wvac-be"]
