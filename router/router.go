@@ -105,7 +105,13 @@ func New(e *echo.Echo, db *gorm.DB) {
 	v2_profile := v2.Group("/profile")
 	{
 		v2_profile.GET("/", citizenController.GetProfile)
-		v2_profile.PUT("/Image", citizenController.UploadImage)
+		v2_profile.PUT("/image", citizenController.UploadImage)
+		v2_profile.GET("/personal", citizenController.GetPersonalData)
+		v2_profile.GET("/address", citizenController.GetAddress)
+		v2_profile.PUT("/update", citizenController.UpdateAddress)
+		v2_profile.GET("/email", citizenController.GetEmail)
+		v2_profile.PUT("/updateemail",citizenController.UpdateEmail)
+
 	}
 
 }

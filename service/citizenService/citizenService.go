@@ -16,6 +16,11 @@ type CitizenService interface {
 	//TODO Profile
 	GetProfile(payloads citizenDto.ProfileReq) (citizenDto.ProfileDTO, error)
 	UploadImage(payloads citizenDto.ProfileReq) (citizenDto.ProfileReq, error)
+	GetPersonalData(payload citizenDto.ProfileReq) ([]citizenDto.PersonalData, error)
+	UpdateAddress(payloads citizenDto.AddressCitizenReq) error
+	GetAddress(payload citizenDto.ProfileReq) (citizenDto.AddressResp, error)
+	GetEmail(payloads citizenDto.ProfileReq) (citizenDto.PersonalData, error)
+	UpdateEmail(payloads citizenDto.UpdateEmail) error
 }
 
 type citizenService struct {
