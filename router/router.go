@@ -78,7 +78,8 @@ func New(e *echo.Echo, db *gorm.DB) {
 	}
 
 	// TODO CITIZEN ROUTE
-
+	v2 := e.Group("/v2")
+	v2.Use(middleware.JWT([]byte(os.Getenv("JWT_KEY"))))
 	// Citizen Auth
 	e.POST("/signup", citizenController.RegisterCitizen)
 	e.POST("/signin", citizenController.LoginCitizen)
