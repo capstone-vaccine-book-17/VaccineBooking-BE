@@ -15,6 +15,7 @@ type CitizenRepository interface {
 
 	//TODO Profile
 	GetProfile(payloads citizenDto.ProfileReq) (citizenDto.ProfileDTO, error)
+	UploadImage(payloads citizenDto.ProfileReq) (citizenDto.ProfileReq, error)
 }
 
 type citizenRepository struct {

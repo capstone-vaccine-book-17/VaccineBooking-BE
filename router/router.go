@@ -98,6 +98,7 @@ func New(e *echo.Echo, db *gorm.DB) {
 	v2_profile := v2.Group("/profile")
 	{
 		v2_profile.GET("/", citizenController.GetProfile)
+		v2_profile.PUT("/Image", citizenController.UploadImage)
 	}
 
 }
