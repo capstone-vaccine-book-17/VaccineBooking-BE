@@ -44,6 +44,10 @@ type AdminService interface {
 	// TODO DeleteVaccine
 	DeleteVaccine(data adminDto.VaccineDTO) error
 
+	// TODO Profile
+	GetProfile(payloads adminDto.ProfileRequest)([]adminDto.ProfilDTO,error)
+	UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.ProfileRequest,error)
+	UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO,error)
 	// TODO BOOKING
 	CreateBooking(payloads adminDto.BookingDto) (adminDto.BookingDto, error)
 	UpdateBooking(payloads adminDto.UpdateBooking) (adminDto.UpdateBooking, error)

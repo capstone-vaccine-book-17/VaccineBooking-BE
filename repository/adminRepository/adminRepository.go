@@ -46,6 +46,11 @@ type AdminRepository interface {
 	// TODO DeleteVaccine
 	DeleteVaccine(data adminDto.VaccineDTO) error
 
+	// TODO Profile
+	GetProfile(payload adminDto.ProfileRequest) ([]adminDto.ProfilDTO, error)
+	UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.Address,error)
+	GetAdmin(payloads adminDto.ProfileRequest) (adminDto.Address, error)
+	UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO,error)
 	// TODO BOOKING
 	CreateCitizenBook(nik, nama, address string) (model.Citizen, error)
 	CreateBooking(payloads adminDto.BookingDto) (adminDto.BookingDto, error)
