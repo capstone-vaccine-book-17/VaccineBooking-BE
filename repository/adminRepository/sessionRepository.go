@@ -56,22 +56,22 @@ func (u *adminRepository) CreateSession(payloads adminDto.SessionRequest) (admin
 		EndTime:   payloads.EndTime,
 		Date:      payloads.Date,
 	}
-	// convKuota := strconv.Itoa(payloads.Kuota)
-	// // if err := u.db.Create(&model.Session{
-	// // 	Name:               payloads.Name,
-	// // 	MedicalFacilitysId: payloads.MedicalFacilitysId,
-	// // 	VaccineId:          payloads.VaccineId,
-	// // 	StartTime:          payloads.StartTime,
-	// // 	Kuota:              convKuota,
-	// // 	Dosis:              payloads.Dosis,
-	// // 	EndTime:            payloads.EndTime,
-	// // 	Date:               payloads.Date,
-	// // 	Status:             "process",
-	// // 	CreatedAT:          time.Now(),
-	// // 	UpdatedAT:          time.Now(),
-	// // }).Error; err != nil {
-	// // 	return temp, err
-	// // }
+	convKuota := strconv.Itoa(payloads.Kuota)
+	if err := u.db.Create(&model.Session{
+		Name:               payloads.Name,
+		MedicalFacilitysId: payloads.MedicalFacilitysId,
+		VaccineId:          payloads.VaccineId,
+		StartTime:          payloads.StartTime,
+		Kuota:              convKuota,
+		Dosis:              payloads.Dosis,
+		EndTime:            payloads.EndTime,
+		Date:               payloads.Date,
+		Status:             "process",
+		CreatedAT:          time.Now(),
+		UpdatedAT:          time.Now(),
+	}).Error; err != nil {
+		return temp, err
+	}
 
 	return temp, nil
 }
