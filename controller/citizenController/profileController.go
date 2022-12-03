@@ -259,21 +259,51 @@ func (u *citizenController) UpdatePassword(c echo.Context) error {
 		})
 	}
 
+	temp1 := citizenDto.ProfileReq{
+		CitizenID: conv,
+	}
+
+	res, _ := u.citizenServ.GetEmail(temp1)
+
+	errss := utils.CompareHash(res.Password, payloads.OldPassword)
+	if errss != nil {
+		return c.JSON(http.StatusBadRequest, utils.Response{
+			Message: "Old password salah",
+			Code:    http.StatusBadRequest,
+		})
+	}
+
+	res2, _ := u.citizenServ.GetEmail(temp1)
+	errsse := utils.CompareHash(res2.Password, payloads.NewPassword)
+	if errsse == nil {
+		return c.JSON(http.StatusBadRequest, utils.Response{
+			Message: "New password sama dengan Old password ",
+			Code:    http.StatusBadRequest,
+		})
+	}
+
+
 	hash, _ := utils.HashBcrypt(payloads.NewPassword)
 
-	// if strings.Compare(payloads.NewPassword, payloads.ConfirmNewPassword) == 0 {
-	// }
+	err := utils.CompareHash(hash, payloads.ConfirmNewPassword)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, utils.Response{
+			Message: "confirmasi password salah",
+			Code:    http.StatusBadRequest,
+		})
+	}
+
 	temp := citizenDto.UpdatePassword{
 		CitizenID:   conv,
 		OldPassword: payloads.OldPassword,
 		NewPassword: hash,
 	}
 
-	err := u.citizenServ.UpdatePassword(temp)
+	_, errs := u.citizenServ.UpdatePassword(temp)
 
-	if err != nil {
+	if errs != nil {
 		return c.JSON(http.StatusInternalServerError, utils.Response{
-			Message: err.Error(),
+			Message: errs.Error(),
 			Code:    http.StatusInternalServerError,
 		})
 	}

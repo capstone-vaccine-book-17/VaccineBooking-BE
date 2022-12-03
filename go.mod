@@ -9,7 +9,6 @@ require (
 	github.com/joho/godotenv v1.4.0
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/leekchan/accounting v1.0.0
-	go.starlark.net v0.0.0-20221202143044-42872f4d8faa
 	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3
 	gorm.io/driver/mysql v1.4.4
 	gorm.io/gorm v1.24.1

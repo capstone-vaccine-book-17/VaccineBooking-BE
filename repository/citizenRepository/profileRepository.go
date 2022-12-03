@@ -84,10 +84,10 @@ func (u *citizenRepository) GetAddress(payload citizenDto.ProfileReq) (citizenDt
 	return out, nil
 }
 
-func (u *citizenRepository) GetEmail(payloads citizenDto.ProfileReq) (citizenDto.PersonalData, error) {
-	profile := citizenDto.PersonalData{}
+func (u *citizenRepository) GetEmail(payloads citizenDto.ProfileReq) (citizenDto.LoginDto, error) {
+	profile := citizenDto.LoginDto{}
 
-	if err := u.db.Model(&model.Citizen{}).Select("citizens.email").Where("citizen_id = ?", payloads.CitizenID).Find(&profile).Error; err != nil {
+	if err := u.db.Model(&model.Citizen{}).Select("citizens.*").Where("citizen_id = ?", payloads.CitizenID).Find(&profile).Error; err != nil {
 		return profile, err
 	}
 	return profile, nil
