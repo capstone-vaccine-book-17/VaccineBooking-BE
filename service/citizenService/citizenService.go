@@ -21,6 +21,7 @@ type CitizenService interface {
 	GetAddress(payload citizenDto.ProfileReq) (citizenDto.AddressResp, error)
 	GetEmail(payloads citizenDto.ProfileReq) (citizenDto.PersonalData, error)
 	UpdateEmail(payloads citizenDto.UpdateEmail) error
+	UpdatePassword(payloads citizenDto.UpdatePassword) error
 }
 
 type citizenService struct {

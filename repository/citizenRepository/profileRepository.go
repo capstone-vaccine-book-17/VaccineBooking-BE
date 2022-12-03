@@ -102,4 +102,22 @@ func (u *citizenRepository) UpdateEmail(payloads citizenDto.UpdateEmail) error {
 
 	}
 	return nil
+
+}
+
+func (u *citizenRepository) UpdatePassword(payloads citizenDto.UpdatePassword) (citizenDto.LoginDto, error) {
+
+	temp := citizenDto.LoginDto{}
+
+	if err := u.db.Model(&model.Citizen{}).Select("citizens.*").Where("citizen_id=?", payloads.CitizenID).Find(&temp).Error; err != nil {
+		return temp, err
+	}
+
+	if err := u.db.Model(&model.Citizen{}).Where("citizen_id = ?", payloads.CitizenID).Updates(&model.Citizen{
+		Password: payloads.NewPassword,
+	}).Error; err != nil {
+		return temp, err
+
+	}
+	return temp, nil
 }

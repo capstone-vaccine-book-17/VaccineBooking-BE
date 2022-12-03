@@ -3,6 +3,9 @@ package citizenService
 import (
 	"capstone_vaccine/dto/citizenDto"
 	"capstone_vaccine/utils"
+	"errors"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 // TODO Get Profile
@@ -99,7 +102,7 @@ func (s *citizenService) GetEmail(payloads citizenDto.ProfileReq) (citizenDto.Pe
 	return res, nil
 }
 
-// TODO Get Email
+// TODO Update Email
 func (s *citizenService) UpdateEmail(payloads citizenDto.UpdateEmail) error {
 
 	err := s.citizenRepository.UpdateEmail(payloads)
@@ -109,4 +112,23 @@ func (s *citizenService) UpdateEmail(payloads citizenDto.UpdateEmail) error {
 	}
 
 	return nil
+}
+
+// TODO Update Password
+func (s *citizenService) UpdatePassword(payloads citizenDto.UpdatePassword) error {
+
+	res, err := s.citizenRepository.UpdatePassword(payloads)
+
+	if err := bcrypt.CompareHashAndPassword([]byte(res.Password), []byte(payloads.OldPassword)); err != nil {
+
+		return errors.New("password incorrect")
+
+	}
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+
 }

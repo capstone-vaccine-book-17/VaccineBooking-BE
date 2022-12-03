@@ -237,3 +237,49 @@ func (u *citizenController) UpdateEmail(c echo.Context) error {
 		Code:    http.StatusOK,
 	})
 }
+
+//TODO Update Password
+
+// TODO UPDATE EMAIL
+func (u *citizenController) UpdatePassword(c echo.Context) error {
+	citizenID, _ := middleware.ClaimData(c, "citizenID")
+	conv_citizenID := citizenID.(float64)
+	conv := uint(conv_citizenID)
+
+	var payloads citizenDto.UpdatePassword
+
+	if err := c.Bind(&payloads); err != nil {
+		return err
+	}
+
+	if err := c.Validate(payloads); err != nil {
+		return c.JSON(http.StatusBadRequest, utils.Response{
+			Message: err.Error(),
+			Code:    http.StatusBadRequest,
+		})
+	}
+
+	hash, _ := utils.HashBcrypt(payloads.NewPassword)
+
+	// if strings.Compare(payloads.NewPassword, payloads.ConfirmNewPassword) == 0 {
+	// }
+	temp := citizenDto.UpdatePassword{
+		CitizenID:   conv,
+		OldPassword: payloads.OldPassword,
+		NewPassword: hash,
+	}
+
+	err := u.citizenServ.UpdatePassword(temp)
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, utils.Response{
+			Message: err.Error(),
+			Code:    http.StatusInternalServerError,
+		})
+	}
+
+	return c.JSON(http.StatusOK, utils.Response{
+		Message: "Password Berhasil dirubah",
+		Code:    http.StatusOK,
+	})
+}
