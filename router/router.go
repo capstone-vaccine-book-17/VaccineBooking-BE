@@ -115,5 +115,9 @@ func New(e *echo.Echo, db *gorm.DB) {
 		v2_profile.PUT("/passwordUpdate", citizenController.UpdatePassword)
 
 	}
+	v2_family := v2.Group("/family")
+	{
+		v2_family.POST("/create", citizenController.CreateFamilyMember)
+	}
 
 }
