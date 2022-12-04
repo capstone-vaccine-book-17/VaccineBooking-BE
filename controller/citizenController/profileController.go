@@ -41,6 +41,7 @@ func (u *citizenController) GetProfile(c echo.Context) error {
 
 }
 
+// TODO Update & Upload Image
 func (u *citizenController) UploadImage(c echo.Context) error {
 
 	cld, _ := cloudinary.NewFromURL(os.Getenv("CLOUDINARY_URL"))
@@ -48,7 +49,7 @@ func (u *citizenController) UploadImage(c echo.Context) error {
 	conv_medicalID := medicalID.(float64)
 	conv := uint(conv_medicalID)
 
-	fileHeader, _ := c.FormFile("upimage")
+	fileHeader, _ := c.FormFile("image")
 
 	file, _ := fileHeader.Open()
 
@@ -87,6 +88,7 @@ func (u *citizenController) UploadImage(c echo.Context) error {
 	})
 }
 
+// TODO GET Personal Data
 func (u *citizenController) GetPersonalData(c echo.Context) error {
 	citizenID, _ := middleware.ClaimData(c, "citizenID")
 	conv_citizenID := citizenID.(float64)
@@ -106,7 +108,7 @@ func (u *citizenController) GetPersonalData(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, utils.Response{
-		Message: "Data Diri",
+		Message: "Personal Data",
 		Code:    http.StatusOK,
 		Data:    res,
 	})
@@ -132,7 +134,7 @@ func (u *citizenController) GetAddress(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, utils.Response{
-		Message: "Update Berhasil Dilakukan",
+		Message: "Update Success",
 		Code:    http.StatusOK,
 		Data:    res,
 	})
@@ -168,7 +170,7 @@ func (u *citizenController) UpdateAddress(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, utils.Response{
-		Message: "Update Berhasil Dilakukan",
+		Message: "Update Success",
 		Code:    http.StatusOK,
 	})
 }
@@ -213,7 +215,7 @@ func (u *citizenController) UpdateEmail(c echo.Context) error {
 
 	if err := c.Validate(payloads); err != nil {
 		return c.JSON(http.StatusBadRequest, utils.Response{
-			Message: "format email salah",
+			Message: "format email incorrect",
 			Code:    http.StatusBadRequest,
 		})
 	}
@@ -233,14 +235,12 @@ func (u *citizenController) UpdateEmail(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, utils.Response{
-		Message: "Email Berhasil dirubah",
+		Message: "e-mail changed successfully",
 		Code:    http.StatusOK,
 	})
 }
 
-//TODO Update Password
-
-// TODO UPDATE EMAIL
+// TODO Update Password
 func (u *citizenController) UpdatePassword(c echo.Context) error {
 	citizenID, _ := middleware.ClaimData(c, "citizenID")
 	conv_citizenID := citizenID.(float64)
@@ -268,7 +268,7 @@ func (u *citizenController) UpdatePassword(c echo.Context) error {
 	errss := utils.CompareHash(res.Password, payloads.OldPassword)
 	if errss != nil {
 		return c.JSON(http.StatusBadRequest, utils.Response{
-			Message: "Old password salah",
+			Message: "password incorrect",
 			Code:    http.StatusBadRequest,
 		})
 	}
@@ -277,18 +277,17 @@ func (u *citizenController) UpdatePassword(c echo.Context) error {
 	errsse := utils.CompareHash(res2.Password, payloads.NewPassword)
 	if errsse == nil {
 		return c.JSON(http.StatusBadRequest, utils.Response{
-			Message: "New password sama dengan Old password ",
+			Message: "New password is the same as old password",
 			Code:    http.StatusBadRequest,
 		})
 	}
-
 
 	hash, _ := utils.HashBcrypt(payloads.NewPassword)
 
 	err := utils.CompareHash(hash, payloads.ConfirmNewPassword)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, utils.Response{
-			Message: "confirmasi password salah",
+			Message: "confirmation New password is wrong",
 			Code:    http.StatusBadRequest,
 		})
 	}
@@ -309,7 +308,7 @@ func (u *citizenController) UpdatePassword(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, utils.Response{
-		Message: "Password Berhasil dirubah",
+		Message: "changed successfully",
 		Code:    http.StatusOK,
 	})
 }

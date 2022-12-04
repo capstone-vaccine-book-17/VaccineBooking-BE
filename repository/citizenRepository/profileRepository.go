@@ -16,7 +16,7 @@ func (u *citizenRepository) GetProfile(payloads citizenDto.ProfileReq) (citizenD
 	return profile, nil
 }
 
-// TODO Upload Image
+// TODO Update Image
 func (u *citizenRepository) UploadImage(payloads citizenDto.ProfileReq) (citizenDto.ProfileReq, error) {
 
 	res := citizenDto.ProfileReq{
@@ -34,6 +34,7 @@ func (u *citizenRepository) UploadImage(payloads citizenDto.ProfileReq) (citizen
 
 }
 
+// TODO GET Personal Data
 func (u *citizenRepository) GetPersonalData(payload citizenDto.ProfileReq) ([]citizenDto.PersonalData, error) {
 
 	Personal := []citizenDto.PersonalData{}
@@ -44,18 +45,15 @@ func (u *citizenRepository) GetPersonalData(payload citizenDto.ProfileReq) ([]ci
 	return Personal, nil
 }
 
+// Update Detail Address
 func (u *citizenRepository) UpdateAddress(payloads citizenDto.AddressCitizenReq) error {
 
 	temp := citizenDto.AddressCitizenReq{}
-	temp2 := citizenDto.AddressCitizenReq{}
 
 	if errh := u.db.Model(&model.Citizen{}).Select("citizens.*").Where("citizen_id=?", payloads.CitizenID).Find(&temp).Error; errh != nil {
 		return errh
 	}
 
-	if erre := u.db.Model(&model.Address{}).Select("addresses.*").Where("address_id=?", temp.AddressID).Find(&temp2).Error; erre != nil {
-		return erre
-	}
 	if err := u.db.Model(&model.Address{}).Where("address_id = ?", temp.AddressID).Updates(&model.Address{
 		Address:   payloads.NewAddress,
 		Province:  payloads.Province,
@@ -69,6 +67,7 @@ func (u *citizenRepository) UpdateAddress(payloads citizenDto.AddressCitizenReq)
 	return nil
 }
 
+// TODO GET Address
 func (u *citizenRepository) GetAddress(payload citizenDto.ProfileReq) (citizenDto.AddressResp, error) {
 	temp := citizenDto.AddressCitizenReq{}
 	out := citizenDto.AddressResp{}
@@ -84,6 +83,7 @@ func (u *citizenRepository) GetAddress(payload citizenDto.ProfileReq) (citizenDt
 	return out, nil
 }
 
+// Todo Get Email
 func (u *citizenRepository) GetEmail(payloads citizenDto.ProfileReq) (citizenDto.LoginDto, error) {
 	profile := citizenDto.LoginDto{}
 
@@ -93,6 +93,7 @@ func (u *citizenRepository) GetEmail(payloads citizenDto.ProfileReq) (citizenDto
 	return profile, nil
 }
 
+// TODO Update Email
 func (u *citizenRepository) UpdateEmail(payloads citizenDto.UpdateEmail) error {
 
 	if err := u.db.Model(&model.Citizen{}).Where("citizen_id = ?", payloads.CitizenID).Updates(&model.Citizen{
@@ -105,6 +106,7 @@ func (u *citizenRepository) UpdateEmail(payloads citizenDto.UpdateEmail) error {
 
 }
 
+// TODO Update Passeord
 func (u *citizenRepository) UpdatePassword(payloads citizenDto.UpdatePassword) (citizenDto.LoginDto, error) {
 
 	temp := citizenDto.LoginDto{}

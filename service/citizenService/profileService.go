@@ -17,6 +17,7 @@ func (s *citizenService) GetProfile(payloads citizenDto.ProfileReq) (citizenDto.
 	return res, nil
 }
 
+// TODO Update & Upload Image
 func (s *citizenService) UploadImage(payloads citizenDto.ProfileReq) (citizenDto.ProfileReq, error) {
 
 	temp := citizenDto.ProfileReq{
@@ -37,7 +38,7 @@ func (s *citizenService) UploadImage(payloads citizenDto.ProfileReq) (citizenDto
 
 }
 
-// TODO Personal Data
+// TODO Get Personal Data
 func (s *citizenService) GetPersonalData(payload citizenDto.ProfileReq) ([]citizenDto.PersonalData, error) {
 
 	var profile []citizenDto.PersonalData
@@ -65,6 +66,7 @@ func (s *citizenService) GetPersonalData(payload citizenDto.ProfileReq) ([]citiz
 
 }
 
+// TODO Update Detail Address
 func (s *citizenService) UpdateAddress(payloads citizenDto.AddressCitizenReq) error {
 
 	err := s.citizenRepository.UpdateAddress(payloads)
@@ -76,6 +78,7 @@ func (s *citizenService) UpdateAddress(payloads citizenDto.AddressCitizenReq) er
 	return nil
 }
 
+// TODO GET Detail Address
 func (s *citizenService) GetAddress(payload citizenDto.ProfileReq) (citizenDto.AddressResp, error) {
 
 	res, err := s.citizenRepository.GetAddress(payload)
@@ -116,11 +119,6 @@ func (s *citizenService) UpdatePassword(payloads citizenDto.UpdatePassword) (cit
 
 	res, err := s.citizenRepository.UpdatePassword(payloads)
 
-	// if err := bcrypt.CompareHashAndPassword([]byte(res.Password), []byte(payloads.OldPassword)); err != nil {
-
-	// 	return errors.New("password incorrect")
-
-	// }
 	if err != nil {
 		return res, err
 	}
