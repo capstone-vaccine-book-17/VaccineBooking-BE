@@ -118,7 +118,7 @@ func (u *adminRepository) GetDashboard() (adminDto.CountDashboard, error) {
 	convDate = string(date)
 
 	// QUERY GET VACCINE AVAILABLE
-	if err := u.db.Model(&model.VaccineVarietie{}).Select("sum(kuota) as vaccine_available").Where("expired <= ?", convDate).Find(&vaccineAvail).Error; err != nil {
+	if err := u.db.Model(&model.VaccineVarietie{}).Select("coalesce(sum(kuota), 0) as vaccine_available").Where("expired >= ?", convDate).Find(&vaccineAvail).Error; err != nil {
 		return dto, err
 	}
 

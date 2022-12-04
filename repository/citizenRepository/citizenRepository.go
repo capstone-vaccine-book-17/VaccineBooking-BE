@@ -52,6 +52,7 @@ func (u *citizenRepository) RegisterCitizen(payloads citizenDto.RegisterDto) (ci
 		Nik:       payloads.Nik,
 		Gender:    payloads.Gender,
 		Email:     payloads.Email,
+		Dob:       payloads.Dob,
 		Password:  payloads.Password,
 		CreatedAT: time.Now(),
 		UpdatedAT: time.Now(),

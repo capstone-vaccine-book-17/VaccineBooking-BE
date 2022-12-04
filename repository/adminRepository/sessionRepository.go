@@ -12,9 +12,22 @@ import (
 // TODO SUM ALL KUOTA FROM SESSION
 func (u *adminRepository) CountKuota(vaccineID uint) (adminDto.CountKuota, error) {
 	var result adminDto.CountKuota
-	if err := u.db.Raw("SELECT sum(sessions.kuota) as total_s, vaccine_varieties.kuota as total_v FROM `sessions` JOIN vaccine_varieties ON vaccine_varieties.vaccine_id = sessions.vaccine_id WHERE sessions.vaccine_id = ? AND sessions.status = 'process'", vaccineID).Scan(&result).Error; err != nil {
+	var (
+		totals int
+		totalv int
+	)
+
+	if err := u.db.Model(&model.Session{}).Select("coalesce(sum(kuota), 0) as total_s").Where("vaccine_id = ? AND sessions.status = 'process'", vaccineID).Find(&totals).Error; err != nil {
 		return result, err
 	}
+
+	if err := u.db.Model(&model.VaccineVarietie{}).Select("coalesce(kuota, 0) as total_v").Where("vaccine_id = ?", vaccineID).Find(&totalv).Error; err != nil {
+		return result, err
+	}
+
+	result.TotalS = totals
+	result.TotalV = totalv
+
 	return result, nil
 }
 
