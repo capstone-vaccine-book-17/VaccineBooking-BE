@@ -4,6 +4,8 @@ import "time"
 
 type FamilyMember struct {
 	FamilyID   uint      `gorm:"primaryKey;autoIncrement" json:"family_id"`
+	Citizen    Citizen   `gorm:"foreignKey:CitizenId"`
+	CitizenId  uint      `json:"citizen_id"`
 	FamilyAs   FamilyAs  `gorm:"foreignKey:FamilyAsId"`
 	FamilyAsId uint      `json:"family_as_id"`
 	Name       string    `gorm:"size:50;not null" json:"name"`
