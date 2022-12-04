@@ -240,7 +240,7 @@ func (u *citizenController) UpdateEmail(c echo.Context) error {
 	})
 }
 
-// TODO Update Password
+// TODO UPDATE Password
 func (u *citizenController) UpdatePassword(c echo.Context) error {
 	citizenID, _ := middleware.ClaimData(c, "citizenID")
 	conv_citizenID := citizenID.(float64)
