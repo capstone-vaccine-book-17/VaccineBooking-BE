@@ -109,10 +109,10 @@ func New(e *echo.Echo, db *gorm.DB) {
 		v2_profile.PUT("/image", citizenController.UploadImage)
 		v2_profile.GET("/personal", citizenController.GetPersonalData)
 		v2_profile.GET("/address", citizenController.GetAddress)
-		v2_profile.PUT("/update", citizenController.UpdateAddress)
+		v2_profile.PUT("/updateAddress", citizenController.UpdateAddress)
 		v2_profile.GET("/email", citizenController.GetEmail)
-		v2_profile.PUT("/updateemail", citizenController.UpdateEmail)
-		v2_profile.PUT("/password", citizenController.UpdatePassword)
+		v2_profile.PUT("/emailUpdate", citizenController.UpdateEmail)
+		v2_profile.PUT("/passwordUpdate", citizenController.UpdatePassword)
 
 	}
 
