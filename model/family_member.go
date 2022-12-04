@@ -8,6 +8,8 @@ type FamilyMember struct {
 	FamilyAsId uint      `json:"family_as_id"`
 	Name       string    `gorm:"size:50;not null" json:"name"`
 	Nik        string    `gorm:"size:16;not null" json:"nik"`
+	Age        uint      `gorm:"age"`
+	Gender     string    `gorm:"size:15;not null" json:"gender"`
 	CreatedAT  time.Time `json:"created_at"`
 	UpdatedAT  time.Time `json:"updated_at"`
 }
