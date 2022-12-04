@@ -61,6 +61,11 @@ func (u *adminController) UpdateProfile(c echo.Context) error {
 	if err := c.Bind(&payloads); err != nil {
 		return err
 	}
+	if payloads.NewPassword == "" {
+		payloads.NewPassword = payloads.Password
+
+	}
+
 	hash, _ := utils.HashBcrypt(payloads.NewPassword)
 
 	temp := adminDto.ProfileRequest{
