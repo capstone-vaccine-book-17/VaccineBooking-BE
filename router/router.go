@@ -100,4 +100,20 @@ func New(e *echo.Echo, db *gorm.DB) {
 	// Citizen Auth
 	e.POST("/signup", citizenController.RegisterCitizen)
 	e.POST("/signin", citizenController.LoginCitizen)
+
+	//profile
+	v2_profile := v2.Group("/profile")
+	{
+
+		v2_profile.GET("/", citizenController.GetProfile)
+		v2_profile.PUT("/image", citizenController.UploadImage)
+		v2_profile.GET("/personal", citizenController.GetPersonalData)
+		v2_profile.GET("/address", citizenController.GetAddress)
+		v2_profile.PUT("/updateAddress", citizenController.UpdateAddress)
+		v2_profile.GET("/email", citizenController.GetEmail)
+		v2_profile.PUT("/emailUpdate", citizenController.UpdateEmail)
+		v2_profile.PUT("/passwordUpdate", citizenController.UpdatePassword)
+
+	}
+
 }

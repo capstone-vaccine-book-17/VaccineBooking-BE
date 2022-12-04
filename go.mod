@@ -4,7 +4,6 @@ go 1.17
 
 require (
 	github.com/cloudinary/cloudinary-go v1.7.0
-	github.com/cloudinary/cloudinary-go/v2 v2.2.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/joho/godotenv v1.4.0
@@ -34,7 +33,7 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.1 // indirect
 	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2 // indirect
-	golang.org/x/sys v0.0.0-20211103235746-7861aae1554b // indirect
+	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 )
