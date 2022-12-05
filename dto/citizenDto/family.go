@@ -2,7 +2,7 @@ package citizenDto
 
 type FamilylDTO struct {
 	FamilyId uint   `json:"family_id"`
-	Relation string `json:"relation"`
+	FamilyAs string `json:"relation"`
 	Name     string `json:"name"`
 	Nik      string `json:"nik"`
 	Age      uint   `json:"age"`

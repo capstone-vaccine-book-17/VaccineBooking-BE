@@ -31,6 +31,7 @@ func (s *citizenService) GetFamilys(payloads citizenDto.FamilyReq) ([]citizenDto
 			Name:     v.Name,
 			Nik:      v.Nik,
 			Age:      v.Age,
+			FamilyAs: v.FamilyAs,
 			Gender:   v.Gender,
 		})
 	}
