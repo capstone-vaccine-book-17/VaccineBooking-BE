@@ -1,6 +1,6 @@
 package citizenDto
 
-type FammylDTO struct {
+type FamilylDTO struct {
 	FamilyId uint   `json:"family_id"`
 	Relation string `json:"relation"`
 	Name     string `json:"name"`

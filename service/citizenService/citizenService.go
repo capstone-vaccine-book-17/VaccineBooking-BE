@@ -25,6 +25,8 @@ type CitizenService interface {
 
 	//TODO Family Members
 	CreateFamilyMember(payloads citizenDto.FamilyReq) error
+	GetFamilys(payloads citizenDto.FamilyReq) ([]citizenDto.FamilylDTO, error)
+	DeleteMember(payloads citizenDto.FamilylDTO) error
 }
 
 type citizenService struct {
