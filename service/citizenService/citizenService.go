@@ -22,6 +22,11 @@ type CitizenService interface {
 	GetEmail(payloads citizenDto.ProfileReq) (citizenDto.LoginDto, error)
 	UpdateEmail(payloads citizenDto.UpdateEmail) error
 	UpdatePassword(payloads citizenDto.UpdatePassword) (citizenDto.LoginDto, error)
+
+	//TODO Family Members
+	CreateFamilyMember(payloads citizenDto.FamilyReq) error
+	GetFamilys(payloads citizenDto.FamilyReq) ([]citizenDto.FamilylDTO, error)
+	DeleteMember(payloads citizenDto.FamilylDTO) error
 }
 
 type citizenService struct {

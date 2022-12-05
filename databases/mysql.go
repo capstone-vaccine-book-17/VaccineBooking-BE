@@ -36,5 +36,5 @@ func InitDB() {
 
 func InitMigrate() {
 	_ = DB.AutoMigrate(&model.Address{}, &model.MedicalFacilitys{}, &model.Role{}, &model.Admin{},
-		&model.VaccineVarietie{}, &model.Session{}, &model.Citizen{}, &model.FamilyAs{}, &model.FamilyMember{}, &model.Booking{})
+		&model.VaccineVarietie{}, &model.Session{}, &model.Citizen{}, &model.FamilyMember{}, &model.Booking{})
 }
