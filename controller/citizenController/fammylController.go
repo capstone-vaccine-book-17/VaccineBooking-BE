@@ -116,3 +116,35 @@ func (u *citizenController) DeleteMember(c echo.Context) error {
 	})
 
 }
+
+// TODO GET DETAIL MEMBER
+func (u *citizenController) GetDetailMember(c echo.Context) error {
+	id := c.Param("id")
+	convId, err := strconv.Atoi(id)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, utils.Response{
+			Message: err.Error(),
+			Code:    http.StatusBadRequest,
+		})
+
+	}
+
+	member := citizenDto.FamilylDTO{
+		FamilyId: uint(convId),
+	}
+	res, errs := u.citizenServ.GetDetailMember(member)
+
+	if errs != nil {
+		return c.JSON(http.StatusInternalServerError, utils.Response{
+			Message: err.Error(),
+			Code:    http.StatusInternalServerError,
+		})
+	}
+
+	return c.JSON(http.StatusOK, utils.Response{
+		Message: "Profil Member",
+		Code:    http.StatusOK,
+		Data:    res,
+	})
+
+}
