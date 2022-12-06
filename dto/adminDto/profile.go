@@ -1,11 +1,12 @@
 package adminDto
 
 type ProfilDTO struct {
-	Name     string `json:"name"`
-	Image    string `json:"image"`
-	Address  string `json:"address"`
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Name              string `json:"name"`
+	Image             string `json:"image"`
+	Address           string `json:"address"`
+	ResponsiblePerson string `json:"responsible_person"`
+	Username          string `json:"username"`
+	Password          string `json:"password"`
 }
 
 type ProfileRequest struct {
@@ -14,6 +15,7 @@ type ProfileRequest struct {
 	Name               string `json:"name"`
 	Image              string `json:"image"`
 	Address            string `json:"address"`
+	ResponsiblePerson  string `json:"responsible_person"`
 	Username           string `json:"username"`
 	Password           string `json:"password"`
 	NewPassword        string `json:"new_password"`
