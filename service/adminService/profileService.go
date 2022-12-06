@@ -20,11 +20,12 @@ func (s *adminService) GetProfile(payloads adminDto.ProfileRequest) ([]adminDto.
 	for _, p := range res {
 
 		profile = append(profile, adminDto.ProfilDTO{
-			Name:     p.Name,
-			Image:    p.Image,
-			Address:  p.Address,
-			Username: p.Username,
-			Password: p.Password,
+			Name:              p.Name,
+			Image:             p.Image,
+			Address:           p.Address,
+			ResponsiblePerson: p.ResponsiblePerson,
+			Username:          p.Username,
+			Password:          p.Password,
 		})
 	}
 	return profile, nil
@@ -39,6 +40,7 @@ func (s *adminService) UpdateProfile(payloads adminDto.ProfileRequest) (adminDto
 		Name:               payloads.Name,
 		Image:              payloads.Image,
 		Address:            payloads.Address,
+		ResponsiblePerson:  payloads.ResponsiblePerson,
 		Username:           payloads.Username,
 		Password:           payloads.Password,
 		NewPassword:        payloads.NewPassword,

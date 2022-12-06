@@ -74,6 +74,7 @@ func (u *adminController) UpdateProfile(c echo.Context) error {
 		Name:               payloads.Name,
 		Image:              payloads.Image,
 		Address:            payloads.Address,
+		ResponsiblePerson:  payloads.ResponsiblePerson,
 		Username:           payloads.Username,
 		NewPassword:        hash,
 		Password:           payloads.Password,
