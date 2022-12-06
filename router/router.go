@@ -122,4 +122,29 @@ func New(e *echo.Echo, db *gorm.DB) {
 		v2_family.DELETE("/:id", citizenController.DeleteMember)
 	}
 
+	// Citizen Search Medical For Booking
+	v2_medical := v2.Group("/medical")
+	{
+		// By Search and Sort
+		v2_medical.GET("/", citizenController.GetMedicalByCity)
+
+		// By ID
+		v2_medical.GET("/:medicalID", citizenController.GetMedicalById)
+	}
+
+	// Citizen Session
+	v2_session := v2.Group("/session")
+	{
+		v2_session.GET("/:medicalID", citizenController.GetSessionByMedicalId)
+	}
+
+	// Citizen Booking
+	v2_booking := v2.Group("/booking")
+	{
+		// Create Booking
+		v2_booking.POST("/", citizenController.CreateBooking)
+
+		// Get Last Booking For Ticket
+		v2_booking.GET("/", citizenController.GetLastBooking)
+	}
 }
