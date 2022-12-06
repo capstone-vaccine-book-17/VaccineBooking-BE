@@ -51,3 +51,13 @@ func (s *citizenService) DeleteMember(payloads citizenDto.FamilylDTO) error {
 	return nil
 
 }
+
+//TODO GET Detail Member
+func (s *citizenService) GetDetailMember(payload citizenDto.FamilylDTO) (citizenDto.FamilylDTO, error) {
+	res, err := s.citizenRepository.GetDetailMember(payload)
+	if err != nil {
+		return res, err
+	}
+	return res, err
+
+}

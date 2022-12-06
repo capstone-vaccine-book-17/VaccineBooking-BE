@@ -120,6 +120,7 @@ func New(e *echo.Echo, db *gorm.DB) {
 		v2_family.GET("/", citizenController.GetFamilys)
 		v2_family.POST("/", citizenController.CreateFamilyMember)
 		v2_family.DELETE("/:id", citizenController.DeleteMember)
+		v2_family.GET("/:id", citizenController.GetDetailMember)
 	}
 
 }

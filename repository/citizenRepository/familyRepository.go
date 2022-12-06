@@ -51,3 +51,16 @@ func (u *citizenRepository) DeleteMember(payloads citizenDto.FamilylDTO) error {
 
 	return nil
 }
+
+// TODO Get Member
+func (u *citizenRepository) GetDetailMember(payload citizenDto.FamilylDTO) (citizenDto.FamilylDTO, error) {
+
+	result := citizenDto.FamilylDTO{}
+
+	if err := u.db.Model(&model.FamilyMember{}).Select("family_members.*").Where("family_id = ?", payload.FamilyId).Find(&result).Error; err != nil {
+		return result, err
+	}
+
+	return result, nil
+
+}
