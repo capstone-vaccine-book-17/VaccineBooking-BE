@@ -3,6 +3,7 @@ package citizenDto
 type MedicalDto struct {
 	MedicalFacilitysID uint   `json:"medical_facilitys_id"`
 	Name               string `json:"name"`
+	Image              string `json:"image"`
 	Address            string `json:"address"`
 	Province           string `json:"province"`
 	PostCode           string `json:"post_code"`
@@ -19,6 +20,7 @@ type SearchKey struct {
 type SearchDto struct {
 	MedicalFacilitysID uint   `json:"medical_facilitys_id"`
 	Name               string `json:"name"`
+	Image              string `json:"image"`
 	Address            string `json:"address"`
 	Province           string `json:"province"`
 	City               string `json:"city"`
