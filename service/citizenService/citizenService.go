@@ -39,6 +39,9 @@ type CitizenService interface {
 	// TODO BOOKING
 	CreateBooking(payloads citizenDto.BookingDto) (citizenDto.BookingDto, error)
 	GetLastBooking(citizenId uint) (citizenDto.TicketBooking, error)
+
+	//TODO TICKET
+	GetTicket(citizenId uint) ([]citizenDto.TicketDetails, error)
 }
 
 type citizenService struct {

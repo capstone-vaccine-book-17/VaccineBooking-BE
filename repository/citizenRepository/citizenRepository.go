@@ -43,6 +43,9 @@ type CitizenRepository interface {
 	UpdateKuotaSession(session_id uint, kuota string) error
 	CreateBooking(payloads citizenDto.BookingDto) (citizenDto.BookingDto, error)
 	GetLastBooking(citizenId uint) (citizenDto.TicketBooking, error)
+
+	//TODO TICKET
+	GetTicket(citizenId uint) ([]citizenDto.TicketDetails, error)
 }
 
 type citizenRepository struct {
