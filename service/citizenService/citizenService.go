@@ -28,6 +28,17 @@ type CitizenService interface {
 	GetFamilys(payloads citizenDto.FamilyReq) ([]citizenDto.FamilylDTO, error)
 	DeleteMember(payloads citizenDto.FamilylDTO) error
 	GetDetailMember(payload citizenDto.FamilylDTO) (citizenDto.FamilylDTO, error)
+
+	// TODO MEDICAL
+	GetMedicalByCity(payloads citizenDto.SearchKey) ([]citizenDto.SearchDto, error)
+	GetMedicalById(medicalID uint) (citizenDto.MedicalDto, error)
+
+	// TODO SESSION
+	GetSessionByMedicalId(medicalID uint) ([]citizenDto.SessionDto, error)
+
+	// TODO BOOKING
+	CreateBooking(payloads citizenDto.BookingDto) (citizenDto.BookingDto, error)
+	GetLastBooking(citizenId uint) (citizenDto.TicketBooking, error)
 }
 
 type citizenService struct {

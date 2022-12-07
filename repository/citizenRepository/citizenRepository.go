@@ -28,6 +28,21 @@ type CitizenRepository interface {
 	GetFamilys(payloads citizenDto.FamilyReq) ([]citizenDto.FamilylDTO, error)
 	DeleteMember(payloads citizenDto.FamilylDTO) error
 	GetDetailMember(payload citizenDto.FamilylDTO) (citizenDto.FamilylDTO, error)
+
+	// TODO MEDICAL
+	GetMedicalByCity(payloads citizenDto.SearchKey) ([]citizenDto.SearchDto, error)
+	GetCityCitizen(id uint) (citizenDto.GetCity, error)
+	GetMedicalById(medicalID uint) (citizenDto.MedicalDto, error)
+
+	// TODO SESSION
+	GetSessionByMedicalId(medicalID uint) ([]citizenDto.SessionDto, error)
+	GetSessionById(id uint) (citizenDto.SessionWithVaccineId, error)
+
+	// TODO BOOKING
+	GetMaxQueue(session_id uint) (citizenDto.MaxQueue, error)
+	UpdateKuotaSession(session_id uint, kuota string) error
+	CreateBooking(payloads citizenDto.BookingDto) (citizenDto.BookingDto, error)
+	GetLastBooking(citizenId uint) (citizenDto.TicketBooking, error)
 }
 
 type citizenRepository struct {
