@@ -152,6 +152,10 @@ func New(e *echo.Echo, db *gorm.DB) {
 	//TICKET
 	v2_ticket := v2.Group("/ticket")
 	{
-		v2_ticket.GET("/", citizenController.GetTicket)
+		v2_ticket.GET("/", citizenController.GetAllTicket)
+		v2_ticket.GET("/:id", citizenController.GetTicket)
+		v2_ticket.GET("/proses", citizenController.GetTicketOnProses)
+		v2_ticket.GET("/finish", citizenController.GetTicketOnFinish)
+
 	}
 }

@@ -1,6 +1,7 @@
 package citizenDto
 
 type TicketDetails struct {
+	BookingID uint   `json:"booking_id"`
 	Queue     string `json:"queue"`
 	Name      string `json:"name"`
 	Nik       string `json:"nik"`

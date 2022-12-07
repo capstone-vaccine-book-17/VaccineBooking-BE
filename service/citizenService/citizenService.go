@@ -41,7 +41,9 @@ type CitizenService interface {
 	GetLastBooking(citizenId uint) (citizenDto.TicketBooking, error)
 
 	//TODO TICKET
-	GetTicket(citizenId uint) ([]citizenDto.TicketDetails, error)
+	GetAllTicket(citizenId uint) ([]citizenDto.TicketDetails, error)
+	GetTicketOnStatus(citizenId uint, status string) ([]citizenDto.TicketDetails, error)
+	GetTicket(bookingId uint) (citizenDto.TicketDetails, error)
 }
 
 type citizenService struct {
