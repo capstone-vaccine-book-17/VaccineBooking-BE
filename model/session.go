@@ -1,6 +1,10 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type Session struct {
 	SessionID          uint             `gorm:"primaryKey;autoIncrement" json:"session_id"`
@@ -17,4 +21,5 @@ type Session struct {
 	Status             string           `gorm:"size:20;not null" json:"status"`
 	CreatedAT          time.Time        `json:"created_at"`
 	UpdatedAT          time.Time        `json:"updated_at"`
+	DeletedAT          gorm.DeletedAt   `gorm:"index"`
 }
