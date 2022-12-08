@@ -134,7 +134,7 @@ func (u *citizenController) GetAddress(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, utils.Response{
-		Message: "Update Success",
+		Message: "Success",
 		Code:    http.StatusOK,
 		Data:    res,
 	})
