@@ -148,4 +148,14 @@ func New(e *echo.Echo, db *gorm.DB) {
 		// Get Last Booking For Ticket
 		v2_booking.GET("/", citizenController.GetLastBooking)
 	}
+
+	//TICKET
+	v2_ticket := v2.Group("/ticket")
+	{
+		v2_ticket.GET("/", citizenController.GetAllTicket)
+		v2_ticket.GET("/:id", citizenController.GetTicket)
+		v2_ticket.GET("/proses", citizenController.GetTicketOnProses)
+		v2_ticket.GET("/finish", citizenController.GetTicketOnFinish)
+
+	}
 }
