@@ -34,23 +34,18 @@ type AdminRepository interface {
 	UpdateSession(payloads adminDto.SessionRequestUpdate) (adminDto.SessionRequestUpdate, error)
 	DeleteSession(payloads adminDto.SessionWithStatusDTO) error
 
-	// TODO CreateVaccine
+	// TODO Manage Vaccine
 	CreateVaccine(input adminDto.VaccineRequest) (adminDto.VaccineResponse, error)
-
-	// TODO ViewAllVaccine
 	ViewAllVaccine() ([]adminDto.VaccineDTO, error)
-
-	// TODO UpdateVaccine
 	UpdateVaccine(payloads adminDto.VaccineDTO) (adminDto.VaccineDTO, error)
-
-	// TODO DeleteVaccine
 	DeleteVaccine(data adminDto.VaccineDTO) error
+	GetVaccineById(vaccineId uint) (adminDto.VaccineDTO, error)
 
 	// TODO Profile
 	GetProfile(payload adminDto.ProfileRequest) ([]adminDto.ProfilDTO, error)
-	UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.Address,error)
+	UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.Address, error)
 	GetAdmin(payloads adminDto.ProfileRequest) (adminDto.Address, error)
-	UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO,error)
+	UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO, error)
 	// TODO BOOKING
 	CreateCitizenBook(nik, nama, address string) (model.Citizen, error)
 	CreateBooking(payloads adminDto.BookingDto) (adminDto.BookingDto, error)

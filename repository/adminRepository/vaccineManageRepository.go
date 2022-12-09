@@ -71,3 +71,14 @@ func (u adminRepository) DeleteVaccine(data adminDto.VaccineDTO) error {
 
 	return nil
 }
+
+// TODO Get Vaccine By Id
+func (u *adminRepository) GetVaccineById(vaccineId uint) (adminDto.VaccineDTO, error) {
+	vaccine := adminDto.VaccineDTO{}
+
+	if err := u.db.Model(&model.VaccineVarietie{}).Select("vaccine_varieties.*").Where("vaccine_id = ?", vaccineId).Find(&vaccine).Error; err != nil {
+		return vaccine, err
+	}
+
+	return vaccine, nil
+}
