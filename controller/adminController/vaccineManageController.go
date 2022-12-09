@@ -145,3 +145,29 @@ func (u *adminController) DeleteVaccine(c echo.Context) error {
 		Code:    http.StatusOK,
 	})
 }
+
+// TODO Get Vaccine
+func (u *adminController) GetVaccineById(c echo.Context) error {
+	id := c.Param("id")
+	convId, err := strconv.Atoi(id)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, utils.Response{
+			Message: err.Error(),
+			Code:    http.StatusBadRequest,
+		})
+	}
+
+	res, err := u.adminServ.GetVaccineById(uint(convId))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, utils.Response{
+			Message: err.Error(),
+			Code:    http.StatusBadRequest,
+		})
+	}
+
+	return c.JSON(http.StatusOK, utils.Response{
+		Message: "Vaccine",
+		Code:    http.StatusOK,
+		Data:    res,
+	})
+}

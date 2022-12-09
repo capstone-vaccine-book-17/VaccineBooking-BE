@@ -2,6 +2,7 @@ package adminService
 
 import (
 	"capstone_vaccine/dto/adminDto"
+	"errors"
 )
 
 // TODO Create Vaccine
@@ -63,4 +64,19 @@ func (s *adminService) DeleteVaccine(data adminDto.VaccineDTO) error {
 	}
 
 	return nil
+}
+
+//TODO GET VACCINE
+func (s *adminService) GetVaccineById(vaccineId uint) (adminDto.VaccineDTO, error) {
+	res, err := s.adminRepository.GetVaccineById(vaccineId)
+
+	if res.VaccineID < 1 {
+		return res, errors.New("record not found")
+	}
+
+	if err != nil {
+		return res, nil
+	}
+
+	return res, nil
 }
