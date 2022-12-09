@@ -73,9 +73,9 @@ func (u *adminController) LoginAdmin(c echo.Context) error {
 	res, err := u.adminServ.LoginAdmin(payloads)
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, utils.Response{
+		return c.JSON(http.StatusUnauthorized, utils.Response{
 			Message: err.Error(),
-			Code:    http.StatusInternalServerError,
+			Code:    http.StatusUnauthorized,
 		})
 	}
 

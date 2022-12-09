@@ -39,9 +39,9 @@ func (u *citizenController) LoginCitizen(c echo.Context) error {
 	res, err := u.citizenServ.LoginCitizen(payloads)
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, utils.Response{
+		return c.JSON(http.StatusUnauthorized, utils.Response{
 			Message: err.Error(),
-			Code:    http.StatusInternalServerError,
+			Code:    http.StatusUnauthorized,
 		})
 	}
 
