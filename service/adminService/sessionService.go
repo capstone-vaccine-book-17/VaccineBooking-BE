@@ -36,7 +36,7 @@ func (s *adminService) CreateSession(payloads adminDto.SessionRequest) (adminDto
 }
 
 // TODO GET ALL SESSION
-func (s *adminService) GetAllSession() ([]adminDto.SessionWithStatusDTO, error) {
+func (s *adminService) GetAllSession(medicalId uint) ([]adminDto.SessionWithStatusDTO, error) {
 
 	// Set time today with time,date format
 	today := time.Now()
@@ -45,7 +45,7 @@ func (s *adminService) GetAllSession() ([]adminDto.SessionWithStatusDTO, error) 
 	convDate := string(dateFormat)
 	convTime := string(timeFormat)
 
-	res, err := s.adminRepository.GetAllSession()
+	res, err := s.adminRepository.GetAllSession(medicalId)
 	if err != nil {
 		return nil, err
 	}
