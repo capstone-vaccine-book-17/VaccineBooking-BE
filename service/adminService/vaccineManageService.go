@@ -23,10 +23,10 @@ func (s *adminService) CreateVaccine(input adminDto.VaccineRequest) (adminDto.Va
 }
 
 // TODO View All Vaccine
-func (s *adminService) ViewAllVaccine() ([]adminDto.VaccineDTO, error) {
+func (s *adminService) ViewAllVaccine(medicalId uint) ([]adminDto.VaccineDTO, error) {
 	var vaccine []adminDto.VaccineDTO
 
-	res, err := s.adminRepository.ViewAllVaccine()
+	res, err := s.adminRepository.ViewAllVaccine(medicalId)
 
 	if err != nil {
 		return nil, err
@@ -44,9 +44,9 @@ func (s *adminService) ViewAllVaccine() ([]adminDto.VaccineDTO, error) {
 }
 
 // TODO Update Vaccine
-func (s *adminService) UpdateVaccine(payloads adminDto.VaccineDTO) (adminDto.VaccineDTO, error) {
+func (s *adminService) UpdateVaccine(payloads adminDto.VaccineDTO, medicalId uint) (adminDto.VaccineDTO, error) {
 
-	res, err := s.adminRepository.UpdateVaccine(payloads)
+	res, err := s.adminRepository.UpdateVaccine(payloads, medicalId)
 
 	if err != nil {
 		return res, err
@@ -56,8 +56,8 @@ func (s *adminService) UpdateVaccine(payloads adminDto.VaccineDTO) (adminDto.Vac
 }
 
 // TODO DELETE VACCINE
-func (s *adminService) DeleteVaccine(data adminDto.VaccineDTO) error {
-	err := s.adminRepository.DeleteVaccine(data)
+func (s *adminService) DeleteVaccine(data adminDto.VaccineDTO, medicalId uint) error {
+	err := s.adminRepository.DeleteVaccine(data, medicalId)
 
 	if err != nil {
 		return err
@@ -66,9 +66,9 @@ func (s *adminService) DeleteVaccine(data adminDto.VaccineDTO) error {
 	return nil
 }
 
-//TODO GET VACCINE
-func (s *adminService) GetVaccineById(vaccineId uint) (adminDto.VaccineDTO, error) {
-	res, err := s.adminRepository.GetVaccineById(vaccineId)
+// TODO GET VACCINE
+func (s *adminService) GetVaccineById(vaccineId uint, medicalId uint) (adminDto.VaccineDTO, error) {
+	res, err := s.adminRepository.GetVaccineById(vaccineId, medicalId)
 
 	if res.VaccineID < 1 {
 		return res, errors.New("record not found")

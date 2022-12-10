@@ -34,10 +34,10 @@ type AdminService interface {
 
 	// TODO Manage Vaccine
 	CreateVaccine(input adminDto.VaccineRequest) (adminDto.VaccineResponse, error)
-	ViewAllVaccine() ([]adminDto.VaccineDTO, error)
-	UpdateVaccine(payloads adminDto.VaccineDTO) (adminDto.VaccineDTO, error)
-	DeleteVaccine(data adminDto.VaccineDTO) error
-	GetVaccineById(vaccineId uint) (adminDto.VaccineDTO, error)
+	ViewAllVaccine(medicalId uint) ([]adminDto.VaccineDTO, error)
+	UpdateVaccine(payloads adminDto.VaccineDTO, medicalId uint) (adminDto.VaccineDTO, error)
+	DeleteVaccine(data adminDto.VaccineDTO, medicalId uint) error
+	GetVaccineById(vaccineId uint, medicalId uint) (adminDto.VaccineDTO, error)
 
 	// TODO Profile
 	GetProfile(payloads adminDto.ProfileRequest) ([]adminDto.ProfilDTO, error)

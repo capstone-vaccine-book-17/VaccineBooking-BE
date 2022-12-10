@@ -54,8 +54,11 @@ func (u *adminController) CreateVaccine(c echo.Context) error {
 
 // TODO View All Vaccine
 func (u *adminController) ViewAllVaccine(c echo.Context) error {
+	medicalID, _ := middleware.ClaimData(c, "medicalID")
+	conv_medicalID := medicalID.(float64)
+	conv := uint(conv_medicalID)
 
-	res, err := u.adminServ.ViewAllVaccine()
+	res, err := u.adminServ.ViewAllVaccine(conv)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, utils.Response{
 			Message: err.Error(),
@@ -72,6 +75,10 @@ func (u *adminController) ViewAllVaccine(c echo.Context) error {
 
 // TODO Update Vaccine
 func (u *adminController) UpdateVaccine(c echo.Context) error {
+	medicalID, _ := middleware.ClaimData(c, "medicalID")
+	conv_medicalID := medicalID.(float64)
+	conv := uint(conv_medicalID)
+
 	id := c.Param("id")
 	convId, err := strconv.Atoi(id)
 	if err != nil {
@@ -101,7 +108,7 @@ func (u *adminController) UpdateVaccine(c echo.Context) error {
 		Expired:   payloads.Expired,
 	}
 
-	res, err := u.adminServ.UpdateVaccine(Vaccine)
+	res, err := u.adminServ.UpdateVaccine(Vaccine,conv)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, utils.Response{
@@ -119,6 +126,10 @@ func (u *adminController) UpdateVaccine(c echo.Context) error {
 
 // TODO Delete Vaccine
 func (u *adminController) DeleteVaccine(c echo.Context) error {
+	medicalID, _ := middleware.ClaimData(c, "medicalID")
+	conv_medicalID := medicalID.(float64)
+	conv := uint(conv_medicalID)
+
 	id := c.Param("id")
 	convId, err := strconv.Atoi(id)
 	if err != nil {
@@ -131,7 +142,7 @@ func (u *adminController) DeleteVaccine(c echo.Context) error {
 		VaccineID: uint(convId),
 	}
 
-	err = u.adminServ.DeleteVaccine(vaccine)
+	err = u.adminServ.DeleteVaccine(vaccine,conv)
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, utils.Response{
@@ -148,6 +159,10 @@ func (u *adminController) DeleteVaccine(c echo.Context) error {
 
 // TODO Get Vaccine
 func (u *adminController) GetVaccineById(c echo.Context) error {
+	medicalID, _ := middleware.ClaimData(c, "medicalID")
+	conv_medicalID := medicalID.(float64)
+	conv := uint(conv_medicalID)
+
 	id := c.Param("id")
 	convId, err := strconv.Atoi(id)
 	if err != nil {
@@ -157,7 +172,7 @@ func (u *adminController) GetVaccineById(c echo.Context) error {
 		})
 	}
 
-	res, err := u.adminServ.GetVaccineById(uint(convId))
+	res, err := u.adminServ.GetVaccineById(uint(convId), conv)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, utils.Response{
 			Message: err.Error(),
