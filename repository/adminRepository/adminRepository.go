@@ -6,7 +6,6 @@ import (
 	"errors"
 	"time"
 
-	"github.com/leekchan/accounting"
 	"gorm.io/gorm"
 )
 
@@ -15,51 +14,51 @@ type AdminRepository interface {
 	RegisterAdmin(payloads adminDto.RegisterAdminDto) (adminDto.RegisterAdminDto, error)
 	LoginAdmin(payloads adminDto.LoginDTO) (model.Admin, error)
 
-	// TODO ROLES
-	CreateRoles(payloads adminDto.RoleDTO) (adminDto.RoleDTO, error)
+	// // TODO ROLES
+	// CreateRoles(payloads adminDto.RoleDTO) (adminDto.RoleDTO, error)
 
-	// TODO MEDICAL FACILITYS
-	CreateMedical(payloads adminDto.MedicalDto) (adminDto.MedicalDto, error)
+	// // TODO MEDICAL FACILITYS
+	// CreateMedical(payloads adminDto.MedicalDto) (adminDto.MedicalDto, error)
 
-	// TODO DASHBOARD
+	// // TODO DASHBOARD
 
-	GetDashboard() (adminDto.CountDashboard, error)
+	// GetDashboard() (adminDto.CountDashboard, error)
 
-	// TODO SESSION
-	CountKuota(vaccineID uint) (adminDto.CountKuota, error)
-	AutoUpdateSession(dateR, timeR string) error
-	CreateSession(payloads adminDto.SessionRequest) (adminDto.SessionDTO, error)
-	GetAllSession() ([]adminDto.SessionWithStatusDTO, error)
-	GetSessionById(payloads adminDto.SessionWithStatusDTO) (adminDto.SessionWithStatusDTO, error)
-	UpdateSession(payloads adminDto.SessionRequestUpdate) (adminDto.SessionRequestUpdate, error)
-	DeleteSession(payloads adminDto.SessionWithStatusDTO) error
+	// // TODO SESSION
+	// CountKuota(vaccineID uint) (adminDto.CountKuota, error)
+	// AutoUpdateSession(dateR, timeR string) error
+	// CreateSession(payloads adminDto.SessionRequest) (adminDto.SessionDTO, error)
+	// GetAllSession() ([]adminDto.SessionWithStatusDTO, error)
+	// GetSessionById(payloads adminDto.SessionWithStatusDTO) (adminDto.SessionWithStatusDTO, error)
+	// UpdateSession(payloads adminDto.SessionRequestUpdate) (adminDto.SessionRequestUpdate, error)
+	// DeleteSession(payloads adminDto.SessionWithStatusDTO) error
 
-	// TODO CreateVaccine
-	CreateVaccine(input adminDto.VaccineRequest) (adminDto.VaccineResponse, error)
+	// // TODO CreateVaccine
+	// CreateVaccine(input adminDto.VaccineRequest) (adminDto.VaccineResponse, error)
 
-	// TODO ViewAllVaccine
-	ViewAllVaccine() ([]adminDto.VaccineDTO, error)
+	// // TODO ViewAllVaccine
+	// ViewAllVaccine() ([]adminDto.VaccineDTO, error)
 
-	// TODO UpdateVaccine
-	UpdateVaccine(payloads adminDto.VaccineDTO) (adminDto.VaccineDTO, error)
+	// // TODO UpdateVaccine
+	// UpdateVaccine(payloads adminDto.VaccineDTO) (adminDto.VaccineDTO, error)
 
-	// TODO DeleteVaccine
-	DeleteVaccine(data adminDto.VaccineDTO) error
+	// // TODO DeleteVaccine
+	// DeleteVaccine(data adminDto.VaccineDTO) error
 
-	// TODO Profile
-	GetProfile(payload adminDto.ProfileRequest) ([]adminDto.ProfilDTO, error)
-	UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.Address,error)
-	GetAdmin(payloads adminDto.ProfileRequest) (adminDto.Address, error)
-	UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO,error)
-	// TODO BOOKING
-	CreateCitizenBook(nik, nama, address string) (model.Citizen, error)
-	CreateBooking(payloads adminDto.BookingDto) (adminDto.BookingDto, error)
-	GetMaxQueue(session_id uint) (adminDto.MaxQueue, error)
-	UpdateSessionBooking(session_id uint, kuota string) error
-	UpdateBooking(payloads adminDto.UpdateBooking) (adminDto.UpdateBooking, error)
-	GetAllBooking() ([]adminDto.BookingAllDto, error)
-	GetBookingById(payloads adminDto.BookingAllDto) (adminDto.BookingAllDto, error)
-	DeleteBooking(payloads adminDto.BookingAllDto) error
+	// // TODO Profile
+	// GetProfile(payload adminDto.ProfileRequest) ([]adminDto.ProfilDTO, error)
+	// UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.Address, error)
+	// GetAdmin(payloads adminDto.ProfileRequest) (adminDto.Address, error)
+	// UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO, error)
+	// // TODO BOOKING
+	// CreateCitizenBook(nik, nama, address string) (model.Citizen, error)
+	// CreateBooking(payloads adminDto.BookingDto) (adminDto.BookingDto, error)
+	// GetMaxQueue(session_id uint) (adminDto.MaxQueue, error)
+	// UpdateSessionBooking(session_id uint, kuota string) error
+	// UpdateBooking(payloads adminDto.UpdateBooking) (adminDto.UpdateBooking, error)
+	// GetAllBooking() ([]adminDto.BookingAllDto, error)
+	// GetBookingById(payloads adminDto.BookingAllDto) (adminDto.BookingAllDto, error)
+	// DeleteBooking(payloads adminDto.BookingAllDto) error
 }
 
 type adminRepository struct {
@@ -105,39 +104,39 @@ func (u *adminRepository) RegisterAdmin(payloads adminDto.RegisterAdminDto) (adm
 }
 
 // TODO DASHBOARD ADMIN
-func (u *adminRepository) GetDashboard() (adminDto.CountDashboard, error) {
-	dto := adminDto.CountDashboard{}
-	var (
-		vaccineAvail      int
-		bookingToday      int64
-		bookingRegistered int64
-		convDate          string
-	)
-	today := time.Now()
-	date := today.Format("2006-01-02")
-	convDate = string(date)
+// func (u *adminRepository) GetDashboard() (adminDto.CountDashboard, error) {
+// 	dto := adminDto.CountDashboard{}
+// 	var (
+// 		vaccineAvail      int
+// 		bookingToday      int64
+// 		bookingRegistered int64
+// 		convDate          string
+// 	)
+// 	today := time.Now()
+// 	date := today.Format("2006-01-02")
+// 	convDate = string(date)
 
-	// QUERY GET VACCINE AVAILABLE
-	if err := u.db.Model(&model.VaccineVarietie{}).Select("coalesce(sum(kuota), 0) as vaccine_available").Where("expired >= ?", convDate).Find(&vaccineAvail).Error; err != nil {
-		return dto, err
-	}
+// 	// QUERY GET VACCINE AVAILABLE
+// 	if err := u.db.Model(&model.VaccineVarietie{}).Select("coalesce(sum(kuota), 0) as vaccine_available").Where("expired >= ?", convDate).Find(&vaccineAvail).Error; err != nil {
+// 		return dto, err
+// 	}
 
-	// QUERY GET BOOKING TODAY
-	if err := u.db.Model(&model.Booking{}).Where("created_at like ?", "%"+convDate+"%").Count(&bookingToday).Error; err != nil {
-		return dto, err
-	}
+// 	// QUERY GET BOOKING TODAY
+// 	if err := u.db.Model(&model.Booking{}).Where("created_at like ?", "%"+convDate+"%").Count(&bookingToday).Error; err != nil {
+// 		return dto, err
+// 	}
 
-	// QUERY GET ALL BOOKING
-	if err := u.db.Model(&model.Booking{}).Count(&bookingRegistered).Error; err != nil {
-		return dto, err
-	}
+// 	// QUERY GET ALL BOOKING
+// 	if err := u.db.Model(&model.Booking{}).Count(&bookingRegistered).Error; err != nil {
+// 		return dto, err
+// 	}
 
-	// USING FORMAT MONEY FROM leekchan/accounting
-	ac := accounting.Accounting{Precision: 0}
+// 	// USING FORMAT MONEY FROM leekchan/accounting
+// 	ac := accounting.Accounting{Precision: 0}
 
-	dto.VaccineAvailable = ac.FormatMoney(vaccineAvail)
-	dto.BookingToday = ac.FormatMoney(bookingToday)
-	dto.BookingsRegistered = ac.FormatMoney(bookingRegistered)
+// 	dto.VaccineAvailable = ac.FormatMoney(vaccineAvail)
+// 	dto.BookingToday = ac.FormatMoney(bookingToday)
+// 	dto.BookingsRegistered = ac.FormatMoney(bookingRegistered)
 
-	return dto, nil
-}
+// 	return dto, nil
+// }

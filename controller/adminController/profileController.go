@@ -1,142 +1,129 @@
 package adminController
 
-import (
-	"capstone_vaccine/dto/adminDto"
-	"capstone_vaccine/middleware"
-	"capstone_vaccine/utils"
-	"context"
-	"net/http"
-	"os"
+// // TODO Get Profile
+// func (u *adminController) GetProfile(c echo.Context) error {
 
-	"github.com/cloudinary/cloudinary-go"
-	"github.com/cloudinary/cloudinary-go/api/uploader"
-	"github.com/labstack/echo"
-)
+// 	adminID, _ := middleware.ClaimData(c, "adminID")
+// 	conv_adminID := adminID.(float64)
+// 	conv_ := uint(conv_adminID)
 
-// TODO Get Profile
-func (u *adminController) GetProfile(c echo.Context) error {
+// 	var payloads adminDto.ProfileRequest
 
-	adminID, _ := middleware.ClaimData(c, "adminID")
-	conv_adminID := adminID.(float64)
-	conv_ := uint(conv_adminID)
+// 	if err := c.Bind(&payloads); err != nil {
+// 		return err
+// 	}
 
-	var payloads adminDto.ProfileRequest
+// 	temp := adminDto.ProfileRequest{
+// 		AdminID: conv_,
+// 	}
 
-	if err := c.Bind(&payloads); err != nil {
-		return err
-	}
+// 	res, err := u.adminServ.GetProfile(temp)
+// 	if err != nil {
+// 		return c.JSON(http.StatusBadRequest, utils.Response{
+// 			Message: err.Error(),
+// 			Code:    http.StatusBadRequest,
+// 		})
+// 	}
 
-	temp := adminDto.ProfileRequest{
-		AdminID: conv_,
-	}
+// 	return c.JSON(http.StatusOK, utils.Response{
+// 		Message: "Profile",
+// 		Code:    http.StatusOK,
+// 		Data:    res,
+// 	})
+// }
 
-	res, err := u.adminServ.GetProfile(temp)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, utils.Response{
-			Message: err.Error(),
-			Code:    http.StatusBadRequest,
-		})
-	}
+// // TODO Update Profile & Change Password
+// func (u *adminController) UpdateProfile(c echo.Context) error {
 
-	return c.JSON(http.StatusOK, utils.Response{
-		Message: "Profile",
-		Code:    http.StatusOK,
-		Data:    res,
-	})
-}
+// 	adminID, _ := middleware.ClaimData(c, "adminID")
+// 	conv_adminID := adminID.(float64)
+// 	conv_ := uint(conv_adminID)
 
-// TODO Update Profile & Change Password
-func (u *adminController) UpdateProfile(c echo.Context) error {
+// 	medicalID, _ := middleware.ClaimData(c, "medicalID")
+// 	conv_medicalID := medicalID.(float64)
+// 	conv := uint(conv_medicalID)
 
-	adminID, _ := middleware.ClaimData(c, "adminID")
-	conv_adminID := adminID.(float64)
-	conv_ := uint(conv_adminID)
+// 	var payloads adminDto.ProfileRequest
 
-	medicalID, _ := middleware.ClaimData(c, "medicalID")
-	conv_medicalID := medicalID.(float64)
-	conv := uint(conv_medicalID)
+// 	if err := c.Bind(&payloads); err != nil {
+// 		return err
+// 	}
+// 	if payloads.NewPassword == "" {
+// 		payloads.NewPassword = payloads.Password
 
-	var payloads adminDto.ProfileRequest
+// 	}
 
-	if err := c.Bind(&payloads); err != nil {
-		return err
-	}
-	if payloads.NewPassword == "" {
-		payloads.NewPassword = payloads.Password
+// 	hash, _ := utils.HashBcrypt(payloads.NewPassword)
 
-	}
+// 	temp := adminDto.ProfileRequest{
+// 		AdminID:            conv_,
+// 		MedicalFacilitysId: conv,
+// 		Name:               payloads.Name,
+// 		Image:              payloads.Image,
+// 		Address:            payloads.Address,
+// 		ResponsiblePerson:  payloads.ResponsiblePerson,
+// 		Username:           payloads.Username,
+// 		NewPassword:        hash,
+// 		Password:           payloads.Password,
+// 	}
 
-	hash, _ := utils.HashBcrypt(payloads.NewPassword)
+// 	_, err := u.adminServ.UpdateProfile(temp)
 
-	temp := adminDto.ProfileRequest{
-		AdminID:            conv_,
-		MedicalFacilitysId: conv,
-		Name:               payloads.Name,
-		Image:              payloads.Image,
-		Address:            payloads.Address,
-		ResponsiblePerson:  payloads.ResponsiblePerson,
-		Username:           payloads.Username,
-		NewPassword:        hash,
-		Password:           payloads.Password,
-	}
+// 	if err != nil {
+// 		return c.JSON(http.StatusInternalServerError, utils.Response{
+// 			Message: err.Error(),
+// 			Code:    http.StatusInternalServerError,
+// 		})
+// 	}
 
-	_, err := u.adminServ.UpdateProfile(temp)
+// 	return c.JSON(http.StatusOK, utils.Response{
+// 		Message: "Update Profile Berhasil dilakukan",
+// 		Code:    http.StatusOK,
+// 	})
+// }
 
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, utils.Response{
-			Message: err.Error(),
-			Code:    http.StatusInternalServerError,
-		})
-	}
+// // Upload Image
+// func (u *adminController) UpdateImage(c echo.Context) error {
 
-	return c.JSON(http.StatusOK, utils.Response{
-		Message: "Update Profile Berhasil dilakukan",
-		Code:    http.StatusOK,
-	})
-}
+// 	cld, _ := cloudinary.NewFromURL(os.Getenv("CLOUDINARY_URL"))
+// 	medicalID, _ := middleware.ClaimData(c, "medicalID")
+// 	conv_medicalID := medicalID.(float64)
+// 	conv := uint(conv_medicalID)
 
-// Upload Image
-func (u *adminController) UpdateImage(c echo.Context) error {
+// 	fileHeader, _ := c.FormFile("image")
 
-	cld, _ := cloudinary.NewFromURL(os.Getenv("CLOUDINARY_URL"))
-	medicalID, _ := middleware.ClaimData(c, "medicalID")
-	conv_medicalID := medicalID.(float64)
-	conv := uint(conv_medicalID)
+// 	file, _ := fileHeader.Open()
 
-	fileHeader, _ := c.FormFile("image")
+// 	ctx := context.Background()
 
-	file, _ := fileHeader.Open()
+// 	result, err := cld.Upload.Upload(ctx, file, uploader.UploadParams{})
 
-	ctx := context.Background()
+// 	if err != nil {
+// 		return err
+// 	}
 
-	result, err := cld.Upload.Upload(ctx, file, uploader.UploadParams{})
+// 	var payloads adminDto.ProfileRequest
 
-	if err != nil {
-		return err
-	}
+// 	if err := c.Bind(&payloads); err != nil {
+// 		return err
+// 	}
 
-	var payloads adminDto.ProfileRequest
+// 	temp := adminDto.ProfileRequest{
+// 		MedicalFacilitysId: conv,
+// 		Image:              result.SecureURL,
+// 	}
+// 	res, err := u.adminServ.UpdateImage(temp)
 
-	if err := c.Bind(&payloads); err != nil {
-		return err
-	}
+// 	if err != nil {
+// 		return c.JSON(http.StatusInternalServerError, utils.Response{
+// 			Message: err.Error(),
+// 			Code:    http.StatusInternalServerError,
+// 		})
+// 	}
 
-	temp := adminDto.ProfileRequest{
-		MedicalFacilitysId: conv,
-		Image:              result.SecureURL,
-	}
-	res, err := u.adminServ.UpdateImage(temp)
-
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, utils.Response{
-			Message: err.Error(),
-			Code:    http.StatusInternalServerError,
-		})
-	}
-
-	return c.JSON(http.StatusOK, utils.Response{
-		Message: "Successfully uploaded the file",
-		Code:    http.StatusOK,
-		Data:    res.Image,
-	})
-}
+// 	return c.JSON(http.StatusOK, utils.Response{
+// 		Message: "Successfully uploaded the file",
+// 		Code:    http.StatusOK,
+// 		Data:    res.Image,
+// 	})
+// }

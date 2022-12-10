@@ -1,83 +1,76 @@
 package adminService
 
-import (
-	"capstone_vaccine/dto/adminDto"
-	"errors"
+// // TODO Get Profile Admin
+// func (s *adminService) GetProfile(payloads adminDto.ProfileRequest) ([]adminDto.ProfilDTO, error) {
 
-	"golang.org/x/crypto/bcrypt"
-)
+// 	var profile []adminDto.ProfilDTO
 
-// TODO Get Profile Admin
-func (s *adminService) GetProfile(payloads adminDto.ProfileRequest) ([]adminDto.ProfilDTO, error) {
+// 	res, err := s.adminRepository.GetProfile(payloads)
 
-	var profile []adminDto.ProfilDTO
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	for _, p := range res {
 
-	res, err := s.adminRepository.GetProfile(payloads)
+// 		profile = append(profile, adminDto.ProfilDTO{
+// 			Name:              p.Name,
+// 			Image:             p.Image,
+// 			Address:           p.Address,
+// 			ResponsiblePerson: p.ResponsiblePerson,
+// 			Username:          p.Username,
+// 			Password:          p.Password,
+// 		})
+// 	}
+// 	return profile, nil
+// }
 
-	if err != nil {
-		return nil, err
-	}
-	for _, p := range res {
+// // TODO Update Profile & Change Password
+// func (s *adminService) UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.ProfileRequest, error) {
 
-		profile = append(profile, adminDto.ProfilDTO{
-			Name:              p.Name,
-			Image:             p.Image,
-			Address:           p.Address,
-			ResponsiblePerson: p.ResponsiblePerson,
-			Username:          p.Username,
-			Password:          p.Password,
-		})
-	}
-	return profile, nil
-}
+// 	dto := adminDto.ProfileRequest{
+// 		AdminID:            payloads.AdminID,
+// 		MedicalFacilitysId: payloads.MedicalFacilitysId,
+// 		Name:               payloads.Name,
+// 		Image:              payloads.Image,
+// 		Address:            payloads.Address,
+// 		ResponsiblePerson:  payloads.ResponsiblePerson,
+// 		Username:           payloads.Username,
+// 		Password:           payloads.Password,
+// 		NewPassword:        payloads.NewPassword,
+// 	}
+// 	new, _ := s.adminRepository.GetAdmin(payloads)
 
-// TODO Update Profile & Change Password
-func (s *adminService) UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.ProfileRequest, error) {
+// 	if err := bcrypt.CompareHashAndPassword([]byte(new.Password), []byte(payloads.Password)); err != nil {
 
-	dto := adminDto.ProfileRequest{
-		AdminID:            payloads.AdminID,
-		MedicalFacilitysId: payloads.MedicalFacilitysId,
-		Name:               payloads.Name,
-		Image:              payloads.Image,
-		Address:            payloads.Address,
-		ResponsiblePerson:  payloads.ResponsiblePerson,
-		Username:           payloads.Username,
-		Password:           payloads.Password,
-		NewPassword:        payloads.NewPassword,
-	}
-	new, _ := s.adminRepository.GetAdmin(payloads)
+// 		return dto, errors.New("password incorrect")
 
-	if err := bcrypt.CompareHashAndPassword([]byte(new.Password), []byte(payloads.Password)); err != nil {
+// 	}
+// 	_, err := s.adminRepository.UpdateProfile(dto)
 
-		return dto, errors.New("password incorrect")
+// 	if err != nil {
+// 		return dto, err
+// 	}
 
-	}
-	_, err := s.adminRepository.UpdateProfile(dto)
+// 	return dto, nil
+// }
 
-	if err != nil {
-		return dto, err
-	}
+// // TODO Uploud Image
+// func (s *adminService) UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO, error) {
 
-	return dto, nil
-}
+// 	temp := adminDto.ProfileRequest{
+// 		MedicalFacilitysId: payloads.MedicalFacilitysId,
+// 		Image:              payloads.Image,
+// 	}
+// 	res, err := s.adminRepository.UpdateImage(temp)
 
-// TODO Uploud Image
-func (s *adminService) UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO, error) {
+// 	out := adminDto.ProfilDTO{
+// 		Image: res.Image,
+// 	}
 
-	temp := adminDto.ProfileRequest{
-		MedicalFacilitysId: payloads.MedicalFacilitysId,
-		Image:              payloads.Image,
-	}
-	res, err := s.adminRepository.UpdateImage(temp)
+// 	if err != nil {
+// 		return out, err
+// 	}
 
-	out := adminDto.ProfilDTO{
-		Image: res.Image,
-	}
+// 	return out, nil
 
-	if err != nil {
-		return out, err
-	}
-
-	return out, nil
-
-}
+// }

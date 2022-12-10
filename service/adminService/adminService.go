@@ -15,45 +15,45 @@ type AdminService interface {
 	RegisterAdmin(payloads adminDto.RegisterAdminDto) (adminDto.RegisterAdminDto, error)
 	LoginAdmin(payloads adminDto.LoginDTO) (adminDto.LoginJWT, error)
 
-	// TODO ROLES
-	CreateRoles(payloads adminDto.RoleDTO) (adminDto.RoleDTO, error)
+	// // TODO ROLES
+	// CreateRoles(payloads adminDto.RoleDTO) (adminDto.RoleDTO, error)
 
-	// TODO MEDICAL FACILITYS
-	CreateMedical(payloads adminDto.MedicalDto) (adminDto.MedicalDto, error)
+	// // TODO MEDICAL FACILITYS
+	// CreateMedical(payloads adminDto.MedicalDto) (adminDto.MedicalDto, error)
 
-	// TODO DASHBOARD
+	// // TODO DASHBOARD
 
-	GetDashboard() (adminDto.CountDashboard, error)
+	// GetDashboard() (adminDto.CountDashboard, error)
 
-	// TODO SESSION
-	CreateSession(payloads adminDto.SessionRequest) (adminDto.SessionDTO, error)
-	GetAllSession() ([]adminDto.SessionWithStatusDTO, error)
-	GetSessionById(payloads adminDto.SessionWithStatusDTO) (adminDto.SessionWithStatusDTO, error)
-	UpdateSession(payloads adminDto.SessionRequestUpdate) (adminDto.SessionRequestUpdate, error)
-	DeleteSession(payloads adminDto.SessionWithStatusDTO) error
+	// // TODO SESSION
+	// CreateSession(payloads adminDto.SessionRequest) (adminDto.SessionDTO, error)
+	// GetAllSession() ([]adminDto.SessionWithStatusDTO, error)
+	// GetSessionById(payloads adminDto.SessionWithStatusDTO) (adminDto.SessionWithStatusDTO, error)
+	// UpdateSession(payloads adminDto.SessionRequestUpdate) (adminDto.SessionRequestUpdate, error)
+	// DeleteSession(payloads adminDto.SessionWithStatusDTO) error
 
-	// TODO CreateVaccine
-	CreateVaccine(input adminDto.VaccineRequest) (adminDto.VaccineResponse, error)
+	// // TODO CreateVaccine
+	// CreateVaccine(input adminDto.VaccineRequest) (adminDto.VaccineResponse, error)
 
-	// TODO ViewAllVaccine
-	ViewAllVaccine() ([]adminDto.VaccineDTO, error)
+	// // TODO ViewAllVaccine
+	// ViewAllVaccine() ([]adminDto.VaccineDTO, error)
 
-	// TODO UpdateVaccine
-	UpdateVaccine(payloads adminDto.VaccineDTO) (adminDto.VaccineDTO, error)
+	// // TODO UpdateVaccine
+	// UpdateVaccine(payloads adminDto.VaccineDTO) (adminDto.VaccineDTO, error)
 
-	// TODO DeleteVaccine
-	DeleteVaccine(data adminDto.VaccineDTO) error
+	// // TODO DeleteVaccine
+	// DeleteVaccine(data adminDto.VaccineDTO) error
 
-	// TODO Profile
-	GetProfile(payloads adminDto.ProfileRequest)([]adminDto.ProfilDTO,error)
-	UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.ProfileRequest,error)
-	UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO,error)
-	// TODO BOOKING
-	CreateBooking(payloads adminDto.BookingDto) (adminDto.BookingDto, error)
-	UpdateBooking(payloads adminDto.UpdateBooking) (adminDto.UpdateBooking, error)
-	GetAllBooking() ([]adminDto.BookingAllDto, error)
-	GetBookingById(payloads adminDto.BookingAllDto) (adminDto.BookingAllDto, error)
-	DeleteBooking(payloads adminDto.BookingAllDto) error
+	// // TODO Profile
+	// GetProfile(payloads adminDto.ProfileRequest)([]adminDto.ProfilDTO,error)
+	// UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.ProfileRequest,error)
+	// UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO,error)
+	// // TODO BOOKING
+	// CreateBooking(payloads adminDto.BookingDto) (adminDto.BookingDto, error)
+	// UpdateBooking(payloads adminDto.UpdateBooking) (adminDto.UpdateBooking, error)
+	// GetAllBooking() ([]adminDto.BookingAllDto, error)
+	// GetBookingById(payloads adminDto.BookingAllDto) (adminDto.BookingAllDto, error)
+	// DeleteBooking(payloads adminDto.BookingAllDto) error
 }
 
 type adminService struct {
@@ -119,12 +119,12 @@ func (s *adminService) LoginAdmin(payloads adminDto.LoginDTO) (adminDto.LoginJWT
 
 // TODO DASHBOARD
 // TODO GET DASHBOARD
-func (s *adminService) GetDashboard() (adminDto.CountDashboard, error) {
-	res, err := s.adminRepository.GetDashboard()
+// func (s *adminService) GetDashboard() (adminDto.CountDashboard, error) {
+// 	res, err := s.adminRepository.GetDashboard()
 
-	if err != nil {
-		return res, err
-	}
+// 	if err != nil {
+// 		return res, err
+// 	}
 
-	return res, nil
-}
+// 	return res, nil
+// }

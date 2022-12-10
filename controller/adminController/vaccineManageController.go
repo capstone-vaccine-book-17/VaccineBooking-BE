@@ -1,147 +1,137 @@
 package adminController
 
-import (
-	"capstone_vaccine/dto/adminDto"
-	"capstone_vaccine/middleware"
-	"capstone_vaccine/utils"
-	"net/http"
-	"strconv"
+// // TODO Create Vaccine
+// func (u *adminController) CreateVaccine(c echo.Context) error {
+// 	medicalID, _ := middleware.ClaimData(c, "medicalID")
 
-	"github.com/labstack/echo"
-)
+// 	conv_medicalID := medicalID.(float64)
 
-// TODO Create Vaccine
-func (u *adminController) CreateVaccine(c echo.Context) error {
-	medicalID, _ := middleware.ClaimData(c, "medicalID")
+// 	conv := uint(conv_medicalID)
 
-	conv_medicalID := medicalID.(float64)
+// 	var payloads adminDto.VaccineRequest
 
-	conv := uint(conv_medicalID)
+// 	if err := c.Bind(&payloads); err != nil {
+// 		return err
+// 	}
 
-	var payloads adminDto.VaccineRequest
+// 	if err := c.Validate(&payloads); err != nil {
+// 		return c.JSON(http.StatusBadRequest, utils.Response{
+// 			Message: err.Error(),
+// 			Code:    http.StatusBadRequest,
+// 		})
+// 	}
+// 	temp := adminDto.VaccineRequest{
+// 		MedicalFacilitysId: conv,
+// 		Name:               payloads.Name,
+// 		Kuota:              payloads.Kuota,
+// 		Expired:            payloads.Expired,
+// 	}
 
-	if err := c.Bind(&payloads); err != nil {
-		return err
-	}
+// 	res, err := u.adminServ.CreateVaccine(temp)
+// 	if err != nil {
+// 		return c.JSON(http.StatusInternalServerError, utils.Response{
+// 			Message: err.Error(),
+// 			Code:    http.StatusInternalServerError,
+// 		})
+// 	}
 
-	if err := c.Validate(&payloads); err != nil {
-		return c.JSON(http.StatusBadRequest, utils.Response{
-			Message: err.Error(),
-			Code:    http.StatusBadRequest,
-		})
-	}
-	temp := adminDto.VaccineRequest{
-		MedicalFacilitysId: conv,
-		Name:               payloads.Name,
-		Kuota:              payloads.Kuota,
-		Expired:            payloads.Expired,
-	}
+// 	return c.JSON(http.StatusOK, utils.Response{
+// 		Message: "Vaccine Berhasil Ditambahkan",
+// 		Code:    http.StatusOK,
+// 		Data:    res,
+// 	})
+// }
 
-	res, err := u.adminServ.CreateVaccine(temp)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, utils.Response{
-			Message: err.Error(),
-			Code:    http.StatusInternalServerError,
-		})
-	}
+// // TODO View All Vaccine
+// func (u *adminController) ViewAllVaccine(c echo.Context) error {
 
-	return c.JSON(http.StatusOK, utils.Response{
-		Message: "Vaccine Berhasil Ditambahkan",
-		Code:    http.StatusOK,
-		Data:    res,
-	})
-}
+// 	res, err := u.adminServ.ViewAllVaccine()
+// 	if err != nil {
+// 		return c.JSON(http.StatusBadRequest, utils.Response{
+// 			Message: err.Error(),
+// 			Code:    http.StatusBadRequest,
+// 		})
+// 	}
 
-// TODO View All Vaccine
-func (u *adminController) ViewAllVaccine(c echo.Context) error {
+// 	return c.JSON(http.StatusOK, utils.Response{
+// 		Message: "Daftar Seluruh Vaccine",
+// 		Code:    http.StatusOK,
+// 		Data:    res,
+// 	})
+// }
 
-	res, err := u.adminServ.ViewAllVaccine()
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, utils.Response{
-			Message: err.Error(),
-			Code:    http.StatusBadRequest,
-		})
-	}
+// // TODO Update Vaccine
+// func (u *adminController) UpdateVaccine(c echo.Context) error {
+// 	id := c.Param("id")
+// 	convId, err := strconv.Atoi(id)
+// 	if err != nil {
+// 		return c.JSON(http.StatusBadRequest, utils.Response{
+// 			Message: err.Error(),
+// 			Code:    http.StatusBadRequest,
+// 		})
+// 	}
 
-	return c.JSON(http.StatusOK, utils.Response{
-		Message: "Daftar Seluruh Vaccine",
-		Code:    http.StatusOK,
-		Data:    res,
-	})
-}
+// 	var payloads adminDto.VaccineDTO
 
-// TODO Update Vaccine
-func (u *adminController) UpdateVaccine(c echo.Context) error {
-	id := c.Param("id")
-	convId, err := strconv.Atoi(id)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, utils.Response{
-			Message: err.Error(),
-			Code:    http.StatusBadRequest,
-		})
-	}
+// 	if err := c.Bind(&payloads); err != nil {
+// 		return err
+// 	}
 
-	var payloads adminDto.VaccineDTO
+// 	if err := c.Validate(&payloads); err != nil {
+// 		return c.JSON(http.StatusBadRequest, utils.Response{
+// 			Message: err.Error(),
+// 			Code:    http.StatusBadRequest,
+// 		})
+// 	}
 
-	if err := c.Bind(&payloads); err != nil {
-		return err
-	}
+// 	Vaccine := adminDto.VaccineDTO{
+// 		VaccineID: uint(convId),
+// 		Name:      payloads.Name,
+// 		Kuota:     payloads.Kuota,
+// 		Expired:   payloads.Expired,
+// 	}
 
-	if err := c.Validate(&payloads); err != nil {
-		return c.JSON(http.StatusBadRequest, utils.Response{
-			Message: err.Error(),
-			Code:    http.StatusBadRequest,
-		})
-	}
+// 	res, err := u.adminServ.UpdateVaccine(Vaccine)
 
-	Vaccine := adminDto.VaccineDTO{
-		VaccineID: uint(convId),
-		Name:      payloads.Name,
-		Kuota:     payloads.Kuota,
-		Expired:   payloads.Expired,
-	}
+// 	if err != nil {
+// 		return c.JSON(http.StatusInternalServerError, utils.Response{
+// 			Message: err.Error(),
+// 			Code:    http.StatusInternalServerError,
+// 		})
+// 	}
 
-	res, err := u.adminServ.UpdateVaccine(Vaccine)
+// 	return c.JSON(http.StatusOK, utils.Response{
+// 		Message: "Update Berhasil Dilakukan",
+// 		Code:    http.StatusOK,
+// 		Data:    res,
+// 	})
+// }
 
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, utils.Response{
-			Message: err.Error(),
-			Code:    http.StatusInternalServerError,
-		})
-	}
+// // TODO Delete Vaccine
+// func (u *adminController) DeleteVaccine(c echo.Context) error {
+// 	id := c.Param("id")
+// 	convId, err := strconv.Atoi(id)
+// 	if err != nil {
+// 		return c.JSON(http.StatusBadRequest, utils.Response{
+// 			Message: err.Error(),
+// 			Code:    http.StatusBadRequest,
+// 		})
+// 	}
+// 	vaccine := adminDto.VaccineDTO{
+// 		VaccineID: uint(convId),
+// 	}
 
-	return c.JSON(http.StatusOK, utils.Response{
-		Message: "Update Berhasil Dilakukan",
-		Code:    http.StatusOK,
-		Data:    res,
-	})
-}
+// 	err = u.adminServ.DeleteVaccine(vaccine)
 
-// TODO Delete Vaccine
-func (u *adminController) DeleteVaccine(c echo.Context) error {
-	id := c.Param("id")
-	convId, err := strconv.Atoi(id)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, utils.Response{
-			Message: err.Error(),
-			Code:    http.StatusBadRequest,
-		})
-	}
-	vaccine := adminDto.VaccineDTO{
-		VaccineID: uint(convId),
-	}
+// 	if err != nil {
+// 		return c.JSON(http.StatusBadRequest, utils.Response{
+// 			Message: err.Error(),
+// 			Code:    http.StatusBadRequest,
+// 		})
+// 	}
 
-	err = u.adminServ.DeleteVaccine(vaccine)
-
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, utils.Response{
-			Message: err.Error(),
-			Code:    http.StatusBadRequest,
-		})
-	}
-
-	return c.JSON(http.StatusOK, utils.Response{
-		Message: "Vaccine Berhasil Dihapus",
-		Code:    http.StatusOK,
-	})
-}
+// 	return c.JSON(http.StatusOK, utils.Response{
+// 		Message: "Vaccine Berhasil Dihapus",
+// 		Code:    http.StatusOK,
+// 	})
+// }

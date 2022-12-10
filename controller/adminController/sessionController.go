@@ -1,180 +1,170 @@
 package adminController
 
-import (
-	"capstone_vaccine/dto/adminDto"
-	"capstone_vaccine/middleware"
-	"capstone_vaccine/utils"
-	"net/http"
-	"strconv"
+// // TODO CREATE SESSION
+// func (u *adminController) CreateSession(c echo.Context) error {
+// 	medicalID, _ := middleware.ClaimData(c, "medicalID")
 
-	"github.com/labstack/echo"
-)
+// 	conv_medicalID := medicalID.(float64)
 
-// TODO CREATE SESSION
-func (u *adminController) CreateSession(c echo.Context) error {
-	medicalID, _ := middleware.ClaimData(c, "medicalID")
+// 	conv := uint(conv_medicalID)
 
-	conv_medicalID := medicalID.(float64)
+// 	var payloads adminDto.SessionRequest
 
-	conv := uint(conv_medicalID)
+// 	if err := c.Bind(&payloads); err != nil {
+// 		return err
+// 	}
 
-	var payloads adminDto.SessionRequest
+// 	temp := adminDto.SessionRequest{
+// 		Name:               payloads.Name,
+// 		MedicalFacilitysId: conv,
+// 		VaccineId:          payloads.VaccineId,
+// 		StartTime:          payloads.StartTime,
+// 		Kuota:              payloads.Kuota,
+// 		Dosis:              payloads.Dosis,
+// 		EndTime:            payloads.EndTime,
+// 		Date:               payloads.Date,
+// 	}
 
-	if err := c.Bind(&payloads); err != nil {
-		return err
-	}
+// 	res, err := u.adminServ.CreateSession(temp)
+// 	if err != nil {
+// 		return c.JSON(http.StatusInternalServerError, utils.Response{
+// 			Message: err.Error(),
+// 			Code:    http.StatusInternalServerError,
+// 		})
+// 	}
 
-	temp := adminDto.SessionRequest{
-		Name:               payloads.Name,
-		MedicalFacilitysId: conv,
-		VaccineId:          payloads.VaccineId,
-		StartTime:          payloads.StartTime,
-		Kuota:              payloads.Kuota,
-		Dosis:              payloads.Dosis,
-		EndTime:            payloads.EndTime,
-		Date:               payloads.Date,
-	}
+// 	return c.JSON(http.StatusOK, utils.Response{
+// 		Message: "create session success",
+// 		Code:    http.StatusOK,
+// 		Data:    res,
+// 	})
+// }
 
-	res, err := u.adminServ.CreateSession(temp)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, utils.Response{
-			Message: err.Error(),
-			Code:    http.StatusInternalServerError,
-		})
-	}
+// // TODO GET ALL SESSION
+// func (u *adminController) GetAllSession(c echo.Context) error {
+// 	res, err := u.adminServ.GetAllSession()
 
-	return c.JSON(http.StatusOK, utils.Response{
-		Message: "create session success",
-		Code:    http.StatusOK,
-		Data:    res,
-	})
-}
+// 	if err != nil {
+// 		return c.JSON(http.StatusInternalServerError, utils.Response{
+// 			Message: err.Error(),
+// 			Code:    http.StatusInternalServerError,
+// 		})
+// 	}
 
-// TODO GET ALL SESSION
-func (u *adminController) GetAllSession(c echo.Context) error {
-	res, err := u.adminServ.GetAllSession()
+// 	return c.JSON(http.StatusOK, utils.Response{
+// 		Message: "success",
+// 		Code:    http.StatusOK,
+// 		Data:    res,
+// 	})
+// }
 
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, utils.Response{
-			Message: err.Error(),
-			Code:    http.StatusInternalServerError,
-		})
-	}
+// // TODO GET SESSION BY ID
+// func (u *adminController) GetSessionById(c echo.Context) error {
+// 	id := c.Param("id")
+// 	convId, err := strconv.Atoi(id)
+// 	if err != nil {
+// 		return c.JSON(http.StatusBadRequest, utils.Response{
+// 			Message: err.Error(),
+// 			Code:    http.StatusBadRequest,
+// 		})
+// 	}
 
-	return c.JSON(http.StatusOK, utils.Response{
-		Message: "success",
-		Code:    http.StatusOK,
-		Data:    res,
-	})
-}
+// 	session := adminDto.SessionWithStatusDTO{
+// 		SessionId: uint(convId),
+// 	}
 
-// TODO GET SESSION BY ID
-func (u *adminController) GetSessionById(c echo.Context) error {
-	id := c.Param("id")
-	convId, err := strconv.Atoi(id)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, utils.Response{
-			Message: err.Error(),
-			Code:    http.StatusBadRequest,
-		})
-	}
+// 	res, err := u.adminServ.GetSessionById(session)
 
-	session := adminDto.SessionWithStatusDTO{
-		SessionId: uint(convId),
-	}
+// 	if err != nil {
+// 		return c.JSON(http.StatusInternalServerError, utils.Response{
+// 			Message: err.Error(),
+// 			Code:    http.StatusInternalServerError,
+// 		})
+// 	}
 
-	res, err := u.adminServ.GetSessionById(session)
+// 	return c.JSON(http.StatusOK, utils.Response{
+// 		Message: "success",
+// 		Code:    http.StatusOK,
+// 		Data:    res,
+// 	})
+// }
 
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, utils.Response{
-			Message: err.Error(),
-			Code:    http.StatusInternalServerError,
-		})
-	}
+// // TODO UPDATE SESSION
+// func (u *adminController) UpdateSession(c echo.Context) error {
+// 	id := c.Param("id")
+// 	convId, err := strconv.Atoi(id)
+// 	if err != nil {
+// 		return c.JSON(http.StatusBadRequest, utils.Response{
+// 			Message: err.Error(),
+// 			Code:    http.StatusBadRequest,
+// 		})
+// 	}
 
-	return c.JSON(http.StatusOK, utils.Response{
-		Message: "success",
-		Code:    http.StatusOK,
-		Data:    res,
-	})
-}
+// 	var payloads adminDto.SessionRequestUpdate
 
-// TODO UPDATE SESSION
-func (u *adminController) UpdateSession(c echo.Context) error {
-	id := c.Param("id")
-	convId, err := strconv.Atoi(id)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, utils.Response{
-			Message: err.Error(),
-			Code:    http.StatusBadRequest,
-		})
-	}
+// 	if err := c.Bind(&payloads); err != nil {
+// 		return err
+// 	}
 
-	var payloads adminDto.SessionRequestUpdate
+// 	if err := c.Validate(&payloads); err != nil {
+// 		return c.JSON(http.StatusBadRequest, utils.Response{
+// 			Message: err.Error(),
+// 			Code:    http.StatusBadRequest,
+// 		})
+// 	}
 
-	if err := c.Bind(&payloads); err != nil {
-		return err
-	}
+// 	session := adminDto.SessionRequestUpdate{
+// 		SessionId: uint(convId),
+// 		Name:      payloads.Name,
+// 		VaccineId: payloads.VaccineId,
+// 		Kuota:     payloads.Kuota,
+// 		Dosis:     payloads.Dosis,
+// 		StartTime: payloads.StartTime,
+// 		EndTime:   payloads.EndTime,
+// 	}
 
-	if err := c.Validate(&payloads); err != nil {
-		return c.JSON(http.StatusBadRequest, utils.Response{
-			Message: err.Error(),
-			Code:    http.StatusBadRequest,
-		})
-	}
+// 	res, err := u.adminServ.UpdateSession(session)
 
-	session := adminDto.SessionRequestUpdate{
-		SessionId: uint(convId),
-		Name:      payloads.Name,
-		VaccineId: payloads.VaccineId,
-		Kuota:     payloads.Kuota,
-		Dosis:     payloads.Dosis,
-		StartTime: payloads.StartTime,
-		EndTime:   payloads.EndTime,
-	}
+// 	if err != nil {
+// 		return c.JSON(http.StatusInternalServerError, utils.Response{
+// 			Message: err.Error(),
+// 			Code:    http.StatusInternalServerError,
+// 		})
+// 	}
 
-	res, err := u.adminServ.UpdateSession(session)
+// 	return c.JSON(http.StatusOK, utils.Response{
+// 		Message: "success",
+// 		Code:    http.StatusOK,
+// 		Data:    res,
+// 	})
+// }
 
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, utils.Response{
-			Message: err.Error(),
-			Code:    http.StatusInternalServerError,
-		})
-	}
+// // TODO DELETE SESSION
+// func (u *adminController) DeleteSession(c echo.Context) error {
+// 	id := c.Param("id")
+// 	convId, err := strconv.Atoi(id)
+// 	if err != nil {
+// 		return c.JSON(http.StatusBadRequest, utils.Response{
+// 			Message: err.Error(),
+// 			Code:    http.StatusBadRequest,
+// 		})
+// 	}
 
-	return c.JSON(http.StatusOK, utils.Response{
-		Message: "success",
-		Code:    http.StatusOK,
-		Data:    res,
-	})
-}
+// 	payload := adminDto.SessionWithStatusDTO{
+// 		SessionId: uint(convId),
+// 	}
 
-// TODO DELETE SESSION
-func (u *adminController) DeleteSession(c echo.Context) error {
-	id := c.Param("id")
-	convId, err := strconv.Atoi(id)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, utils.Response{
-			Message: err.Error(),
-			Code:    http.StatusBadRequest,
-		})
-	}
+// 	err = u.adminServ.DeleteSession(payload)
 
-	payload := adminDto.SessionWithStatusDTO{
-		SessionId: uint(convId),
-	}
+// 	if err != nil {
+// 		return c.JSON(http.StatusInternalServerError, utils.Response{
+// 			Message: err.Error(),
+// 			Code:    http.StatusInternalServerError,
+// 		})
+// 	}
 
-	err = u.adminServ.DeleteSession(payload)
-
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, utils.Response{
-			Message: err.Error(),
-			Code:    http.StatusInternalServerError,
-		})
-	}
-
-	return c.JSON(http.StatusOK, utils.Response{
-		Message: "success",
-		Code:    http.StatusOK,
-	})
-}
+// 	return c.JSON(http.StatusOK, utils.Response{
+// 		Message: "success",
+// 		Code:    http.StatusOK,
+// 	})
+// }
