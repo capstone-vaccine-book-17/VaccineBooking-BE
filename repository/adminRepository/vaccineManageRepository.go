@@ -50,14 +50,13 @@ func (u *adminRepository) UpdateVaccine(payloads adminDto.VaccineDTO, medicalId 
 		Expired:   payloads.Expired,
 	}
 
-	if err := u.db.Model(&model.VaccineVarietie{}).Where("vaccine_id = ?", payloads.VaccineID).Where("medical_facilitys_id =?", medicalId).Updates(&model.VaccineVarietie{
+	if err := u.db.Model(&model.VaccineVarietie{}).Where("vaccine_id = ?", payloads.VaccineID).Where("medical_facilitys_id =?",medicalId).Updates(&model.VaccineVarietie{
 		Name:      payloads.Name,
 		Kuota:     payloads.Kuota,
 		Expired:   payloads.Expired,
 		UpdatedAT: time.Now(),
 	}).Error; err != nil {
 		return temp, err
-	} else {
 	}
 
 	return temp, nil
