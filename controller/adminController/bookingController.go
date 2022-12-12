@@ -2,6 +2,7 @@ package adminController
 
 import (
 	"capstone_vaccine/dto/adminDto"
+	"capstone_vaccine/middleware"
 	"capstone_vaccine/utils"
 	"net/http"
 	"strconv"
@@ -88,7 +89,12 @@ func (u *adminController) UpdateBooking(c echo.Context) error {
 
 // TODO GET ALL BOOKING
 func (u *adminController) GetAllBooking(c echo.Context) error {
-	res, err := u.adminServ.GetAllBooking()
+	medicalID, _ := middleware.ClaimData(c, "medicalID")
+
+	conv_medicalID := medicalID.(float64)
+
+	conv := uint(conv_medicalID)
+	res, err := u.adminServ.GetAllBooking(conv)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, utils.Response{
