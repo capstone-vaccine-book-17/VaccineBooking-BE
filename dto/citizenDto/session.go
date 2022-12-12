@@ -7,6 +7,7 @@ type SessionDto struct {
 	Kuota     int    `json:"kuota"`
 	Dosis     string `json:"dosis"`
 	Date      string `json:"date"`
+	ConvDate  string `json:"conv_date"`
 	StartTime string `json:"start_time"`
 	EndTime   string `json:"end_time"`
 }
