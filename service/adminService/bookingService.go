@@ -81,8 +81,8 @@ func (s *adminService) UpdateBooking(payloads adminDto.UpdateBooking) (adminDto.
 }
 
 // TODO GET ALL BOOKING
-func (s *adminService) GetAllBooking() ([]adminDto.BookingAllDto, error) {
-	res, err := s.adminRepository.GetAllBooking()
+func (s *adminService) GetAllBooking(medicalId uint) ([]adminDto.BookingAllDto, error) {
+	res, err := s.adminRepository.GetAllBooking(medicalId)
 
 	if err != nil {
 		return nil, err
