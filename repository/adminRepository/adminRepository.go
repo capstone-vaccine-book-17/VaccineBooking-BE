@@ -23,7 +23,7 @@ type AdminRepository interface {
 
 	// TODO DASHBOARD
 
-	GetDashboard() (adminDto.CountDashboard, error)
+	GetDashboard(medicalId uint) (adminDto.CountDashboard, error)
 
 	// TODO SESSION
 	CountKuota(vaccineID uint) (adminDto.CountKuota, error)
@@ -100,7 +100,7 @@ func (u *adminRepository) RegisterAdmin(payloads adminDto.RegisterAdminDto) (adm
 }
 
 // TODO DASHBOARD ADMIN
-func (u *adminRepository) GetDashboard() (adminDto.CountDashboard, error) {
+func (u *adminRepository) GetDashboard(medicalId uint) (adminDto.CountDashboard, error) {
 	dto := adminDto.CountDashboard{}
 	var (
 		vaccineAvail      int
@@ -113,17 +113,17 @@ func (u *adminRepository) GetDashboard() (adminDto.CountDashboard, error) {
 	convDate = string(date)
 
 	// QUERY GET VACCINE AVAILABLE
-	if err := u.db.Model(&model.VaccineVarietie{}).Select("coalesce(sum(kuota), 0) as vaccine_available").Where("expired >= ?", convDate).Find(&vaccineAvail).Error; err != nil {
+	if err := u.db.Model(&model.VaccineVarietie{}).Select("coalesce(sum(kuota), 0) as vaccine_available").Where("expired >= ?", convDate).Where("vaccine_varieties.medical_facilitys_id = ?", medicalId).Find(&vaccineAvail).Error; err != nil {
 		return dto, err
 	}
 
 	// QUERY GET BOOKING TODAY
-	if err := u.db.Model(&model.Booking{}).Where("created_at like ?", "%"+convDate+"%").Count(&bookingToday).Error; err != nil {
+	if err := u.db.Model(&model.Booking{}).Joins("join sessions on sessions.session_id = bookings.session_id").Where("bookings.created_at like ?", "%"+convDate+"%").Where("sessions.medical_facilitys_id = ?", medicalId).Count(&bookingToday).Error; err != nil {
 		return dto, err
 	}
 
 	// QUERY GET ALL BOOKING
-	if err := u.db.Model(&model.Booking{}).Count(&bookingRegistered).Error; err != nil {
+	if err := u.db.Model(&model.Booking{}).Joins("join sessions on sessions.session_id = bookings.session_id").Where("sessions.medical_facilitys_id = ?", medicalId).Count(&bookingRegistered).Error; err != nil {
 		return dto, err
 	}
 

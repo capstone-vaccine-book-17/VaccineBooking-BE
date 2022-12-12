@@ -23,7 +23,7 @@ type AdminService interface {
 
 	// TODO DASHBOARD
 
-	GetDashboard() (adminDto.CountDashboard, error)
+	GetDashboard(medicalId uint) (adminDto.CountDashboard, error)
 
 	// TODO SESSION
 	CreateSession(payloads adminDto.SessionRequest) (adminDto.SessionDTO, error)
@@ -114,8 +114,8 @@ func (s *adminService) LoginAdmin(payloads adminDto.LoginDTO) (adminDto.LoginJWT
 
 // TODO DASHBOARD
 // TODO GET DASHBOARD
-func (s *adminService) GetDashboard() (adminDto.CountDashboard, error) {
-	res, err := s.adminRepository.GetDashboard()
+func (s *adminService) GetDashboard(medicalId uint) (adminDto.CountDashboard, error) {
+	res, err := s.adminRepository.GetDashboard(medicalId)
 
 	if err != nil {
 		return res, err
