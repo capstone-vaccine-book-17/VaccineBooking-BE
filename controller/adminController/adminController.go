@@ -2,6 +2,7 @@ package adminController
 
 import (
 	"capstone_vaccine/dto/adminDto"
+	"capstone_vaccine/middleware"
 	"capstone_vaccine/service/adminService"
 	"capstone_vaccine/utils"
 	"net/http"
@@ -88,7 +89,12 @@ func (u *adminController) LoginAdmin(c echo.Context) error {
 
 // TODO DASHBOARD
 func (u *adminController) GetDashboard(c echo.Context) error {
-	res, err := u.adminServ.GetDashboard()
+	medicalID, _ := middleware.ClaimData(c, "medicalID")
+
+	conv_medicalID := medicalID.(float64)
+
+	conv := uint(conv_medicalID)
+	res, err := u.adminServ.GetDashboard(conv)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, utils.Response{
