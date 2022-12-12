@@ -23,3 +23,10 @@ func (u *MockAdmin) LoginAdmin(payloads adminDto.LoginDTO) (adminDto.LoginJWT, e
 
 	return args.Get(0).(adminDto.LoginJWT), args.Error(1)
 }
+
+// MOCK Dashboard
+func (u *MockAdmin) GetDashboard() (adminDto.CountDashboard, error) {
+	args := u.Called()
+
+	return args.Get(0).(adminDto.CountDashboard), args.Error(1)
+}

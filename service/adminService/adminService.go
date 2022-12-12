@@ -21,15 +21,15 @@ type AdminService interface {
 	// // TODO MEDICAL FACILITYS
 	// CreateMedical(payloads adminDto.MedicalDto) (adminDto.MedicalDto, error)
 
-	// // TODO DASHBOARD
+	// TODO DASHBOARD
 
-	// GetDashboard() (adminDto.CountDashboard, error)
+	GetDashboard() (adminDto.CountDashboard, error)
 
-	// // TODO SESSION
-	// CreateSession(payloads adminDto.SessionRequest) (adminDto.SessionDTO, error)
-	// GetAllSession() ([]adminDto.SessionWithStatusDTO, error)
-	// GetSessionById(payloads adminDto.SessionWithStatusDTO) (adminDto.SessionWithStatusDTO, error)
-	// UpdateSession(payloads adminDto.SessionRequestUpdate) (adminDto.SessionRequestUpdate, error)
+	// TODO SESSION
+	CreateSession(payloads adminDto.SessionRequest) (adminDto.SessionDTO, error)
+	GetAllSession() ([]adminDto.SessionWithStatusDTO, error)
+	GetSessionById(payloads adminDto.SessionWithStatusDTO) (adminDto.SessionWithStatusDTO, error)
+	UpdateSession(payloads adminDto.SessionRequestUpdate) (adminDto.SessionRequestUpdate, error)
 	// DeleteSession(payloads adminDto.SessionWithStatusDTO) error
 
 	// // TODO CreateVaccine
@@ -119,12 +119,12 @@ func (s *adminService) LoginAdmin(payloads adminDto.LoginDTO) (adminDto.LoginJWT
 
 // TODO DASHBOARD
 // TODO GET DASHBOARD
-// func (s *adminService) GetDashboard() (adminDto.CountDashboard, error) {
-// 	res, err := s.adminRepository.GetDashboard()
+func (s *adminService) GetDashboard() (adminDto.CountDashboard, error) {
+	res, err := s.adminRepository.GetDashboard()
 
-// 	if err != nil {
-// 		return res, err
-// 	}
+	if err != nil {
+		return res, err
+	}
 
-// 	return res, nil
-// }
+	return res, nil
+}

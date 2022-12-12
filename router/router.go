@@ -40,10 +40,10 @@ func New(e *echo.Echo, db *gorm.DB) {
 	// v2 := e.Group("/v2")
 	// v2.Use(middleware.JWT([]byte(os.Getenv("JWT_KEY"))))
 
-	// v1.GET("/", adminController.GetDashboard)
+	v1.GET("/", adminController.GetDashboard)
 
 	// // TODO AUTH ADMIN
-	// e.POST("/auth/login", adminController.LoginAdmin)
+	e.POST("/auth/login", adminController.LoginAdmin)
 
 	// TODO REGISTER
 	v1.POST("/register", adminController.RegisterAdmin, m.Authorization)
