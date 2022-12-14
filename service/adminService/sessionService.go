@@ -35,26 +35,30 @@ func (s *adminService) CreateSession(payloads adminDto.SessionRequest) (adminDto
 	return res, nil
 }
 
+func InTimeSpan(start, end, check time.Time) bool {
+	return check.After(start) && check.Before(end)
+}
+
 // TODO GET ALL SESSION
 func (s *adminService) GetAllSession(medicalId uint) ([]adminDto.SessionWithStatusDTO, error) {
 
-	// Set time today with time,date format
+	// Set time today with date format
 	today := time.Now()
 	dateFormat := today.Format("2006-01-02")
-	timeFormat := today.Format("15:04")
 	convDate := string(dateFormat)
-	convTime := string(timeFormat)
+	loc := today.Location()
 
 	res, err := s.adminRepository.GetAllSession(medicalId)
 	if err != nil {
 		return nil, err
 	}
 
-	// loop data from session and check if date and time same with convDate,convTime or not
+	// loop data from session and check if date and time same with convDate and different time or not
 	for i := range res {
-
+		pasttime, _ := time.ParseInLocation("15:04", res[i].EndTime, loc)
+		diff := today.Sub(pasttime)
 		if res[i].Date <= convDate {
-			if res[i].EndTime <= convTime {
+			if diff.Hours() != 0 {
 				err := s.adminRepository.AutoUpdateSession(res[i].Date, res[i].EndTime)
 				if err != nil {
 					return res, err
