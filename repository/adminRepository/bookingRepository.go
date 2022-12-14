@@ -3,6 +3,7 @@ package adminRepository
 import (
 	"capstone_vaccine/dto/adminDto"
 	"capstone_vaccine/model"
+	"strconv"
 	"time"
 )
 
@@ -76,12 +77,48 @@ func (u *adminRepository) UpdateSessionBooking(session_id uint, kuota string) er
 
 // TODO UPDATE BOOKING
 func (u *adminRepository) UpdateBooking(payloads adminDto.UpdateBooking) (adminDto.UpdateBooking, error) {
+	if payloads.Status == "process" {
+		if err := u.db.Model(&model.Booking{}).Where("booking_id = ?", payloads.BookingId).Updates(&model.Booking{
+			Status:    "process",
+			UpdatedAT: time.Now(),
+		}).Error; err != nil {
+			return payloads, err
+		}
+	} else if payloads.Status == "batal" {
+		var booking model.Booking
+		if err := u.db.Model(&model.Booking{}).Where("booking_id = ? AND status='process'", payloads.BookingId).Find(&booking).Error; err != nil {
+			return payloads, err
+		}
+		sessionID := adminDto.SessionWithStatusDTO{
+			SessionId: booking.SessionId,
+		}
+		kuota, err := u.GetSessionById(sessionID)
 
-	if err := u.db.Model(&model.Booking{}).Where("booking_id = ?", payloads.BookingId).Updates(&model.Booking{
-		Status:    payloads.Status,
-		UpdatedAT: time.Now(),
-	}).Error; err != nil {
-		return payloads, err
+		if err != nil {
+			return payloads, err
+		}
+		addition := kuota.Kuota + 1
+		conv_addition := strconv.Itoa(addition)
+		if err := u.db.Model(&model.Session{}).Where("session_id = ?", booking.SessionId).Updates(&model.Session{
+			Kuota:     conv_addition,
+			UpdatedAT: time.Now(),
+		}).Error; err != nil {
+			return payloads, err
+		}
+
+		if err := u.db.Model(&model.Booking{}).Where("booking_id = ?", payloads.BookingId).Updates(&model.Booking{
+			Status:    "batal",
+			UpdatedAT: time.Now(),
+		}).Error; err != nil {
+			return payloads, err
+		}
+	} else if payloads.Status == "selesai" {
+		if err := u.db.Model(&model.Booking{}).Where("booking_id = ?", payloads.BookingId).Updates(&model.Booking{
+			Status:    "selesai",
+			UpdatedAT: time.Now(),
+		}).Error; err != nil {
+			return payloads, err
+		}
 	}
 
 	return payloads, nil
@@ -116,6 +153,27 @@ func (u *adminRepository) GetBookingById(payloads adminDto.BookingAllDto) (admin
 
 // TODO DELETE BOOKING
 func (u *adminRepository) DeleteBooking(payloads adminDto.BookingAllDto) error {
+	var booking model.Booking
+	if err := u.db.Model(&model.Booking{}).Where("booking_id = ? AND status='process'", payloads.BookingId).Find(&booking).Error; err != nil {
+		return err
+	}
+	sessionID := adminDto.SessionWithStatusDTO{
+		SessionId: booking.SessionId,
+	}
+	kuota, err := u.GetSessionById(sessionID)
+
+	if err != nil {
+		return err
+	}
+	addition := kuota.Kuota + 1
+	conv_addition := strconv.Itoa(addition)
+	if err := u.db.Model(&model.Session{}).Where("session_id = ?", booking.SessionId).Updates(&model.Session{
+		Kuota:     conv_addition,
+		UpdatedAT: time.Now(),
+	}).Error; err != nil {
+		return err
+	}
+
 	if err := u.db.Where("booking_id", payloads.BookingId).Delete(&model.Booking{}).Error; err != nil {
 		return err
 	}
