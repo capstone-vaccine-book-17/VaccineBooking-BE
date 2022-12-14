@@ -29,3 +29,10 @@ func (u *MockAdmin) UpdateSession(payloads adminDto.SessionRequestUpdate) (admin
 
 	return args.Get(0).(adminDto.SessionRequestUpdate), args.Error(1)
 }
+
+// MOCK Delete Session
+func (u *MockAdmin) DeleteSession(payloads adminDto.SessionWithStatusDTO) error {
+	args := u.Called(payloads.SessionId)
+
+	return args.Error(0)
+}

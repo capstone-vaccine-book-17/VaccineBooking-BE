@@ -126,11 +126,11 @@ func (u *adminRepository) UpdateSession(payloads adminDto.SessionRequestUpdate) 
 	return temp, nil
 }
 
-// // TODO DELETE SESSION
-// func (u *adminRepository) DeleteSession(payloads adminDto.SessionWithStatusDTO) error {
-// 	if err := u.db.Where("session_id", payloads.SessionId).Delete(&model.Session{}).Error; err != nil {
-// 		return err
-// 	}
+// TODO DELETE SESSION
+func (u *adminRepository) DeleteSession(payloads adminDto.SessionWithStatusDTO) error {
+	if err := u.db.Where("session_id", payloads.SessionId).Delete(&model.Session{}).Error; err != nil {
+		return err
+	}
 
-// 	return nil
-// }
+	return nil
+}

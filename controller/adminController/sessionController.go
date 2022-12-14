@@ -155,32 +155,32 @@ func (u *adminController) UpdateSession(c echo.Context) error {
 	})
 }
 
-// // TODO DELETE SESSION
-// func (u *adminController) DeleteSession(c echo.Context) error {
-// 	id := c.Param("id")
-// 	convId, err := strconv.Atoi(id)
-// 	if err != nil {
-// 		return c.JSON(http.StatusBadRequest, utils.Response{
-// 			Message: err.Error(),
-// 			Code:    http.StatusBadRequest,
-// 		})
-// 	}
+// TODO DELETE SESSION
+func (u *adminController) DeleteSession(c echo.Context) error {
+	id := c.Param("id")
+	convId, err := strconv.Atoi(id)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, utils.Response{
+			Message: err.Error(),
+			Code:    http.StatusBadRequest,
+		})
+	}
 
-// 	payload := adminDto.SessionWithStatusDTO{
-// 		SessionId: uint(convId),
-// 	}
+	payload := adminDto.SessionWithStatusDTO{
+		SessionId: uint(convId),
+	}
 
-// 	err = u.adminServ.DeleteSession(payload)
+	err = u.adminServ.DeleteSession(payload)
 
-// 	if err != nil {
-// 		return c.JSON(http.StatusInternalServerError, utils.Response{
-// 			Message: err.Error(),
-// 			Code:    http.StatusInternalServerError,
-// 		})
-// 	}
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, utils.Response{
+			Message: err.Error(),
+			Code:    http.StatusInternalServerError,
+		})
+	}
 
-// 	return c.JSON(http.StatusOK, utils.Response{
-// 		Message: "success",
-// 		Code:    http.StatusOK,
-// 	})
-// }
+	return c.JSON(http.StatusOK, utils.Response{
+		Message: "success",
+		Code:    http.StatusOK,
+	})
+}

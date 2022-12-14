@@ -687,4 +687,99 @@ func TestUpdateSession_InValid(t *testing.T) {
 	}
 }
 
-// TODO TEST DELETE SESSION VALID
+// TODO TEST DELETE SESSION VALID AND INVALID
+func TestDeleteSession_Valid(t *testing.T) {
+	data := adminDto.SessionWithStatusDTO{
+		SessionId: 1,
+	}
+
+	mockServ.On("DeleteSession", data.SessionId).Return(nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		ExpectedBody       string
+	}{
+		{
+			"success",
+			http.StatusOK,
+			"DELETE",
+			"success",
+		},
+	}
+
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			r := httptest.NewRequest(v.Method, "/v1/session/1", nil)
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+			ctx.SetPath("/v1/session/:id")
+			ctx.SetParamNames("id")
+			ctx.SetParamValues("1")
+
+			ctx.Set("user", jwtToken)
+
+			err := controller.DeleteSession(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			var resp map[string]interface{}
+
+			_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+			assert.Equal(t, v.ExpectedBody, resp["message"])
+		})
+	}
+}
+
+func TestDeleteSession_InValid(t *testing.T) {
+	data := adminDto.SessionWithStatusDTO{
+		SessionId: 1,
+	}
+
+	mockServ.On("DeleteSession", data.SessionId).Return(nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		ExpectedBody       string
+	}{
+		{
+			"success",
+			http.StatusBadRequest,
+			"DELETE",
+			"strconv.Atoi: parsing \"a\": invalid syntax",
+		},
+	}
+
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			r := httptest.NewRequest(v.Method, "/v1/session/a", nil)
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+			ctx.SetPath("/v1/session/:id")
+			ctx.SetParamNames("id")
+			ctx.SetParamValues("a")
+
+			ctx.Set("user", jwtToken)
+
+			err := controller.DeleteSession(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			var resp map[string]interface{}
+
+			_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+			assert.Equal(t, v.ExpectedBody, resp["message"])
+		})
+	}
+}

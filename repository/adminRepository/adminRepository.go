@@ -32,7 +32,7 @@ type AdminRepository interface {
 	GetAllSession(medicalId uint) ([]adminDto.SessionWithStatusDTO, error)
 	GetSessionById(payloads adminDto.SessionWithStatusDTO) (adminDto.SessionWithStatusDTO, error)
 	UpdateSession(payloads adminDto.SessionRequestUpdate) (adminDto.SessionRequestUpdate, error)
-	// DeleteSession(payloads adminDto.SessionWithStatusDTO) error
+	DeleteSession(payloads adminDto.SessionWithStatusDTO) error
 
 	// // TODO Manage Vaccine
 	// CreateVaccine(input adminDto.VaccineRequest) (adminDto.VaccineResponse, error)
