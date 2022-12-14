@@ -10,8 +10,8 @@ func (u *MockAdmin) CreateSession(payloads adminDto.SessionRequest) (adminDto.Se
 }
 
 // Mock Get All Session
-func (u *MockAdmin) GetAllSession() ([]adminDto.SessionWithStatusDTO, error) {
-	args := u.Called()
+func (u *MockAdmin) GetAllSession(medicalID uint) ([]adminDto.SessionWithStatusDTO, error) {
+	args := u.Called(medicalID)
 
 	return args.Get(0).([]adminDto.SessionWithStatusDTO), args.Error(1)
 }

@@ -308,7 +308,7 @@ func TestGetDashboard_Valid(t *testing.T) {
 		BookingToday:       "10",
 		BookingsRegistered: "100",
 	}
-	mockServ.On("GetDashboard").Return(data, nil).Once()
+	mockServ.On("GetDashboard", uint(1)).Return(data, nil).Once()
 
 	testCases := []struct {
 		Name               string
@@ -331,6 +331,8 @@ func TestGetDashboard_Valid(t *testing.T) {
 
 			e := echo.New()
 			ctx := e.NewContext(r, w)
+
+			ctx.Set("user", jwtToken)
 
 			err := controller.GetDashboard(ctx)
 			assert.NoError(t, err)
@@ -443,7 +445,7 @@ func TestGetAllSession_Valid(t *testing.T) {
 			Status:      "process",
 		},
 	}
-	mockServ.On("GetAllSession").Return(data, nil).Once()
+	mockServ.On("GetAllSession", uint(1)).Return(data, nil).Once()
 
 	testCases := []struct {
 		Name               string
@@ -466,6 +468,8 @@ func TestGetAllSession_Valid(t *testing.T) {
 
 			e := echo.New()
 			ctx := e.NewContext(r, w)
+
+			ctx.Set("user", jwtToken)
 
 			err := controller.GetAllSession(ctx)
 			assert.NoError(t, err)
