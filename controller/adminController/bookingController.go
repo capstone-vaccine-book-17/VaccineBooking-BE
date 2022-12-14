@@ -1,8 +1,17 @@
 package adminController
 
+<<<<<<< HEAD
 // // TODO CREATE BOOKING
 // func (u *adminController) CreateBooking(c echo.Context) error {
 // 	var payloads adminDto.BookingDto
+=======
+import (
+	"capstone_vaccine/dto/adminDto"
+	"capstone_vaccine/middleware"
+	"capstone_vaccine/utils"
+	"net/http"
+	"strconv"
+>>>>>>> 5f7d23e513a40b96d601b5af6eb5e857711639d2
 
 // 	if err := c.Bind(&payloads); err != nil {
 // 		return err
@@ -88,12 +97,23 @@ package adminController
 // 		})
 // 	}
 
+<<<<<<< HEAD
 // 	return c.JSON(http.StatusOK, utils.Response{
 // 		Message: "success",
 // 		Code:    http.StatusOK,
 // 		Data:    res,
 // 	})
 // }
+=======
+// TODO GET ALL BOOKING
+func (u *adminController) GetAllBooking(c echo.Context) error {
+	medicalID, _ := middleware.ClaimData(c, "medicalID")
+
+	conv_medicalID := medicalID.(float64)
+
+	conv := uint(conv_medicalID)
+	res, err := u.adminServ.GetAllBooking(conv)
+>>>>>>> 5f7d23e513a40b96d601b5af6eb5e857711639d2
 
 // // TODO GET BOOKING BY ID
 // func (u *adminController) GetBookingById(c echo.Context) error {

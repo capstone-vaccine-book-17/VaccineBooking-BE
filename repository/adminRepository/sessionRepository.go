@@ -77,10 +77,10 @@ func (u *adminRepository) CreateSession(payloads adminDto.SessionRequest) (admin
 }
 
 // TODO GET SESSION
-func (u *adminRepository) GetAllSession() ([]adminDto.SessionWithStatusDTO, error) {
+func (u *adminRepository) GetAllSession(medicalId uint) ([]adminDto.SessionWithStatusDTO, error) {
 	session := []adminDto.SessionWithStatusDTO{}
 
-	if err := u.db.Model(&model.Session{}).Select("sessions.*, vaccine_varieties.name as vaccine_name").Joins("join vaccine_varieties on vaccine_varieties.vaccine_id = sessions.vaccine_id").Find(&session).Error; err != nil {
+	if err := u.db.Model(&model.Session{}).Select("sessions.*, vaccine_varieties.name as vaccine_name").Joins("join vaccine_varieties on vaccine_varieties.vaccine_id = sessions.vaccine_id").Where("sessions.medical_facilitys_id = ?", medicalId).Find(&session).Error; err != nil {
 		return nil, err
 	}
 

@@ -24,27 +24,18 @@ package adminRepository
 // }
 
 // // TODO View All Vaccine
-// func (u *adminRepository) ViewAllVaccine() ([]adminDto.VaccineDTO, error) {
+// func (u *adminRepository) ViewAllVaccine(medicalId uint) ([]adminDto.VaccineDTO, error) {
 // 	vaccine := []adminDto.VaccineDTO{}
 
-// 	if err := u.db.Model(&model.VaccineVarietie{}).Find(&vaccine).Error; err != nil {
+// 	if err := u.db.Model(&model.VaccineVarietie{}).Select("vaccine_varieties.*").Where("medical_facilitys_id = ?", medicalId).Find(&vaccine).Error; err != nil {
 // 		return nil, err
 // 	}
-
-// 	return vaccine, nil
 // }
 
 // // TODO Update Vaccine
-// func (u *adminRepository) UpdateVaccine(payloads adminDto.VaccineDTO) (adminDto.VaccineDTO, error) {
+// func (u *adminRepository) UpdateVaccine(payloads adminDto.VaccineDTO, medicalId uint) (adminDto.VaccineDTO, error) {
 
-// 	temp := adminDto.VaccineDTO{
-// 		VaccineID: payloads.VaccineID,
-// 		Name:      payloads.Name,
-// 		Kuota:     payloads.Kuota,
-// 		Expired:   payloads.Expired,
-// 	}
-
-// 	if err := u.db.Model(&model.VaccineVarietie{}).Where("vaccine_id = ?", payloads.VaccineID).Updates(&model.VaccineVarietie{
+// 	if err := u.db.Model(&model.VaccineVarietie{}).Where("vaccine_id = ?", payloads.VaccineID).Where("medical_facilitys_id =?",medicalId).Updates(&model.VaccineVarietie{
 // 		Name:      payloads.Name,
 // 		Kuota:     payloads.Kuota,
 // 		Expired:   payloads.Expired,
@@ -52,16 +43,25 @@ package adminRepository
 // 	}).Error; err != nil {
 // 		return temp, err
 // 	}
-
-// 	return temp, nil
 // }
 
 // // TODO DELETE Vaccine
-// func (u adminRepository) DeleteVaccine(data adminDto.VaccineDTO) error {
+// func (u adminRepository) DeleteVaccine(data adminDto.VaccineDTO, medicalId uint) error {
 
-// 	if err := u.db.Where("vaccine_id = ?", data.VaccineID).Delete(&model.VaccineVarietie{}).Error; err != nil {
+// 	if err := u.db.Where("vaccine_id = ?", data.VaccineID).Where("medical_facilitys_id = ?", medicalId).Delete(&model.VaccineVarietie{}).Error; err != nil {
 // 		return err
 // 	}
 
 // 	return nil
+// }
+
+// // TODO Get Vaccine By Id
+// func (u *adminRepository) GetVaccineById(vaccineId uint, medicalId uint) (adminDto.VaccineDTO, error) {
+// 	vaccine := adminDto.VaccineDTO{}
+
+// 	if err := u.db.Model(&model.VaccineVarietie{}).Select("vaccine_varieties.*").Where("vaccine_id = ?", vaccineId).Where("medical_facilitys_id = ?", medicalId).Find(&vaccine).Error; err != nil {
+// 		return vaccine, err
+// 	}
+
+// 	return vaccine, nil
 // }

@@ -23,35 +23,30 @@ type AdminService interface {
 
 	// TODO DASHBOARD
 
-	GetDashboard() (adminDto.CountDashboard, error)
+	GetDashboard(medicalId uint) (adminDto.CountDashboard, error)
 
 	// TODO SESSION
 	CreateSession(payloads adminDto.SessionRequest) (adminDto.SessionDTO, error)
-	GetAllSession() ([]adminDto.SessionWithStatusDTO, error)
+	GetAllSession(medicalId uint) ([]adminDto.SessionWithStatusDTO, error)
 	GetSessionById(payloads adminDto.SessionWithStatusDTO) (adminDto.SessionWithStatusDTO, error)
 	UpdateSession(payloads adminDto.SessionRequestUpdate) (adminDto.SessionRequestUpdate, error)
 	// DeleteSession(payloads adminDto.SessionWithStatusDTO) error
 
-	// // TODO CreateVaccine
+	// // TODO Manage Vaccine
 	// CreateVaccine(input adminDto.VaccineRequest) (adminDto.VaccineResponse, error)
-
-	// // TODO ViewAllVaccine
-	// ViewAllVaccine() ([]adminDto.VaccineDTO, error)
-
-	// // TODO UpdateVaccine
-	// UpdateVaccine(payloads adminDto.VaccineDTO) (adminDto.VaccineDTO, error)
-
-	// // TODO DeleteVaccine
-	// DeleteVaccine(data adminDto.VaccineDTO) error
+	// ViewAllVaccine(medicalId uint) ([]adminDto.VaccineDTO, error)
+	// UpdateVaccine(payloads adminDto.VaccineDTO, medicalId uint) (adminDto.VaccineDTO, error)
+	// DeleteVaccine(data adminDto.VaccineDTO, medicalId uint) error
+	// GetVaccineById(vaccineId uint, medicalId uint) (adminDto.VaccineDTO, error)
 
 	// // TODO Profile
-	// GetProfile(payloads adminDto.ProfileRequest)([]adminDto.ProfilDTO,error)
-	// UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.ProfileRequest,error)
-	// UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO,error)
+	// GetProfile(payloads adminDto.ProfileRequest) ([]adminDto.ProfilDTO, error)
+	// UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.ProfileRequest, error)
+	// UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO, error)
 	// // TODO BOOKING
 	// CreateBooking(payloads adminDto.BookingDto) (adminDto.BookingDto, error)
 	// UpdateBooking(payloads adminDto.UpdateBooking) (adminDto.UpdateBooking, error)
-	// GetAllBooking() ([]adminDto.BookingAllDto, error)
+	// GetAllBooking(medicalId uint) ([]adminDto.BookingAllDto, error)
 	// GetBookingById(payloads adminDto.BookingAllDto) (adminDto.BookingAllDto, error)
 	// DeleteBooking(payloads adminDto.BookingAllDto) error
 }
@@ -119,8 +114,8 @@ func (s *adminService) LoginAdmin(payloads adminDto.LoginDTO) (adminDto.LoginJWT
 
 // TODO DASHBOARD
 // TODO GET DASHBOARD
-func (s *adminService) GetDashboard() (adminDto.CountDashboard, error) {
-	res, err := s.adminRepository.GetDashboard()
+func (s *adminService) GetDashboard(medicalId uint) (adminDto.CountDashboard, error) {
+	res, err := s.adminRepository.GetDashboard(medicalId)
 
 	if err != nil {
 		return res, err

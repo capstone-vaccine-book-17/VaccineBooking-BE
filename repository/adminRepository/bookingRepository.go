@@ -82,16 +82,11 @@ package adminRepository
 // }
 
 // // TODO GET ALL BOOKING
-// func (u *adminRepository) GetAllBooking() ([]adminDto.BookingAllDto, error) {
-
-// 	booking := []adminDto.BookingAllDto{}
-
+// func (u *adminRepository) GetAllBooking(medicalId uint) ([]adminDto.BookingAllDto, error) {
 // 	if err := u.db.Model(&model.Booking{}).Select("citizens.name as citizen_name,citizens.nik,sessions.dosis,sessions.date,sessions.start_time,sessions.end_time,bookings.queue, bookings.booking_id,bookings.status").
-// 		Joins("join citizens on citizens.citizen_id = bookings.citizen_id").Joins("join sessions on sessions.session_id = bookings.session_id").Find(&booking).Error; err != nil {
+// 		Joins("join citizens on citizens.citizen_id = bookings.citizen_id").Joins("join sessions on sessions.session_id = bookings.session_id").Where("sessions.medical_facilitys_id = ?", medicalId).Find(&booking).Error; err != nil {
 // 		return nil, err
 // 	}
-
-// 	return booking, nil
 // }
 
 // // TODO GET BOOKING BY ID

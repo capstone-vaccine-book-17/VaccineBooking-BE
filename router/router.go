@@ -74,6 +74,7 @@ func New(e *echo.Echo, db *gorm.DB) {
 	// 	v1_manageVaccine.GET("/view", adminController.ViewAllVaccine)
 	// 	v1_manageVaccine.PUT("/update/:id", adminController.UpdateVaccine)
 	// 	v1_manageVaccine.DELETE("/delete/:id", adminController.DeleteVaccine)
+	// 	v1_manageVaccine.GET("/view/:id", adminController.GetVaccineById)
 	// }
 
 	// v1_profile := v1.Group("/profile")
@@ -142,7 +143,17 @@ func New(e *echo.Echo, db *gorm.DB) {
 	// 	// Create Booking
 	// 	v2_booking.POST("/", citizenController.CreateBooking)
 
-	// 	// Get Last Booking For Ticket
+	// Get Last Booking For Ticket
 	// 	v2_booking.GET("/", citizenController.GetLastBooking)
+	// }
+
+	//TICKET
+	// v2_ticket := v2.Group("/ticket")
+	// {
+	// 	v2_ticket.GET("/", citizenController.GetAllTicket)
+	// 	v2_ticket.GET("/:id", citizenController.GetTicket)
+	// 	v2_ticket.GET("/proses", citizenController.GetTicketOnProses)
+	// 	v2_ticket.GET("/finish", citizenController.GetTicketOnFinish)
+
 	// }
 }

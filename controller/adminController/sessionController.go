@@ -52,7 +52,13 @@ func (u *adminController) CreateSession(c echo.Context) error {
 
 // TODO GET ALL SESSION
 func (u *adminController) GetAllSession(c echo.Context) error {
-	res, err := u.adminServ.GetAllSession()
+	medicalID, _ := middleware.ClaimData(c, "medicalID")
+
+	conv_medicalID := medicalID.(float64)
+
+	conv := uint(conv_medicalID)
+
+	res, err := u.adminServ.GetAllSession(conv)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, utils.Response{

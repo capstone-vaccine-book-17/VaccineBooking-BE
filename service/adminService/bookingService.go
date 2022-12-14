@@ -75,12 +75,8 @@ package adminService
 // }
 
 // // TODO GET ALL BOOKING
-// func (s *adminService) GetAllBooking() ([]adminDto.BookingAllDto, error) {
-// 	res, err := s.adminRepository.GetAllBooking()
-
-// 	if err != nil {
-// 		return nil, err
-// 	}
+// func (s *adminService) GetAllBooking(medicalId uint) ([]adminDto.BookingAllDto, error) {
+// 	res, err := s.adminRepository.GetAllBooking(medicalId)
 
 // 	return res, nil
 // }
