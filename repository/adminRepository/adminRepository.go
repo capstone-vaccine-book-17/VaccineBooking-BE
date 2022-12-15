@@ -46,15 +46,15 @@ type AdminRepository interface {
 	// UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.Address, error)
 	// GetAdmin(payloads adminDto.ProfileRequest) (adminDto.Address, error)
 	// UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO, error)
-	// // TODO BOOKING
-	// CreateCitizenBook(nik, nama, address string) (model.Citizen, error)
-	// CreateBooking(payloads adminDto.BookingDto) (adminDto.BookingDto, error)
-	// GetMaxQueue(session_id uint) (adminDto.MaxQueue, error)
-	// UpdateSessionBooking(session_id uint, kuota string) error
-	// UpdateBooking(payloads adminDto.UpdateBooking) (adminDto.UpdateBooking, error)
-	// GetAllBooking(medicalId uint) ([]adminDto.BookingAllDto, error)
-	// GetBookingById(payloads adminDto.BookingAllDto) (adminDto.BookingAllDto, error)
-	// DeleteBooking(payloads adminDto.BookingAllDto) error
+	// TODO BOOKING
+	CreateCitizenBook(nik, nama, address string) (model.Citizen, error)
+	CreateBooking(payloads adminDto.BookingDto) (adminDto.BookingDto, error)
+	GetMaxQueue(session_id uint) (adminDto.MaxQueue, error)
+	UpdateSessionBooking(session_id uint, kuota string) error
+	UpdateBooking(payloads adminDto.UpdateBooking) (adminDto.UpdateBooking, error)
+	GetAllBooking(medicalId uint) ([]adminDto.BookingAllDto, error)
+	GetBookingById(payloads adminDto.BookingAllDto) (adminDto.BookingAllDto, error)
+	DeleteBooking(payloads adminDto.BookingAllDto) error
 }
 
 type adminRepository struct {

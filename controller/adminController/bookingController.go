@@ -1,150 +1,174 @@
 package adminController
 
-// // TODO CREATE BOOKING
-// func (u *adminController) CreateBooking(c echo.Context) error {
-// 	var payloads adminDto.BookingDto
+import (
+	"capstone_vaccine/dto/adminDto"
+	"capstone_vaccine/middleware"
+	"capstone_vaccine/utils"
+	"net/http"
+	"strconv"
 
-// 	if err := c.Bind(&payloads); err != nil {
-// 		return err
-// 	}
+	"github.com/labstack/echo"
+)
 
-// 	if err := c.Validate(payloads); err != nil {
-// 		return c.JSON(http.StatusBadRequest, utils.Response{
-// 			Message: err.Error(),
-// 			Code:    http.StatusBadRequest,
-// 		})
-// 	}
+// TODO CREATE BOOKING
+func (u *adminController) CreateBooking(c echo.Context) error {
+	var payloads adminDto.BookingDto
 
-// 	res, err := u.adminServ.CreateBooking(payloads)
+	if err := c.Bind(&payloads); err != nil {
+		return err
+	}
 
-// 	if err != nil {
-// 		return c.JSON(http.StatusInternalServerError, utils.Response{
-// 			Message: err.Error(),
-// 			Code:    http.StatusInternalServerError,
-// 		})
-// 	}
+	if err := c.Validate(payloads); err != nil {
+		return c.JSON(http.StatusBadRequest, utils.Response{
+			Message: err.Error(),
+			Code:    http.StatusBadRequest,
+		})
+	}
 
-// 	return c.JSON(http.StatusOK, utils.Response{
-// 		Message: "create booking success",
-// 		Code:    http.StatusOK,
-// 		Data:    res,
-// 	})
-// }
+	res, err := u.adminServ.CreateBooking(payloads)
 
-// // TODO UPDATE BOOKING
-// func (u *adminController) UpdateBooking(c echo.Context) error {
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, utils.Response{
+			Message: err.Error(),
+			Code:    http.StatusInternalServerError,
+		})
+	}
 
-// 	id := c.Param("id")
-// 	convId, err := strconv.Atoi(id)
-// 	if err != nil {
-// 		return c.JSON(http.StatusBadRequest, utils.Response{
-// 			Message: err.Error(),
-// 			Code:    http.StatusBadRequest,
-// 		})
-// 	}
+	return c.JSON(http.StatusOK, utils.Response{
+		Message: "create booking success",
+		Code:    http.StatusOK,
+		Data:    res,
+	})
+}
 
-// 	var payloads adminDto.UpdateBooking
+// TODO UPDATE BOOKING
+func (u *adminController) UpdateBooking(c echo.Context) error {
 
-// 	if err := c.Bind(&payloads); err != nil {
-// 		return err
-// 	}
+	id := c.Param("id")
+	convId, err := strconv.Atoi(id)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, utils.Response{
+			Message: err.Error(),
+			Code:    http.StatusBadRequest,
+		})
+	}
 
-// 	if err := c.Validate(payloads); err != nil {
-// 		return c.JSON(http.StatusBadRequest, utils.Response{
-// 			Message: err.Error(),
-// 			Code:    http.StatusBadRequest,
-// 		})
-// 	}
+	var payloads adminDto.UpdateBooking
 
-// 	temp := adminDto.UpdateBooking{
-// 		BookingId: uint(convId),
-// 		Status:    payloads.Status,
-// 	}
+	if err := c.Bind(&payloads); err != nil {
+		return err
+	}
 
-// 	res, err := u.adminServ.UpdateBooking(temp)
+	if err := c.Validate(payloads); err != nil {
+		return c.JSON(http.StatusBadRequest, utils.Response{
+			Message: err.Error(),
+			Code:    http.StatusBadRequest,
+		})
+	}
 
-// 	if err != nil {
-// 		return c.JSON(http.StatusInternalServerError, utils.Response{
-// 			Message: err.Error(),
-// 			Code:    http.StatusInternalServerError,
-// 		})
-// 	}
+	temp := adminDto.UpdateBooking{
+		BookingId: uint(convId),
+		Status:    payloads.Status,
+	}
 
-// 	return c.JSON(http.StatusOK, utils.Response{
-// 		Message: "update booking success",
-// 		Code:    http.StatusOK,
-// 		Data:    res,
-// 	})
-// }
+	res, err := u.adminServ.UpdateBooking(temp)
 
-// // TODO GET ALL BOOKING
-// func (u *adminController) GetAllBooking(c echo.Context) error {
-// 	medicalID, _ := middleware.ClaimData(c, "medicalID")
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, utils.Response{
+			Message: err.Error(),
+			Code:    http.StatusInternalServerError,
+		})
+	}
 
-// 	conv_medicalID := medicalID.(float64)
+	return c.JSON(http.StatusOK, utils.Response{
+		Message: "update booking success",
+		Code:    http.StatusOK,
+		Data:    res,
+	})
+}
 
-// 	conv := uint(conv_medicalID)
-// 	res, err := u.adminServ.GetAllBooking(conv)
-// }
-// // TODO GET BOOKING BY ID
-// func (u *adminController) GetBookingById(c echo.Context) error {
+// TODO GET ALL BOOKING
+func (u *adminController) GetAllBooking(c echo.Context) error {
+	medicalID, _ := middleware.ClaimData(c, "medicalID")
 
-// 	id := c.Param("id")
-// 	convId, err := strconv.Atoi(id)
-// 	if err != nil {
-// 		return c.JSON(http.StatusBadRequest, utils.Response{
-// 			Message: err.Error(),
-// 			Code:    http.StatusBadRequest,
-// 		})
-// 	}
+	conv_medicalID := medicalID.(float64)
 
-// 	payloads := adminDto.BookingAllDto{
-// 		BookingId: uint(convId),
-// 	}
+	conv := uint(conv_medicalID)
+	res, err := u.adminServ.GetAllBooking(conv)
 
-// 	res, err := u.adminServ.GetBookingById(payloads)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, utils.Response{
+			Message: err.Error(),
+			Code:    http.StatusInternalServerError,
+		})
+	}
 
-// 	if err != nil {
-// 		return c.JSON(http.StatusInternalServerError, utils.Response{
-// 			Message: err.Error(),
-// 			Code:    http.StatusInternalServerError,
-// 		})
-// 	}
+	return c.JSON(http.StatusOK, utils.Response{
+		Message: "success",
+		Code:    http.StatusOK,
+		Data:    res,
+	})
+}
 
-// 	return c.JSON(http.StatusOK, utils.Response{
-// 		Message: "success",
-// 		Code:    http.StatusOK,
-// 		Data:    res,
-// 	})
-// }
+// TODO GET BOOKING BY ID
+func (u *adminController) GetBookingById(c echo.Context) error {
 
-// // TODO DELETE BOOKING
-// func (u *adminController) DeleteBooking(c echo.Context) error {
+	id := c.Param("id")
+	convId, err := strconv.Atoi(id)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, utils.Response{
+			Message: err.Error(),
+			Code:    http.StatusBadRequest,
+		})
+	}
 
-// 	id := c.Param("id")
-// 	convId, err := strconv.Atoi(id)
-// 	if err != nil {
-// 		return c.JSON(http.StatusBadRequest, utils.Response{
-// 			Message: err.Error(),
-// 			Code:    http.StatusBadRequest,
-// 		})
-// 	}
+	payloads := adminDto.BookingAllDto{
+		BookingId: uint(convId),
+	}
 
-// 	payloads := adminDto.BookingAllDto{
-// 		BookingId: uint(convId),
-// 	}
+	res, err := u.adminServ.GetBookingById(payloads)
 
-// 	errS := u.adminServ.DeleteBooking(payloads)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, utils.Response{
+			Message: err.Error(),
+			Code:    http.StatusInternalServerError,
+		})
+	}
 
-// 	if errS != nil {
-// 		return c.JSON(http.StatusInternalServerError, utils.Response{
-// 			Message: errS.Error(),
-// 			Code:    http.StatusInternalServerError,
-// 		})
-// 	}
+	return c.JSON(http.StatusOK, utils.Response{
+		Message: "success",
+		Code:    http.StatusOK,
+		Data:    res,
+	})
+}
 
-// 	return c.JSON(http.StatusOK, utils.Response{
-// 		Message: "success",
-// 		Code:    http.StatusOK,
-// 	})
-// }
+// TODO DELETE BOOKING
+func (u *adminController) DeleteBooking(c echo.Context) error {
+
+	id := c.Param("id")
+	convId, err := strconv.Atoi(id)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, utils.Response{
+			Message: err.Error(),
+			Code:    http.StatusBadRequest,
+		})
+	}
+
+	payloads := adminDto.BookingAllDto{
+		BookingId: uint(convId),
+	}
+
+	errS := u.adminServ.DeleteBooking(payloads)
+
+	if errS != nil {
+		return c.JSON(http.StatusInternalServerError, utils.Response{
+			Message: errS.Error(),
+			Code:    http.StatusInternalServerError,
+		})
+	}
+
+	return c.JSON(http.StatusOK, utils.Response{
+		Message: "success",
+		Code:    http.StatusOK,
+	})
+}

@@ -43,12 +43,12 @@ type AdminService interface {
 	// GetProfile(payloads adminDto.ProfileRequest) ([]adminDto.ProfilDTO, error)
 	// UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.ProfileRequest, error)
 	// UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO, error)
-	// // TODO BOOKING
-	// CreateBooking(payloads adminDto.BookingDto) (adminDto.BookingDto, error)
-	// UpdateBooking(payloads adminDto.UpdateBooking) (adminDto.UpdateBooking, error)
-	// GetAllBooking(medicalId uint) ([]adminDto.BookingAllDto, error)
-	// GetBookingById(payloads adminDto.BookingAllDto) (adminDto.BookingAllDto, error)
-	// DeleteBooking(payloads adminDto.BookingAllDto) error
+	// TODO BOOKING
+	CreateBooking(payloads adminDto.BookingDto) (adminDto.BookingDto, error)
+	UpdateBooking(payloads adminDto.UpdateBooking) (adminDto.UpdateBooking, error)
+	GetAllBooking(medicalId uint) ([]adminDto.BookingAllDto, error)
+	GetBookingById(payloads adminDto.BookingAllDto) (adminDto.BookingAllDto, error)
+	DeleteBooking(payloads adminDto.BookingAllDto) error
 }
 
 type adminService struct {
