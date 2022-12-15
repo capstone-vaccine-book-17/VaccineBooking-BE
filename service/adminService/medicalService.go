@@ -1,11 +1,13 @@
 package adminService
 
-// func (s *adminService) CreateMedical(payloads adminDto.MedicalDto) (adminDto.MedicalDto, error) {
-// 	res, err := s.adminRepository.CreateMedical(payloads)
+import "capstone_vaccine/dto/adminDto"
 
-// 	if err != nil {
-// 		return res, err
-// 	}
+func (s *adminService) CreateMedical(payloads adminDto.MedicalDto) (adminDto.MedicalDto, error) {
+	res, err := s.adminRepository.CreateMedical(payloads)
 
-// 	return res, nil
-// }
+	if err != nil {
+		return res, err
+	}
+
+	return res, nil
+}

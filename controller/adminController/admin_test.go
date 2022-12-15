@@ -299,6 +299,241 @@ func TestLoginAdmin_InValid_Empty(t *testing.T) {
 	}
 }
 
+// TODO TEST CREATE ROLE VALID AND INVALID
+func TestCreateRole_Valid(t *testing.T) {
+	data := adminDto.RoleDTO{
+		Name: "testing",
+	}
+	mockServ.On("CreateRoles", data).Return(data, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		Body               adminDto.RoleDTO
+		HasReturnBody      bool
+		ExpectedBody       adminDto.RoleDTO
+	}{
+		{
+			"success",
+			http.StatusOK,
+			"POST",
+			data,
+			true,
+			data,
+		},
+	}
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			res, _ := json.Marshal(v.Body)
+			r := httptest.NewRequest(v.Method, "/", bytes.NewBuffer(res))
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+
+			r.Header.Add("Content-Type", "application/json")
+
+			e.Validator = &CustomValidator{validator: validator.New()}
+			assert.NoError(t, ctx.Validate(v.Body))
+
+			err := controller.CreateRoles(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			if v.HasReturnBody {
+				var resp map[string]interface{}
+
+				_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+				data := resp["data"]
+				conv, _ := data.(map[string]interface{})
+
+				assert.Equal(t, v.ExpectedBody.Name, conv["name"])
+			}
+		})
+	}
+}
+
+func TestCreateRole_InValid(t *testing.T) {
+	data := adminDto.RoleDTO{
+		Name: "",
+	}
+	mockServ.On("CreateRoles", data).Return(data, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		Body               adminDto.RoleDTO
+		HasReturnBody      bool
+		ExpectedBody       string
+	}{
+		{
+			"success",
+			http.StatusBadRequest,
+			"POST",
+			data,
+			true,
+			"Key: 'RoleDTO.Name' Error:Field validation for 'Name' failed on the 'required' tag",
+		},
+	}
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			res, _ := json.Marshal(v.Body)
+			r := httptest.NewRequest(v.Method, "/", bytes.NewBuffer(res))
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+
+			r.Header.Add("Content-Type", "application/json")
+
+			e.Validator = &CustomValidator{validator: validator.New()}
+			assert.Equal(t, ctx.Validate(v.Body), ctx.Validate(v.Body))
+
+			err := controller.CreateRoles(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			if v.HasReturnBody {
+				var resp map[string]interface{}
+
+				_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+				assert.Equal(t, v.ExpectedBody, resp["message"])
+			}
+		})
+	}
+}
+
+// TODO TEST CREATE MEDICAL VALID AND INVALID
+func TestCreateMedical_Valid(t *testing.T) {
+	data := adminDto.MedicalDto{
+		Name:     "testing",
+		Address:  "Jln Testing",
+		Province: "testing province",
+		PostCode: "7896",
+		Country:  "testing indonesia",
+		City:     "testing city",
+		NoTlp:    "088775566",
+	}
+	mockServ.On("CreateMedical", data).Return(data, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		Body               adminDto.MedicalDto
+		HasReturnBody      bool
+		ExpectedBody       adminDto.MedicalDto
+	}{
+		{
+			"success",
+			http.StatusOK,
+			"POST",
+			data,
+			true,
+			data,
+		},
+	}
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			res, _ := json.Marshal(v.Body)
+			r := httptest.NewRequest(v.Method, "/", bytes.NewBuffer(res))
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+
+			r.Header.Add("Content-Type", "application/json")
+
+			e.Validator = &CustomValidator{validator: validator.New()}
+			assert.NoError(t, ctx.Validate(v.Body))
+
+			err := controller.CreateMedical(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			if v.HasReturnBody {
+				var resp map[string]interface{}
+
+				_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+				data := resp["data"]
+				conv, _ := data.(map[string]interface{})
+
+				assert.Equal(t, v.ExpectedBody.Name, conv["name"])
+			}
+		})
+	}
+}
+
+func TestCreateMedical_InValid(t *testing.T) {
+	data := adminDto.MedicalDto{
+		Name:     "",
+		Address:  "Jln Testing",
+		Province: "testing province",
+		PostCode: "7896",
+		Country:  "testing indonesia",
+		City:     "testing city",
+		NoTlp:    "088775566",
+	}
+	mockServ.On("CreateMedical", data).Return(data, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		Body               adminDto.MedicalDto
+		HasReturnBody      bool
+		ExpectedBody       string
+	}{
+		{
+			"success",
+			http.StatusBadRequest,
+			"POST",
+			data,
+			true,
+			"Key: 'MedicalDto.Name' Error:Field validation for 'Name' failed on the 'required' tag",
+		},
+	}
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			res, _ := json.Marshal(v.Body)
+			r := httptest.NewRequest(v.Method, "/", bytes.NewBuffer(res))
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+
+			r.Header.Add("Content-Type", "application/json")
+
+			e.Validator = &CustomValidator{validator: validator.New()}
+			assert.Equal(t, ctx.Validate(v.Body), ctx.Validate(v.Body))
+
+			err := controller.CreateMedical(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			if v.HasReturnBody {
+				var resp map[string]interface{}
+
+				_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+				// data := resp["data"]
+				// conv, _ := data.(map[string]interface{})
+
+				// assert.Equal(t, v.ExpectedBody.Name, conv["name"])
+			}
+		})
+	}
+}
+
 // TODO TEST GET DASHBOARD VALID
 func TestGetDashboard_Valid(t *testing.T) {
 	data := adminDto.CountDashboard{

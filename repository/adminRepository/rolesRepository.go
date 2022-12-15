@@ -1,17 +1,23 @@
 package adminRepository
 
-// func (u *adminRepository) CreateRoles(payloads adminDto.RoleDTO) (adminDto.RoleDTO, error) {
+import (
+	"capstone_vaccine/dto/adminDto"
+	"capstone_vaccine/model"
+	"time"
+)
 
-// 	temp := adminDto.RoleDTO{
-// 		Name: payloads.Name,
-// 	}
+func (u *adminRepository) CreateRoles(payloads adminDto.RoleDTO) (adminDto.RoleDTO, error) {
 
-// 	if err := u.db.Create(&model.Role{
-// 		Name:      temp.Name,
-// 		CreatedAT: time.Now(),
-// 	}).Error; err != nil {
-// 		return temp, err
-// 	}
+	temp := adminDto.RoleDTO{
+		Name: payloads.Name,
+	}
 
-// 	return temp, nil
-// }
+	if err := u.db.Create(&model.Role{
+		Name:      temp.Name,
+		CreatedAT: time.Now(),
+	}).Error; err != nil {
+		return temp, err
+	}
+
+	return temp, nil
+}

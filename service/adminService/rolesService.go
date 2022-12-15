@@ -1,20 +1,25 @@
 package adminService
 
-// func (s *adminService) CreateRoles(payloads adminDto.RoleDTO) (adminDto.RoleDTO, error) {
+import (
+	"capstone_vaccine/dto/adminDto"
+	"errors"
+)
 
-// 	temp := adminDto.RoleDTO{
-// 		Name: payloads.Name,
-// 	}
+func (s *adminService) CreateRoles(payloads adminDto.RoleDTO) (adminDto.RoleDTO, error) {
 
-// 	if temp.Name == "" {
-// 		return temp, errors.New("name cannot be empty")
-// 	}
+	temp := adminDto.RoleDTO{
+		Name: payloads.Name,
+	}
 
-// 	res, err := s.adminRepository.CreateRoles(payloads)
+	if temp.Name == "" {
+		return temp, errors.New("name cannot be empty")
+	}
 
-// 	if err != nil {
-// 		return res, err
-// 	}
+	res, err := s.adminRepository.CreateRoles(payloads)
 
-// 	return temp, nil
-// }
+	if err != nil {
+		return res, err
+	}
+
+	return temp, nil
+}

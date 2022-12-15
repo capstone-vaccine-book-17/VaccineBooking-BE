@@ -15,11 +15,11 @@ type AdminRepository interface {
 	RegisterAdmin(payloads adminDto.RegisterAdminDto) (adminDto.RegisterAdminDto, error)
 	LoginAdmin(payloads adminDto.LoginDTO) (model.Admin, error)
 
-	// // TODO ROLES
-	// CreateRoles(payloads adminDto.RoleDTO) (adminDto.RoleDTO, error)
+	// TODO ROLES
+	CreateRoles(payloads adminDto.RoleDTO) (adminDto.RoleDTO, error)
 
-	// // TODO MEDICAL FACILITYS
-	// CreateMedical(payloads adminDto.MedicalDto) (adminDto.MedicalDto, error)
+	// TODO MEDICAL FACILITYS
+	CreateMedical(payloads adminDto.MedicalDto) (adminDto.MedicalDto, error)
 
 	// TODO DASHBOARD
 
