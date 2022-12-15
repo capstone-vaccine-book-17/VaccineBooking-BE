@@ -9,6 +9,7 @@ type TicketDetails struct {
 	Vaccine   string `json:"vaccine"`
 	Dosis     string `json:"dosis"`
 	Date      string `json:"date"`
+	ConvDate  string `json:"conv_date"`
 	StartTime string `json:"start_time"`
 	EndTime   string `json:"end_time"`
 	RsName    string `json:"rs_name"`
