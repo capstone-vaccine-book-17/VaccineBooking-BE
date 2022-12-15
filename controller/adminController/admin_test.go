@@ -782,7 +782,7 @@ func TestDeleteSession_InValid(t *testing.T) {
 	}
 }
 
-// TODO TEST CREATE VACCINE
+// TODO TEST CREATE VACCINE VALID And INVALID
 func TestCreateVaccine_Valid(t *testing.T) {
 	data := adminDto.VaccineRequest{
 		Name:               "moderna",
@@ -846,6 +846,64 @@ func TestCreateVaccine_Valid(t *testing.T) {
 				conv, _ := data.(map[string]interface{})
 
 				assert.Equal(t, v.ExpectedBody.Name, conv["name"])
+			}
+		})
+	}
+}
+
+func TestCreateVaccine_InValid(t *testing.T) {
+	data := adminDto.VaccineRequest{
+		Name:               "",
+		MedicalFacilitysId: 1,
+		Kuota:              1000,
+		Expired:            "2022-12-20",
+	}
+	mockServ.On("CreateVaccine", data).Return(adminDto.VaccineResponse{}, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		Body               adminDto.VaccineRequest
+		HasReturnBody      bool
+		ExpectedBody       string
+	}{
+		{
+			"success",
+			http.StatusBadRequest,
+			"POST",
+			data,
+			true,
+			"Key: 'VaccineRequest.Name' Error:Field validation for 'Name' failed on the 'required' tag",
+			
+		},
+	}
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			res, _ := json.Marshal(v.Body)
+			r := httptest.NewRequest(v.Method, "/v1/vaccine/create", bytes.NewBuffer(res))
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+
+			r.Header.Add("Content-Type", "application/json")
+			e.Validator = &CustomValidator{validator: validator.New()}
+			assert.Equal(t, ctx.Validate(v.Body), ctx.Validate(v.Body))
+
+			ctx.Set("user", jwtToken)
+
+			err := controller.CreateVaccine(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			if v.HasReturnBody {
+				var resp map[string]interface{}
+
+				_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+				assert.Equal(t, v.ExpectedBody, resp["message"])
 			}
 		})
 	}
