@@ -32,12 +32,12 @@ type AdminService interface {
 	UpdateSession(payloads adminDto.SessionRequestUpdate) (adminDto.SessionRequestUpdate, error)
 	DeleteSession(payloads adminDto.SessionWithStatusDTO) error
 
-	// // TODO Manage Vaccine
-	// CreateVaccine(input adminDto.VaccineRequest) (adminDto.VaccineResponse, error)
-	// ViewAllVaccine(medicalId uint) ([]adminDto.VaccineDTO, error)
-	// UpdateVaccine(payloads adminDto.VaccineDTO, medicalId uint) (adminDto.VaccineDTO, error)
-	// DeleteVaccine(data adminDto.VaccineDTO, medicalId uint) error
-	// GetVaccineById(vaccineId uint, medicalId uint) (adminDto.VaccineDTO, error)
+	// TODO Manage Vaccine
+	CreateVaccine(input adminDto.VaccineRequest) (adminDto.VaccineResponse, error)
+	ViewAllVaccine(medicalId uint) ([]adminDto.VaccineDTO, error)
+	UpdateVaccine(payloads adminDto.VaccineDTO, medicalId uint) (adminDto.VaccineDTO, error)
+	DeleteVaccine(data adminDto.VaccineDTO, medicalId uint) error
+	GetVaccineById(vaccineId uint, medicalId uint) (adminDto.VaccineDTO, error)
 
 	// // TODO Profile
 	// GetProfile(payloads adminDto.ProfileRequest) ([]adminDto.ProfilDTO, error)

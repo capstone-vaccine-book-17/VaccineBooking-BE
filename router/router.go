@@ -68,14 +68,14 @@ func New(e *echo.Echo, db *gorm.DB) {
 	// 	v1_session.DELETE("/:id", adminController.DeleteSession)
 	// }
 
-	// v1_manageVaccine := v1.Group("/vaccine")
-	// {
-	// 	v1_manageVaccine.POST("/create", adminController.CreateVaccine)
-	// 	v1_manageVaccine.GET("/view", adminController.ViewAllVaccine)
-	// 	v1_manageVaccine.PUT("/update/:id", adminController.UpdateVaccine)
-	// 	v1_manageVaccine.DELETE("/delete/:id", adminController.DeleteVaccine)
-	// 	v1_manageVaccine.GET("/view/:id", adminController.GetVaccineById)
-	// }
+	v1_manageVaccine := v1.Group("/vaccine")
+	{
+		v1_manageVaccine.POST("/create", adminController.CreateVaccine)
+		v1_manageVaccine.GET("/view", adminController.ViewAllVaccine)
+		v1_manageVaccine.PUT("/update/:id", adminController.UpdateVaccine)
+		v1_manageVaccine.DELETE("/delete/:id", adminController.DeleteVaccine)
+		v1_manageVaccine.GET("/view/:id", adminController.GetVaccineById)
+	}
 
 	// v1_profile := v1.Group("/profile")
 	// {

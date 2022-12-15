@@ -30,8 +30,6 @@ var (
 	controller *adminController
 )
 
-// const jwt_tok = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklEIjozLCJleHAiOjE2NzA4MTkyODIsIm1lZGljYWxJRCI6MSwicm9sZUlEIjoyLCJ1c2VybmFtZSI6ImZhY2hydWRpbiJ9.st-OsNyD_WnNjBLmj-NryetvxNlkfy1g5HjJmvD_06E"
-
 func InitEcho() *echo.Echo {
 	e := echo.New()
 
@@ -771,6 +769,461 @@ func TestDeleteSession_InValid(t *testing.T) {
 			ctx.Set("user", jwtToken)
 
 			err := controller.DeleteSession(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			var resp map[string]interface{}
+
+			_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+			assert.Equal(t, v.ExpectedBody, resp["message"])
+		})
+	}
+}
+
+// TODO TEST CREATE VACCINE
+func TestCreateVaccine_Valid(t *testing.T) {
+	data := adminDto.VaccineRequest{
+		Name:               "moderna",
+		MedicalFacilitysId: 1,
+		Kuota:              1000,
+		Expired:            "2022-12-20",
+	}
+	mockServ.On("CreateVaccine", data).Return(adminDto.VaccineResponse{
+		Name:    "moderna",
+		Kuota:   1000,
+		Expired: "2022-12-20",
+	}, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		Body               adminDto.VaccineRequest
+		HasReturnBody      bool
+		ExpectedBody       adminDto.VaccineResponse
+	}{
+		{
+			"success",
+			http.StatusOK,
+			"POST",
+			data,
+			true,
+			adminDto.VaccineResponse{
+				Name:    "moderna",
+				Kuota:   1000,
+				Expired: "2022-12-20",
+			},
+		},
+	}
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			res, _ := json.Marshal(v.Body)
+			r := httptest.NewRequest(v.Method, "/v1/vaccine/create", bytes.NewBuffer(res))
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+
+			r.Header.Add("Content-Type", "application/json")
+			e.Validator = &CustomValidator{validator: validator.New()}
+			assert.Equal(t, ctx.Validate(v.Body), ctx.Validate(v.Body))
+
+			ctx.Set("user", jwtToken)
+
+			err := controller.CreateVaccine(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			if v.HasReturnBody {
+				var resp map[string]interface{}
+
+				_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+				data := resp["data"]
+				conv, _ := data.(map[string]interface{})
+
+				assert.Equal(t, v.ExpectedBody.Name, conv["name"])
+			}
+		})
+	}
+}
+
+// TODO TEST VIEW ALL VACCINE
+func TestViewAllVaccine_Valid(t *testing.T) {
+	data := []adminDto.VaccineDTO{
+		{
+			VaccineID: 1,
+			Name:      "astra",
+			Kuota:     1000,
+			Expired:   "2023-12-2",
+		},
+	}
+	mockServ.On("ViewAllVaccine", uint(1)).Return(data, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		ExpectedBody       []adminDto.VaccineDTO
+	}{
+		{
+			"success",
+			http.StatusOK,
+			"GET",
+			data,
+		},
+	}
+
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			r := httptest.NewRequest(v.Method, "/v1/vaccine/view", nil)
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+
+			ctx.Set("user", jwtToken)
+
+			err := controller.ViewAllVaccine(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			var resp map[string][]adminDto.VaccineDTO
+
+			_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+			assert.Equal(t, v.ExpectedBody[0].Name, resp["data"][0].Name)
+		})
+	}
+}
+
+// TODO TEST UPDATE Vaccine VALID AND INVALID
+func TestUpdateVaccine_Valid(t *testing.T) {
+	data := adminDto.VaccineDTO{
+		VaccineID: 1,
+		Name:      "astra edited",
+		Kuota:     1000,
+		Expired:   "2024-12-1 edited",
+	}
+	mockServ.On("UpdateVaccine", data).Return(data, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		Body               adminDto.VaccineDTO
+		HasReturnBody      bool
+		ExpectedBody       adminDto.VaccineDTO
+	}{
+		{
+			"success",
+			http.StatusOK,
+			"POST",
+			data,
+			true,
+			data,
+		},
+	}
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			res, _ := json.Marshal(v.Body)
+			r := httptest.NewRequest(v.Method, "/", bytes.NewBuffer(res))
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+			ctx.Set("user", jwtToken)
+			ctx.SetPath("/v1/vaccine/update/:id")
+			ctx.SetParamNames("id")
+			ctx.SetParamValues("1")
+
+			r.Header.Add("Content-Type", "application/json")
+
+			e.Validator = &CustomValidator{validator: validator.New()}
+			assert.NoError(t, ctx.Validate(v.Body))
+
+			err := controller.UpdateVaccine(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			if v.HasReturnBody {
+				var resp map[string]interface{}
+
+				_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+				data := resp["data"]
+				conv, _ := data.(map[string]interface{})
+
+				assert.Equal(t, v.ExpectedBody.Name, conv["name"])
+			}
+		})
+	}
+}
+
+func TestUpdateVaccine_InValid(t *testing.T) {
+	data := adminDto.VaccineDTO{
+		VaccineID: 1,
+		Name:      "",
+		Kuota:     1000,
+		Expired:   "2024-12-1 edited",
+	}
+	mockServ.On("UpdateVaccine", data).Return(data, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		Body               adminDto.VaccineDTO
+		HasReturnBody      bool
+		ExpectedBody       string
+	}{
+		{
+			"success",
+			http.StatusBadRequest,
+			"POST",
+			data,
+			true,
+			"Key: 'VaccineDTO.Name' Error:Field validation for 'Name' failed on the 'required' tag",
+		},
+	}
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			res, _ := json.Marshal(v.Body)
+			r := httptest.NewRequest(v.Method, "/", bytes.NewBuffer(res))
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+			ctx.Set("user", jwtToken)
+			ctx.SetPath("/v1/session/:id")
+			ctx.SetParamNames("id")
+			ctx.SetParamValues("1")
+
+			r.Header.Add("Content-Type", "application/json")
+
+			e.Validator = &CustomValidator{validator: validator.New()}
+			assert.Equal(t, ctx.Validate(v.Body), ctx.Validate(v.Body))
+
+			err := controller.UpdateVaccine(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			if v.HasReturnBody {
+				var resp map[string]interface{}
+
+				_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+				assert.Equal(t, v.ExpectedBody, resp["message"])
+			}
+		})
+	}
+}
+
+// TODO TEST DELETE Vaccine VALID AND INVALID
+func TestDeleteVaccine_Valid(t *testing.T) {
+	data := adminDto.VaccineDTO{
+		VaccineID: 1,
+	}
+
+	mockServ.On("DeleteVaccine", data.VaccineID, uint(1)).Return(nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		ExpectedBody       string
+	}{
+		{
+			"success",
+			http.StatusOK,
+			"DELETE",
+			"Vaccine Berhasil Dihapus",
+		},
+	}
+
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			r := httptest.NewRequest(v.Method, "/v1/vaccine/delete/1", nil)
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+			ctx.SetPath("/v1/vaccine/delete/:id")
+			ctx.SetParamNames("id")
+			ctx.SetParamValues("1")
+
+			ctx.Set("user", jwtToken)
+
+			err := controller.DeleteVaccine(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			var resp map[string]interface{}
+
+			_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+			assert.Equal(t, v.ExpectedBody, resp["message"])
+		})
+	}
+}
+
+func TestDeleteVaccine_InValid(t *testing.T) {
+	data := adminDto.VaccineDTO{
+		VaccineID: 1,
+	}
+
+	mockServ.On("DeleteVaccine", data.VaccineID, uint(1)).Return(nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		ExpectedBody       string
+	}{
+		{
+			"success",
+			http.StatusBadRequest,
+			"DELETE",
+			"strconv.Atoi: parsing \"a\": invalid syntax",
+		},
+	}
+
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			r := httptest.NewRequest(v.Method, "/v1/vaccine/delete/a", nil)
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+			ctx.SetPath("/v1/vaccine/delete/:id")
+			ctx.SetParamNames("id")
+			ctx.SetParamValues("a")
+
+			ctx.Set("user", jwtToken)
+
+			err := controller.DeleteVaccine(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			var resp map[string]interface{}
+
+			_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+			assert.Equal(t, v.ExpectedBody, resp["message"])
+		})
+	}
+}
+
+// TODO TEST GET BY ID VACCINE VALID And INVALID
+func TestGetVaccineById_Valid(t *testing.T) {
+	mockServ.On("GetVaccineById", uint(1), uint(1)).Return(adminDto.VaccineDTO{
+		VaccineID: 1,
+		Name:      "astra",
+		Kuota:     1000,
+		Expired:   "2023-12-2",
+	}, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		Body               uint
+		HasReturnBody      bool
+		ExpectedBody       adminDto.VaccineDTO
+	}{
+		{
+			"success",
+			http.StatusOK,
+			"GET",
+			1,
+			true,
+			adminDto.VaccineDTO{
+				VaccineID: 1,
+				Name:      "astra",
+				Kuota:     1000,
+				Expired:   "2023-12-2",
+			},
+		},
+	}
+
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			r := httptest.NewRequest(v.Method, "/", nil)
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+			ctx.Set("user", jwtToken)
+			ctx.SetPath("/v1/vaccine/view/:id")
+			ctx.SetParamNames("id")
+			ctx.SetParamValues("1")
+
+			err := controller.GetVaccineById(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			if v.HasReturnBody {
+				var resp map[string]interface{}
+
+				_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+				data := resp["data"]
+				conv, _ := data.(map[string]interface{})
+
+				assert.Equal(t, v.ExpectedBody.Name, conv["name"])
+			}
+		})
+	}
+}
+
+func TestGetVaccineById_InValid(t *testing.T) {
+
+	mockServ.On("GetVaccineById", uint(1), uint(1)).Return(adminDto.VaccineDTO{
+		VaccineID: 1,
+		Name:      "astra",
+		Kuota:     1000,
+		Expired:   "2023-12-2",
+	}, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Body               uint
+		Method             string
+		ExpectedBody       string
+	}{
+		{
+			"success",
+			http.StatusBadRequest,
+			1,
+			"GET",
+			"strconv.Atoi: parsing \"a\": invalid syntax",
+		},
+	}
+
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			r := httptest.NewRequest(v.Method, "/v1/vaccine/view/a", nil)
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+			ctx.SetPath("/v1/vaccine/view/:id")
+			ctx.SetParamNames("id")
+			ctx.SetParamValues("a")
+
+			ctx.Set("user", jwtToken)
+
+			err := controller.GetVaccineById(ctx)
 			assert.NoError(t, err)
 
 			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
