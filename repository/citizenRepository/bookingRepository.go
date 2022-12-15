@@ -48,7 +48,7 @@ func (u *citizenRepository) CreateBooking(payloads citizenDto.BookingDto) (citiz
 func (u *citizenRepository) GetLastBooking(citizenId uint) (citizenDto.TicketBooking, error) {
 
 	var ticket citizenDto.TicketBooking
-	if err := u.db.Model(&model.Booking{}).Select("sessions.*, citizens.name, citizens.nik, citizens.gender, vaccine_varieties.name as vaccine, medical_facilitys.name as rs_name, bookings.queue").
+	if err := u.db.Model(&model.Booking{}).Select("sessions.session_id, sessions.start_time, sessions.end_time, sessions.name, sessions.kuota, sessions.dosis, sessions.date, DATE_FORMAT(sessions.date, '%d %M %Y') as conv_date, citizens.name, citizens.nik, citizens.gender, vaccine_varieties.name as vaccine, medical_facilitys.name as rs_name, bookings.queue").
 		Joins("JOIN sessions ON sessions.session_id = bookings.session_id").
 		Joins("JOIN citizens ON citizens.citizen_id = bookings.citizen_id").
 		Joins("JOIN vaccine_varieties ON vaccine_varieties.vaccine_id = sessions.vaccine_id").
