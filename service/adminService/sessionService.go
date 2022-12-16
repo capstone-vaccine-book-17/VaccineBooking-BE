@@ -3,6 +3,7 @@ package adminService
 import (
 	"capstone_vaccine/dto/adminDto"
 	"errors"
+	"fmt"
 	"time"
 )
 
@@ -45,8 +46,8 @@ func (s *adminService) GetAllSession() ([]adminDto.SessionWithStatusDTO, error) 
 	// Set time today with date format
 	today := time.Now()
 	dateFormat := today.Format("2006-01-02")
+	timeFormat := today.Format("15:04")
 	convDate := string(dateFormat)
-	loc := today.Location()
 
 	res, err := s.adminRepository.GetAllSession()
 	if err != nil {
@@ -55,10 +56,11 @@ func (s *adminService) GetAllSession() ([]adminDto.SessionWithStatusDTO, error) 
 
 	// loop data from session and check if date and time same with convDate and different time or not
 	for i := range res {
-		pasttime, _ := time.ParseInLocation("15:04", res[i].EndTime, loc)
-		diff := today.Sub(pasttime)
 		if res[i].Date <= convDate {
-			if diff.Hours() != 0 {
+			now, _ := time.Parse("15:04", string(timeFormat))
+			endTime, _ := time.Parse("15:04", res[i].EndTime)
+			if endTime.Before(now) {
+				fmt.Println(res[i].EndTime)
 				err := s.adminRepository.AutoUpdateSession(res[i].Date, res[i].EndTime)
 				if err != nil {
 					return res, err
