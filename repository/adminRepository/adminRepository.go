@@ -41,11 +41,12 @@ type AdminRepository interface {
 	DeleteVaccine(data adminDto.VaccineDTO, medicalId uint) error
 	GetVaccineById(vaccineId uint, medicalId uint) (adminDto.VaccineDTO, error)
 
-	// // TODO Profile
-	// GetProfile(payload adminDto.ProfileRequest) ([]adminDto.ProfilDTO, error)
-	// UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.Address, error)
-	// GetAdmin(payloads adminDto.ProfileRequest) (adminDto.Address, error)
-	// UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO, error)
+	// TODO Profile
+	GetProfile(payload adminDto.ProfileRequest) ([]adminDto.ProfilDTO, error)
+	UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.Address, error)
+	GetAdmin(payloads adminDto.ProfileRequest) (adminDto.Address, error)
+	UpdateImage(payloads adminDto.ProfileRequest) error
+
 	// TODO BOOKING
 	CreateCitizenBook(nik, nama, address string) (model.Citizen, error)
 	CreateBooking(payloads adminDto.BookingDto) (adminDto.BookingDto, error)

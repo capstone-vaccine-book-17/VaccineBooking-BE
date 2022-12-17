@@ -1,76 +1,100 @@
 package adminService
 
-// // TODO Get Profile Admin
-// func (s *adminService) GetProfile(payloads adminDto.ProfileRequest) ([]adminDto.ProfilDTO, error) {
+import (
+	"capstone_vaccine/dto/adminDto"
+	"capstone_vaccine/utils"
+	"context"
+	"errors"
+	"mime/multipart"
+	"os"
 
-// 	var profile []adminDto.ProfilDTO
+	"github.com/cloudinary/cloudinary-go"
+	"github.com/cloudinary/cloudinary-go/api/uploader"
+	"golang.org/x/crypto/bcrypt"
+)
 
-// 	res, err := s.adminRepository.GetProfile(payloads)
+// TODO Get Profile Admin
+func (s *adminService) GetProfile(payloads adminDto.ProfileRequest) ([]adminDto.ProfilDTO, error) {
 
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	for _, p := range res {
+	var profile []adminDto.ProfilDTO
 
-// 		profile = append(profile, adminDto.ProfilDTO{
-// 			Name:              p.Name,
-// 			Image:             p.Image,
-// 			Address:           p.Address,
-// 			ResponsiblePerson: p.ResponsiblePerson,
-// 			Username:          p.Username,
-// 			Password:          p.Password,
-// 		})
-// 	}
-// 	return profile, nil
-// }
+	res, err := s.adminRepository.GetProfile(payloads)
 
-// // TODO Update Profile & Change Password
-// func (s *adminService) UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.ProfileRequest, error) {
+	if err != nil {
+		return nil, err
+	}
+	for _, p := range res {
 
-// 	dto := adminDto.ProfileRequest{
-// 		AdminID:            payloads.AdminID,
-// 		MedicalFacilitysId: payloads.MedicalFacilitysId,
-// 		Name:               payloads.Name,
-// 		Image:              payloads.Image,
-// 		Address:            payloads.Address,
-// 		ResponsiblePerson:  payloads.ResponsiblePerson,
-// 		Username:           payloads.Username,
-// 		Password:           payloads.Password,
-// 		NewPassword:        payloads.NewPassword,
-// 	}
-// 	new, _ := s.adminRepository.GetAdmin(payloads)
+		profile = append(profile, adminDto.ProfilDTO{
+			Name:              p.Name,
+			Image:             p.Image,
+			Address:           p.Address,
+			ResponsiblePerson: p.ResponsiblePerson,
+			Username:          p.Username,
+			Password:          p.Password,
+		})
+	}
+	return profile, nil
+}
 
-// 	if err := bcrypt.CompareHashAndPassword([]byte(new.Password), []byte(payloads.Password)); err != nil {
+// TODO Update Profile & Change Password
+func (s *adminService) UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.ProfileRequest, error) {
 
-// 		return dto, errors.New("password incorrect")
+	if payloads.NewPassword == "" {
+		payloads.NewPassword = payloads.Password
 
-// 	}
-// 	_, err := s.adminRepository.UpdateProfile(dto)
+	}
+	hash, _ := utils.HashBcrypt(payloads.NewPassword)
 
-// 	if err != nil {
-// 		return dto, err
-// 	}
+	dto := adminDto.ProfileRequest{
+		AdminID:            payloads.AdminID,
+		MedicalFacilitysId: payloads.MedicalFacilitysId,
+		Name:               payloads.Name,
+		Image:              payloads.Image,
+		Address:            payloads.Address,
+		ResponsiblePerson:  payloads.ResponsiblePerson,
+		Username:           payloads.Username,
+		Password:           payloads.Password,
+		NewPassword:        hash,
+	}
+	new, _ := s.adminRepository.GetAdmin(payloads)
 
-// 	return dto, nil
-// }
+	if err := bcrypt.CompareHashAndPassword([]byte(new.Password), []byte(dto.Password)); err != nil {
 
-// // TODO Uploud Image
-// func (s *adminService) UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO, error) {
+		return dto, errors.New("password incorrect")
 
-// 	temp := adminDto.ProfileRequest{
-// 		MedicalFacilitysId: payloads.MedicalFacilitysId,
-// 		Image:              payloads.Image,
-// 	}
-// 	res, err := s.adminRepository.UpdateImage(temp)
+	}
 
-// 	out := adminDto.ProfilDTO{
-// 		Image: res.Image,
-// 	}
+	_, err := s.adminRepository.UpdateProfile(dto)
 
-// 	if err != nil {
-// 		return out, err
-// 	}
+	if err != nil {
+		return dto, err
+	}
 
-// 	return out, nil
+	return dto, nil
+}
 
-// }
+// TODO Uploud Image
+func (s *adminService) UpdateImage(payloads adminDto.ProfileRequest, file multipart.File) error {
+
+	cld, _ := cloudinary.NewFromURL(os.Getenv("CLOUDINARY_URL"))
+	ctx := context.Background()
+
+	result, errs := cld.Upload.Upload(ctx, file, uploader.UploadParams{})
+	if errs != nil {
+		return errs
+	}
+
+	temp := adminDto.ProfileRequest{
+		MedicalFacilitysId: payloads.MedicalFacilitysId,
+		Image:              result.SecureURL,
+	}
+
+	err := s.adminRepository.UpdateImage(temp)
+	if err != nil {
+		return err
+	}
+
+	return nil
+
+}

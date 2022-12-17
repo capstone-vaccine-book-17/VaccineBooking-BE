@@ -1,129 +1,119 @@
 package adminController
 
-// // TODO Get Profile
-// func (u *adminController) GetProfile(c echo.Context) error {
+import (
+	"capstone_vaccine/dto/adminDto"
+	"capstone_vaccine/middleware"
+	"capstone_vaccine/utils"
+	"net/http"
 
-// 	adminID, _ := middleware.ClaimData(c, "adminID")
-// 	conv_adminID := adminID.(float64)
-// 	conv_ := uint(conv_adminID)
+	"github.com/labstack/echo"
+)
 
-// 	var payloads adminDto.ProfileRequest
+// TODO Get Profile
+func (u *adminController) GetProfile(c echo.Context) error {
 
-// 	if err := c.Bind(&payloads); err != nil {
-// 		return err
-// 	}
+	adminID, _ := middleware.ClaimData(c, "adminID")
+	conv_adminID := adminID.(float64)
+	conv_ := uint(conv_adminID)
 
-// 	temp := adminDto.ProfileRequest{
-// 		AdminID: conv_,
-// 	}
+	var payloads adminDto.ProfileRequest
 
-// 	res, err := u.adminServ.GetProfile(temp)
-// 	if err != nil {
-// 		return c.JSON(http.StatusBadRequest, utils.Response{
-// 			Message: err.Error(),
-// 			Code:    http.StatusBadRequest,
-// 		})
-// 	}
+	if err := c.Bind(&payloads); err != nil {
+		return err
+	}
 
-// 	return c.JSON(http.StatusOK, utils.Response{
-// 		Message: "Profile",
-// 		Code:    http.StatusOK,
-// 		Data:    res,
-// 	})
-// }
+	temp := adminDto.ProfileRequest{
+		AdminID: conv_,
+	}
 
-// // TODO Update Profile & Change Password
-// func (u *adminController) UpdateProfile(c echo.Context) error {
+	res, err := u.adminServ.GetProfile(temp)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, utils.Response{
+			Message: err.Error(),
+			Code:    http.StatusBadRequest,
+		})
+	}
 
-// 	adminID, _ := middleware.ClaimData(c, "adminID")
-// 	conv_adminID := adminID.(float64)
-// 	conv_ := uint(conv_adminID)
+	return c.JSON(http.StatusOK, utils.Response{
+		Message: "Profile",
+		Code:    http.StatusOK,
+		Data:    res,
+	})
+}
 
-// 	medicalID, _ := middleware.ClaimData(c, "medicalID")
-// 	conv_medicalID := medicalID.(float64)
-// 	conv := uint(conv_medicalID)
+// TODO Update Profile & Change Password
+func (u *adminController) UpdateProfile(c echo.Context) error {
 
-// 	var payloads adminDto.ProfileRequest
+	adminID, _ := middleware.ClaimData(c, "adminID")
+	conv_adminID := adminID.(float64)
+	conv_ := uint(conv_adminID)
 
-// 	if err := c.Bind(&payloads); err != nil {
-// 		return err
-// 	}
-// 	if payloads.NewPassword == "" {
-// 		payloads.NewPassword = payloads.Password
+	medicalID, _ := middleware.ClaimData(c, "medicalID")
+	conv_medicalID := medicalID.(float64)
+	conv := uint(conv_medicalID)
 
-// 	}
+	var payloads adminDto.ProfileRequest
 
-// 	hash, _ := utils.HashBcrypt(payloads.NewPassword)
+	if err := c.Bind(&payloads); err != nil {
+		return err
+	}
 
-// 	temp := adminDto.ProfileRequest{
-// 		AdminID:            conv_,
-// 		MedicalFacilitysId: conv,
-// 		Name:               payloads.Name,
-// 		Image:              payloads.Image,
-// 		Address:            payloads.Address,
-// 		ResponsiblePerson:  payloads.ResponsiblePerson,
-// 		Username:           payloads.Username,
-// 		NewPassword:        hash,
-// 		Password:           payloads.Password,
-// 	}
+	temp := adminDto.ProfileRequest{
+		AdminID:            conv_,
+		MedicalFacilitysId: conv,
+		Name:               payloads.Name,
+		Image:              payloads.Image,
+		Address:            payloads.Address,
+		ResponsiblePerson:  payloads.ResponsiblePerson,
+		Username:           payloads.Username,
+		NewPassword:        payloads.NewPassword,
+		Password:           payloads.Password,
+	}
 
-// 	_, err := u.adminServ.UpdateProfile(temp)
+	_, err := u.adminServ.UpdateProfile(temp)
 
-// 	if err != nil {
-// 		return c.JSON(http.StatusInternalServerError, utils.Response{
-// 			Message: err.Error(),
-// 			Code:    http.StatusInternalServerError,
-// 		})
-// 	}
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, utils.Response{
+			Message: err.Error(),
+			Code:    http.StatusInternalServerError,
+		})
+	}
 
-// 	return c.JSON(http.StatusOK, utils.Response{
-// 		Message: "Update Profile Berhasil dilakukan",
-// 		Code:    http.StatusOK,
-// 	})
-// }
+	return c.JSON(http.StatusOK, utils.Response{
+		Message: "Update Profile Berhasil dilakukan",
+		Code:    http.StatusOK,
+	})
+}
 
-// // Upload Image
-// func (u *adminController) UpdateImage(c echo.Context) error {
+// Upload Image
+func (u *adminController) UpdateImage(c echo.Context) error {
 
-// 	cld, _ := cloudinary.NewFromURL(os.Getenv("CLOUDINARY_URL"))
-// 	medicalID, _ := middleware.ClaimData(c, "medicalID")
-// 	conv_medicalID := medicalID.(float64)
-// 	conv := uint(conv_medicalID)
+	medicalID, _ := middleware.ClaimData(c, "medicalID")
+	conv_medicalID := medicalID.(float64)
+	conv := uint(conv_medicalID)
+	fileHeader, _ := c.FormFile("image")
+	file, _ := fileHeader.Open()
 
-// 	fileHeader, _ := c.FormFile("image")
+	var payloads adminDto.ProfileRequest
 
-// 	file, _ := fileHeader.Open()
+	if err := c.Bind(&payloads); err != nil {
+		return err
+	}
 
-// 	ctx := context.Background()
+	temp := adminDto.ProfileRequest{
+		MedicalFacilitysId: conv,
+	}
+	err := u.adminServ.UpdateImage(temp, file)
 
-// 	result, err := cld.Upload.Upload(ctx, file, uploader.UploadParams{})
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, utils.Response{
+			Message: err.Error(),
+			Code:    http.StatusInternalServerError,
+		})
+	}
 
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	var payloads adminDto.ProfileRequest
-
-// 	if err := c.Bind(&payloads); err != nil {
-// 		return err
-// 	}
-
-// 	temp := adminDto.ProfileRequest{
-// 		MedicalFacilitysId: conv,
-// 		Image:              result.SecureURL,
-// 	}
-// 	res, err := u.adminServ.UpdateImage(temp)
-
-// 	if err != nil {
-// 		return c.JSON(http.StatusInternalServerError, utils.Response{
-// 			Message: err.Error(),
-// 			Code:    http.StatusInternalServerError,
-// 		})
-// 	}
-
-// 	return c.JSON(http.StatusOK, utils.Response{
-// 		Message: "Successfully uploaded the file",
-// 		Code:    http.StatusOK,
-// 		Data:    res.Image,
-// 	})
-// }
+	return c.JSON(http.StatusOK, utils.Response{
+		Message: "Successfully uploaded the file",
+		Code:    http.StatusOK,
+	})
+}

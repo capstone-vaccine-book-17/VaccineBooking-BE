@@ -6,6 +6,7 @@ import (
 	"capstone_vaccine/repository/adminRepository"
 	"capstone_vaccine/utils"
 	"errors"
+	"mime/multipart"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -39,10 +40,11 @@ type AdminService interface {
 	DeleteVaccine(data adminDto.VaccineDTO, medicalId uint) error
 	GetVaccineById(vaccineId uint, medicalId uint) (adminDto.VaccineDTO, error)
 
-	// // TODO Profile
-	// GetProfile(payloads adminDto.ProfileRequest) ([]adminDto.ProfilDTO, error)
-	// UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.ProfileRequest, error)
-	// UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO, error)
+	// TODO Profile
+	GetProfile(payloads adminDto.ProfileRequest) ([]adminDto.ProfilDTO, error)
+	UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.ProfileRequest, error)
+	UpdateImage(payloads adminDto.ProfileRequest, file multipart.File) error
+
 	// TODO BOOKING
 	CreateBooking(payloads adminDto.BookingDto) (adminDto.BookingDto, error)
 	UpdateBooking(payloads adminDto.UpdateBooking) (adminDto.UpdateBooking, error)
