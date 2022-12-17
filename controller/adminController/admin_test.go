@@ -789,6 +789,857 @@ func TestDeleteSession_InValid(t *testing.T) {
 	}
 }
 
+// TODO TEST CREATE ROLE VALID AND INVALID
+func TestCreateRole_Valid(t *testing.T) {
+	data := adminDto.RoleDTO{
+		Name: "testing",
+	}
+	mockServ.On("CreateRoles", data).Return(data, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		Body               adminDto.RoleDTO
+		HasReturnBody      bool
+		ExpectedBody       adminDto.RoleDTO
+	}{
+		{
+			"success",
+			http.StatusOK,
+			"POST",
+			data,
+			true,
+			data,
+		},
+	}
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			res, _ := json.Marshal(v.Body)
+			r := httptest.NewRequest(v.Method, "/", bytes.NewBuffer(res))
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+
+			r.Header.Add("Content-Type", "application/json")
+
+			e.Validator = &CustomValidator{validator: validator.New()}
+			assert.NoError(t, ctx.Validate(v.Body))
+
+			err := controller.CreateRoles(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			if v.HasReturnBody {
+				var resp map[string]interface{}
+
+				_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+				data := resp["data"]
+				conv, _ := data.(map[string]interface{})
+
+				assert.Equal(t, v.ExpectedBody.Name, conv["name"])
+			}
+		})
+	}
+}
+
+func TestCreateRole_InValid(t *testing.T) {
+	data := adminDto.RoleDTO{
+		Name: "",
+	}
+	mockServ.On("CreateRoles", data).Return(data, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		Body               adminDto.RoleDTO
+		HasReturnBody      bool
+		ExpectedBody       string
+	}{
+		{
+			"success",
+			http.StatusBadRequest,
+			"POST",
+			data,
+			true,
+			"Key: 'RoleDTO.Name' Error:Field validation for 'Name' failed on the 'required' tag",
+		},
+	}
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			res, _ := json.Marshal(v.Body)
+			r := httptest.NewRequest(v.Method, "/", bytes.NewBuffer(res))
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+
+			r.Header.Add("Content-Type", "application/json")
+
+			e.Validator = &CustomValidator{validator: validator.New()}
+			assert.Equal(t, ctx.Validate(v.Body), ctx.Validate(v.Body))
+
+			err := controller.CreateRoles(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			if v.HasReturnBody {
+				var resp map[string]interface{}
+
+				_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+				assert.Equal(t, v.ExpectedBody, resp["message"])
+			}
+		})
+	}
+}
+
+// TODO TEST CREATE MEDICAL VALID AND INVALID
+func TestCreateMedical_Valid(t *testing.T) {
+	data := adminDto.MedicalDto{
+		Name:     "testing",
+		Address:  "Jln Testing",
+		Province: "testing province",
+		PostCode: "7896",
+		Country:  "testing indonesia",
+		City:     "testing city",
+		NoTlp:    "088775566",
+	}
+	mockServ.On("CreateMedical", data).Return(data, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		Body               adminDto.MedicalDto
+		HasReturnBody      bool
+		ExpectedBody       adminDto.MedicalDto
+	}{
+		{
+			"success",
+			http.StatusOK,
+			"POST",
+			data,
+			true,
+			data,
+		},
+	}
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			res, _ := json.Marshal(v.Body)
+			r := httptest.NewRequest(v.Method, "/", bytes.NewBuffer(res))
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+
+			r.Header.Add("Content-Type", "application/json")
+
+			e.Validator = &CustomValidator{validator: validator.New()}
+			assert.NoError(t, ctx.Validate(v.Body))
+
+			err := controller.CreateMedical(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			if v.HasReturnBody {
+				var resp map[string]interface{}
+
+				_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+				data := resp["data"]
+				conv, _ := data.(map[string]interface{})
+
+				assert.Equal(t, v.ExpectedBody.Name, conv["name"])
+			}
+		})
+	}
+}
+
+func TestCreateMedical_InValid(t *testing.T) {
+	data := adminDto.MedicalDto{
+		Name:     "",
+		Address:  "Jln Testing",
+		Province: "testing province",
+		PostCode: "7896",
+		Country:  "testing indonesia",
+		City:     "testing city",
+		NoTlp:    "088775566",
+	}
+	mockServ.On("CreateMedical", data).Return(data, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		Body               adminDto.MedicalDto
+		HasReturnBody      bool
+		ExpectedBody       string
+	}{
+		{
+			"success",
+			http.StatusBadRequest,
+			"POST",
+			data,
+			true,
+			"Key: 'MedicalDto.Name' Error:Field validation for 'Name' failed on the 'required' tag",
+		},
+	}
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			res, _ := json.Marshal(v.Body)
+			r := httptest.NewRequest(v.Method, "/", bytes.NewBuffer(res))
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+
+			r.Header.Add("Content-Type", "application/json")
+
+			e.Validator = &CustomValidator{validator: validator.New()}
+			assert.Equal(t, ctx.Validate(v.Body), ctx.Validate(v.Body))
+
+			err := controller.CreateMedical(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			if v.HasReturnBody {
+				var resp map[string]interface{}
+
+				_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+				// data := resp["data"]
+				// conv, _ := data.(map[string]interface{})
+
+				// assert.Equal(t, v.ExpectedBody.Name, conv["name"])
+			}
+		})
+	}
+}
+
+// TODO TEST CREATE BOOKING VALID AND INVALID
+func TestCreateBooking_Valid(t *testing.T) {
+	data := adminDto.BookingDto{
+		SessionId: 1,
+		Nama:      "testing",
+		Nik:       "663212546",
+		Address:   "Jln Jauh testing",
+	}
+	mockServ.On("CreateBooking", data).Return(adminDto.BookingDto{
+		CitizenId: 1,
+		SessionId: 1,
+		Nama:      "testing",
+		Nik:       "663212546",
+		Address:   "Jln Jauh testing",
+		Queue:     1,
+	}, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		Body               adminDto.BookingDto
+		HasReturnBody      bool
+		ExpectedBody       adminDto.BookingDto
+	}{
+		{
+			"success",
+			http.StatusOK,
+			"POST",
+			data,
+			true,
+			adminDto.BookingDto{
+				CitizenId: 1,
+				SessionId: 1,
+				Nama:      "testing",
+				Nik:       "663212546",
+				Address:   "Jln Jauh testing",
+				Queue:     1,
+			},
+		},
+	}
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			res, _ := json.Marshal(v.Body)
+			r := httptest.NewRequest(v.Method, "/", bytes.NewBuffer(res))
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+
+			r.Header.Add("Content-Type", "application/json")
+
+			e.Validator = &CustomValidator{validator: validator.New()}
+			assert.NoError(t, ctx.Validate(v.Body))
+
+			err := controller.CreateBooking(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			if v.HasReturnBody {
+				var resp map[string]interface{}
+
+				_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+				data := resp["data"]
+				conv, _ := data.(map[string]interface{})
+
+				assert.Equal(t, v.ExpectedBody.Nama, conv["nama"])
+			}
+		})
+	}
+}
+
+func TestCreateBooking_InValid(t *testing.T) {
+	data := adminDto.BookingDto{
+		SessionId: 1,
+		Nama:      "testing",
+		Nik:       "",
+		Address:   "Jln Jauh testing",
+	}
+	mockServ.On("CreateBooking", data).Return(adminDto.BookingDto{
+		CitizenId: 1,
+		SessionId: 1,
+		Nama:      "testing",
+		Nik:       "663212546",
+		Address:   "Jln Jauh testing",
+		Queue:     1,
+	}, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		Body               adminDto.BookingDto
+		HasReturnBody      bool
+		ExpectedBody       string
+	}{
+		{
+			"success",
+			http.StatusBadRequest,
+			"POST",
+			data,
+			true,
+			"Key: 'BookingDto.Nik' Error:Field validation for 'Nik' failed on the 'required' tag",
+		},
+	}
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			res, _ := json.Marshal(v.Body)
+			r := httptest.NewRequest(v.Method, "/", bytes.NewBuffer(res))
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+
+			r.Header.Add("Content-Type", "application/json")
+
+			e.Validator = &CustomValidator{validator: validator.New()}
+			assert.Equal(t, ctx.Validate(v.Body), ctx.Validate(v.Body))
+
+			err := controller.CreateBooking(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			if v.HasReturnBody {
+				var resp map[string]interface{}
+
+				_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+				assert.Equal(t, v.ExpectedBody, resp["message"])
+			}
+		})
+	}
+}
+
+// TODO TEST UPDATE BOOKING VALID AND INVALID
+func TestUpdateBooking_Valid(t *testing.T) {
+	data := adminDto.UpdateBooking{
+		BookingId: 1,
+		Status:    "batal",
+	}
+	mockServ.On("UpdateBooking", data).Return(adminDto.UpdateBooking{
+		BookingId: 1,
+		Status:    "batal",
+	}, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		Body               adminDto.UpdateBooking
+		HasReturnBody      bool
+		ExpectedBody       adminDto.UpdateBooking
+	}{
+		{
+			"success",
+			http.StatusOK,
+			"PUT",
+			data,
+			true,
+			adminDto.UpdateBooking{
+				BookingId: 1,
+				Status:    "batal",
+			},
+		},
+	}
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			res, _ := json.Marshal(v.Body)
+			r := httptest.NewRequest(v.Method, "/", bytes.NewBuffer(res))
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+			ctx.SetPath("/v1/booking/:id")
+			ctx.SetParamNames("id")
+			ctx.SetParamValues("1")
+
+			r.Header.Add("Content-Type", "application/json")
+
+			e.Validator = &CustomValidator{validator: validator.New()}
+			assert.NoError(t, ctx.Validate(v.Body))
+
+			err := controller.UpdateBooking(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			if v.HasReturnBody {
+				var resp map[string]interface{}
+
+				_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+				data := resp["data"]
+				conv, _ := data.(map[string]interface{})
+
+				assert.Equal(t, v.ExpectedBody.Status, conv["status"])
+			}
+		})
+	}
+}
+
+func TestUpdateBooking_InValid_Empty(t *testing.T) {
+	data := adminDto.UpdateBooking{
+		BookingId: 1,
+		Status:    "",
+	}
+	mockServ.On("UpdateBooking", data).Return(adminDto.UpdateBooking{
+		BookingId: 1,
+		Status:    "batal",
+	}, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		Body               adminDto.UpdateBooking
+		HasReturnBody      bool
+		ExpectedBody       string
+	}{
+		{
+			"success",
+			http.StatusBadRequest,
+			"PUT",
+			data,
+			true,
+			"Key: 'UpdateBooking.Status' Error:Field validation for 'Status' failed on the 'required' tag",
+		},
+	}
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			res, _ := json.Marshal(v.Body)
+			r := httptest.NewRequest(v.Method, "/", bytes.NewBuffer(res))
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+			ctx.SetPath("/v1/booking/:id")
+			ctx.SetParamNames("id")
+			ctx.SetParamValues("1")
+
+			r.Header.Add("Content-Type", "application/json")
+
+			e.Validator = &CustomValidator{validator: validator.New()}
+			assert.Equal(t, ctx.Validate(v.Body), ctx.Validate(v.Body))
+
+			err := controller.UpdateBooking(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			if v.HasReturnBody {
+				var resp map[string]interface{}
+
+				_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+				assert.Equal(t, v.ExpectedBody, resp["message"])
+			}
+		})
+	}
+}
+
+func TestUpdateBooking_InValid_StrConv(t *testing.T) {
+	data := adminDto.UpdateBooking{
+		BookingId: 1,
+		Status:    "batal",
+	}
+	mockServ.On("UpdateBooking", data).Return(adminDto.UpdateBooking{
+		BookingId: 1,
+		Status:    "batal",
+	}, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		Body               adminDto.UpdateBooking
+		HasReturnBody      bool
+		ExpectedBody       string
+	}{
+		{
+			"success",
+			http.StatusBadRequest,
+			"PUT",
+			data,
+			true,
+			"strconv.Atoi: parsing \"a\": invalid syntax",
+		},
+	}
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			res, _ := json.Marshal(v.Body)
+			r := httptest.NewRequest(v.Method, "/", bytes.NewBuffer(res))
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+			ctx.SetPath("/v1/booking/:id")
+			ctx.SetParamNames("id")
+			ctx.SetParamValues("a")
+
+			r.Header.Add("Content-Type", "application/json")
+
+			e.Validator = &CustomValidator{validator: validator.New()}
+			assert.NoError(t, ctx.Validate(v.Body))
+
+			err := controller.UpdateBooking(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			if v.HasReturnBody {
+				var resp map[string]interface{}
+
+				_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+				assert.Equal(t, v.ExpectedBody, resp["message"])
+			}
+		})
+	}
+}
+
+// TODO TEST GET ALL BOOKING VALID
+func TestGetAllBooking_Valid(t *testing.T) {
+	data := []adminDto.BookingAllDto{
+		{
+			BookingId:   1,
+			CitizenName: "Joni",
+			StartTime:   "15:03",
+			EndTime:     "16:03",
+			Date:        "2022-12-29",
+			Dosis:       "Kedua",
+			Nik:         "555632214",
+			Queue:       1,
+			Status:      "process",
+		},
+	}
+	mockServ.On("GetAllBooking", uint(1)).Return(data, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		HasReturnBody      bool
+		ExpectedBody       []adminDto.BookingAllDto
+	}{
+		{
+			"success",
+			http.StatusOK,
+			"GET",
+			true,
+			data,
+		},
+	}
+
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			r := httptest.NewRequest(v.Method, "/", nil)
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+
+			ctx.Set("user", jwtToken)
+
+			err := controller.GetAllBooking(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			if v.HasReturnBody {
+				var resp map[string][]adminDto.BookingAllDto
+
+				_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+				assert.Equal(t, v.ExpectedBody[0].CitizenName, resp["data"][0].CitizenName)
+			}
+		})
+	}
+}
+
+// TODO TEST GET BY ID BOOKING VALID AND INVALID
+func TestGetByIdBooking_Valid(t *testing.T) {
+	data := adminDto.BookingAllDto{
+		BookingId: 1,
+	}
+	mockServ.On("GetBookingById", data.BookingId).Return(adminDto.BookingAllDto{
+		BookingId:   1,
+		CitizenName: "Joni",
+		StartTime:   "15:03",
+		EndTime:     "16:03",
+		Date:        "2022-12-29",
+		Dosis:       "Kedua",
+		Nik:         "555632214",
+		Queue:       1,
+		Status:      "process",
+	}, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		Body               adminDto.BookingAllDto
+		HasReturnBody      bool
+		ExpectedBody       adminDto.BookingAllDto
+	}{
+		{
+			"success",
+			http.StatusOK,
+			"GET",
+			data,
+			true,
+			adminDto.BookingAllDto{
+				BookingId:   1,
+				CitizenName: "Joni",
+				StartTime:   "15:03",
+				EndTime:     "16:03",
+				Date:        "2022-12-29",
+				Dosis:       "Kedua",
+				Nik:         "555632214",
+				Queue:       1,
+				Status:      "process",
+			},
+		},
+	}
+
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			r := httptest.NewRequest(v.Method, "/", nil)
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+			ctx.SetPath("/v1/booking/:id")
+			ctx.SetParamNames("id")
+			ctx.SetParamValues("1")
+
+			err := controller.GetBookingById(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			if v.HasReturnBody {
+				var resp map[string]interface{}
+
+				_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+				data := resp["data"]
+				conv, _ := data.(map[string]interface{})
+
+				assert.Equal(t, v.ExpectedBody.CitizenName, conv["citizen_name"])
+			}
+		})
+	}
+}
+
+func TestGetByIdBooking_InValid_StrConv(t *testing.T) {
+	data := adminDto.BookingAllDto{
+		BookingId: 1,
+	}
+	mockServ.On("GetBookingById", data.BookingId).Return(adminDto.BookingAllDto{
+		BookingId:   1,
+		CitizenName: "Joni",
+		StartTime:   "15:03",
+		EndTime:     "16:03",
+		Date:        "2022-12-29",
+		Dosis:       "Kedua",
+		Nik:         "555632214",
+		Queue:       1,
+		Status:      "process",
+	}, nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		Body               adminDto.BookingAllDto
+		HasReturnBody      bool
+		ExpectedBody       string
+	}{
+		{
+			"success",
+			http.StatusBadRequest,
+			"GET",
+			data,
+			true,
+			"strconv.Atoi: parsing \"a\": invalid syntax",
+		},
+	}
+
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			r := httptest.NewRequest(v.Method, "/", nil)
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+			ctx.SetPath("/v1/booking/:id")
+			ctx.SetParamNames("id")
+			ctx.SetParamValues("a")
+
+			err := controller.GetBookingById(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			if v.HasReturnBody {
+				var resp map[string]interface{}
+
+				_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+				assert.Equal(t, v.ExpectedBody, resp["message"])
+			}
+		})
+	}
+}
+
+// TODO TEST DELETE BOOKING VALID AND INVALID
+func TestDeleteBooking_Valid(t *testing.T) {
+	data := adminDto.BookingAllDto{
+		BookingId: 1,
+	}
+
+	mockServ.On("DeleteBooking", data.BookingId).Return(nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		ExpectedBody       string
+	}{
+		{
+			"success",
+			http.StatusOK,
+			"DELETE",
+			"success",
+		},
+	}
+
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			r := httptest.NewRequest(v.Method, "/", nil)
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+			ctx.SetPath("/v1/booking/:id")
+			ctx.SetParamNames("id")
+			ctx.SetParamValues("1")
+
+			ctx.Set("user", jwtToken)
+
+			err := controller.DeleteBooking(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			var resp map[string]interface{}
+
+			_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+			assert.Equal(t, v.ExpectedBody, resp["message"])
+		})
+	}
+}
+
+func TestDeleteBooking_InValid(t *testing.T) {
+	data := adminDto.BookingAllDto{
+		BookingId: 1,
+	}
+
+	mockServ.On("DeleteBooking", data.BookingId).Return(nil).Once()
+
+	testCases := []struct {
+		Name               string
+		ExpectedStatusCode int
+		Method             string
+		ExpectedBody       string
+	}{
+		{
+			"success",
+			http.StatusBadRequest,
+			"DELETE",
+			"strconv.Atoi: parsing \"a\": invalid syntax",
+		},
+	}
+
+	for _, v := range testCases {
+		t.Run(v.Name, func(t *testing.T) {
+			r := httptest.NewRequest(v.Method, "/", nil)
+			w := httptest.NewRecorder()
+
+			e := echo.New()
+			ctx := e.NewContext(r, w)
+			ctx.SetPath("/v1/booking/:id")
+			ctx.SetParamNames("id")
+			ctx.SetParamValues("a")
+
+			ctx.Set("user", jwtToken)
+
+			err := controller.DeleteBooking(ctx)
+			assert.NoError(t, err)
+
+			assert.Equal(t, v.ExpectedStatusCode, w.Result().StatusCode)
+
+			var resp map[string]interface{}
+
+			_ = json.NewDecoder(w.Result().Body).Decode(&resp)
+
+			assert.Equal(t, v.ExpectedBody, resp["message"])
+		})
+	}
+}
+
 // TODO TEST CREATE VACCINE VALID And INVALID
 func TestCreateVaccine_Valid(t *testing.T) {
 	data := adminDto.VaccineRequest{
