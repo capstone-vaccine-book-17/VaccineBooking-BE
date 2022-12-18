@@ -1,8 +1,61 @@
 package adminRepository
 
-import "gorm.io/gorm"
+import (
+	"capstone_vaccine/dto/adminDto"
+	"capstone_vaccine/model"
+	"errors"
+	"time"
+
+	"github.com/leekchan/accounting"
+	"gorm.io/gorm"
+)
 
 type AdminRepository interface {
+	// TODO AUTH
+	RegisterAdmin(payloads adminDto.RegisterAdminDto) (adminDto.RegisterAdminDto, error)
+	LoginAdmin(payloads adminDto.LoginDTO) (model.Admin, error)
+
+	// TODO ROLES
+	CreateRoles(payloads adminDto.RoleDTO) (adminDto.RoleDTO, error)
+
+	// TODO MEDICAL FACILITYS
+	CreateMedical(payloads adminDto.MedicalDto) (adminDto.MedicalDto, error)
+
+	// TODO DASHBOARD
+
+	GetDashboard(medicalId uint) (adminDto.CountDashboard, error)
+
+	// TODO SESSION
+	CountKuota(vaccineID uint) (adminDto.CountKuota, error)
+	AutoUpdateSession(dateR, timeR string) error
+	CreateSession(payloads adminDto.SessionRequest) (adminDto.SessionDTO, error)
+	GetAllSession(medicalId uint) ([]adminDto.SessionWithStatusDTO, error)
+	GetSessionById(payloads adminDto.SessionWithStatusDTO) (adminDto.SessionWithStatusDTO, error)
+	UpdateSession(payloads adminDto.SessionRequestUpdate) (adminDto.SessionRequestUpdate, error)
+	DeleteSession(payloads adminDto.SessionWithStatusDTO) error
+
+	// TODO Manage Vaccine
+	CreateVaccine(input adminDto.VaccineRequest) (adminDto.VaccineResponse, error)
+	ViewAllVaccine(medicalId uint) ([]adminDto.VaccineDTO, error)
+	UpdateVaccine(payloads adminDto.VaccineDTO, medicalId uint) (adminDto.VaccineDTO, error)
+	DeleteVaccine(data adminDto.VaccineDTO, medicalId uint) error
+	GetVaccineById(vaccineId uint, medicalId uint) (adminDto.VaccineDTO, error)
+
+	// TODO Profile
+	GetProfile(payload adminDto.ProfileRequest) ([]adminDto.ProfilDTO, error)
+	UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.Address, error)
+	GetAdmin(payloads adminDto.ProfileRequest) (adminDto.Address, error)
+	UpdateImage(payloads adminDto.ProfileRequest) error
+
+	// TODO BOOKING
+	CreateCitizenBook(nik, nama, address string) (model.Citizen, error)
+	CreateBooking(payloads adminDto.BookingDto) (adminDto.BookingDto, error)
+	GetMaxQueue(session_id uint) (adminDto.MaxQueue, error)
+	UpdateSessionBooking(session_id uint, kuota string) error
+	UpdateBooking(payloads adminDto.UpdateBooking) (adminDto.UpdateBooking, error)
+	GetAllBooking(medicalId uint) ([]adminDto.BookingAllDto, error)
+	GetBookingById(payloads adminDto.BookingAllDto) (adminDto.BookingAllDto, error)
+	DeleteBooking(payloads adminDto.BookingAllDto) error
 }
 
 type adminRepository struct {
@@ -14,3 +67,73 @@ func NewAdminRepository(db *gorm.DB) *adminRepository {
 }
 
 // TODO ADMIN REPOSITORY HERE
+
+// TODO LOGIN ADMIN
+func (u *adminRepository) LoginAdmin(payloads adminDto.LoginDTO) (model.Admin, error) {
+	var admin model.Admin
+
+	query := u.db.Where("username = ?", payloads.Username).First(&admin)
+	if query.Error != nil {
+		return admin, query.Error
+	}
+
+	if query.RowsAffected < 1 {
+		return admin, errors.New("username is incorrect")
+	}
+
+	return admin, nil
+}
+
+// TODO REGISTER ADMIN
+func (u *adminRepository) RegisterAdmin(payloads adminDto.RegisterAdminDto) (adminDto.RegisterAdminDto, error) {
+
+	if err := u.db.Create(&model.Admin{
+		RoleId:             payloads.RoleId,
+		MedicalFacilitysId: payloads.MedicalId,
+		Username:           payloads.Username,
+		Password:           payloads.Password,
+		CreatedAT:          time.Now(),
+	}).Error; err != nil {
+		return payloads, err
+	}
+
+	return payloads, nil
+}
+
+// TODO DASHBOARD ADMIN
+func (u *adminRepository) GetDashboard(medicalId uint) (adminDto.CountDashboard, error) {
+	dto := adminDto.CountDashboard{}
+	var (
+		vaccineAvail      int
+		bookingToday      int64
+		bookingRegistered int64
+		convDate          string
+	)
+	today := time.Now()
+	date := today.Format("2006-01-02")
+	convDate = string(date)
+
+	// QUERY GET VACCINE AVAILABLE
+	if err := u.db.Model(&model.VaccineVarietie{}).Select("coalesce(sum(kuota), 0) as vaccine_available").Where("expired >= ?", convDate).Where("vaccine_varieties.medical_facilitys_id = ?", medicalId).Find(&vaccineAvail).Error; err != nil {
+		return dto, err
+	}
+
+	// QUERY GET BOOKING TODAY
+	if err := u.db.Model(&model.Booking{}).Joins("join sessions on sessions.session_id = bookings.session_id").Where("bookings.created_at like ?", "%"+convDate+"%").Where("sessions.medical_facilitys_id = ?", medicalId).Count(&bookingToday).Error; err != nil {
+		return dto, err
+	}
+
+	// QUERY GET ALL BOOKING
+	if err := u.db.Model(&model.Booking{}).Joins("join sessions on sessions.session_id = bookings.session_id").Where("sessions.medical_facilitys_id = ?", medicalId).Count(&bookingRegistered).Error; err != nil {
+		return dto, err
+	}
+
+	// USING FORMAT MONEY FROM leekchan/accounting
+	ac := accounting.Accounting{Precision: 0}
+
+	dto.VaccineAvailable = ac.FormatMoney(vaccineAvail)
+	dto.BookingToday = ac.FormatMoney(bookingToday)
+	dto.BookingsRegistered = ac.FormatMoney(bookingRegistered)
+
+	return dto, nil
+}

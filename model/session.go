@@ -1,6 +1,10 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type Session struct {
 	SessionID          uint             `gorm:"primaryKey;autoIncrement" json:"session_id"`
@@ -9,7 +13,7 @@ type Session struct {
 	VaccineVarietie    VaccineVarietie  `gorm:"foreignKey:VaccineId"`
 	VaccineId          uint             `json:"vaccine_id"`
 	Name               string           `gorm:"size:50;not null" json:"name"`
-	Kuota              int              `gorm:"size:10;not null" json:"kuota"`
+	Kuota              string           `gorm:"size:10;not null" json:"kuota"`
 	Dosis              string           `gorm:"size:30;not null" json:"dosis"`
 	Date               string           `gorm:"size:30;not null" json:"date"`
 	StartTime          string           `gorm:"size:20;not null" json:"startTime"`
@@ -17,4 +21,5 @@ type Session struct {
 	Status             string           `gorm:"size:20;not null" json:"status"`
 	CreatedAT          time.Time        `json:"created_at"`
 	UpdatedAT          time.Time        `json:"updated_at"`
+	DeletedAT          gorm.DeletedAt   `gorm:"index"`
 }

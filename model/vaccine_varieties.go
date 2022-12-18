@@ -1,6 +1,10 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type VaccineVarietie struct {
 	VaccineID          uint             `gorm:"primaryKey;autoIncrement" json:"vaccine_id"`
@@ -11,4 +15,5 @@ type VaccineVarietie struct {
 	Expired            string           `gorm:"size:50;not null" json:"expired"`
 	CreatedAT          time.Time        `json:"created_at"`
 	UpdatedAT          time.Time        `json:"updated_at"`
+	DeletedAT          gorm.DeletedAt   `gorm:"index"`
 }
