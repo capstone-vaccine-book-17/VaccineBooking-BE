@@ -35,6 +35,10 @@ func New(e *echo.Echo, db *gorm.DB) {
 	adminController := adminController.NewAdminController(adminService)
 	citizenController := citizenController.NewCitizenController(citizenService)
 
+	e.GET("/", func(c echo.Context) error {
+		return c.String(200, "ping")
+	})
+
 	// TODO ADMIN ROUTE
 
 	v1 := e.Group("/v1")
