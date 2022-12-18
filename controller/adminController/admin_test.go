@@ -2344,7 +2344,7 @@ func createImage() *image.RGBA {
 	}
 
 	// Encode as PNG.
-	os.Create("image.png")
+	_, _ = os.Create("image.png")
 
 	return img
 }
