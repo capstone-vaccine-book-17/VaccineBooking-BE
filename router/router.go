@@ -49,7 +49,7 @@ func New(e *echo.Echo, db *gorm.DB) {
 
 	v1.GET("/", adminController.GetDashboard)
 
-	// TODO AUTH ADMIN
+	// // TODO AUTH ADMIN
 	e.POST("/auth/login", adminController.LoginAdmin)
 
 	// TODO REGISTER
@@ -100,7 +100,7 @@ func New(e *echo.Echo, db *gorm.DB) {
 		v1_booking.DELETE("/:id", adminController.DeleteBooking)
 	}
 
-	// TODO CITIZEN ROUTE
+	// // TODO CITIZEN ROUTE
 
 	// Citizen Auth
 	e.POST("/signup", citizenController.RegisterCitizen)

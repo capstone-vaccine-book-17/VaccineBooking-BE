@@ -45,7 +45,8 @@ type AdminRepository interface {
 	GetProfile(payload adminDto.ProfileRequest) ([]adminDto.ProfilDTO, error)
 	UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.Address, error)
 	GetAdmin(payloads adminDto.ProfileRequest) (adminDto.Address, error)
-	UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO, error)
+	UpdateImage(payloads adminDto.ProfileRequest) error
+
 	// TODO BOOKING
 	CreateCitizenBook(nik, nama, address string) (model.Citizen, error)
 	CreateBooking(payloads adminDto.BookingDto) (adminDto.BookingDto, error)

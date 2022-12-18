@@ -69,17 +69,12 @@ func (u *adminRepository) UpdateProfile(payloads adminDto.ProfileRequest) (admin
 }
 
 // TODO Upload Image
-func (u *adminRepository) UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO, error) {
-
-	res := adminDto.ProfilDTO{
-		Image: payloads.Image,
-	}
-
+func (u *adminRepository) UpdateImage(payloads adminDto.ProfileRequest) error {
 	if err := u.db.Model(&model.MedicalFacilitys{}).Where("medical_facilitys_id = ?", payloads.MedicalFacilitysId).Updates(&model.MedicalFacilitys{
 		Image: payloads.Image,
 	}).Error; err != nil {
-		return res, err
+		return err
 
 	}
-	return res, nil
+	return nil
 }

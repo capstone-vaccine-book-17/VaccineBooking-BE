@@ -2,8 +2,14 @@ package adminService
 
 import (
 	"capstone_vaccine/dto/adminDto"
+	"capstone_vaccine/utils"
+	"context"
 	"errors"
+	"mime/multipart"
+	"os"
 
+	"github.com/cloudinary/cloudinary-go"
+	"github.com/cloudinary/cloudinary-go/api/uploader"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -34,6 +40,12 @@ func (s *adminService) GetProfile(payloads adminDto.ProfileRequest) ([]adminDto.
 // TODO Update Profile & Change Password
 func (s *adminService) UpdateProfile(payloads adminDto.ProfileRequest) (adminDto.ProfileRequest, error) {
 
+	if payloads.NewPassword == "" {
+		payloads.NewPassword = payloads.Password
+
+	}
+	hash, _ := utils.HashBcrypt(payloads.NewPassword)
+
 	dto := adminDto.ProfileRequest{
 		AdminID:            payloads.AdminID,
 		MedicalFacilitysId: payloads.MedicalFacilitysId,
@@ -43,15 +55,16 @@ func (s *adminService) UpdateProfile(payloads adminDto.ProfileRequest) (adminDto
 		ResponsiblePerson:  payloads.ResponsiblePerson,
 		Username:           payloads.Username,
 		Password:           payloads.Password,
-		NewPassword:        payloads.NewPassword,
+		NewPassword:        hash,
 	}
 	new, _ := s.adminRepository.GetAdmin(payloads)
 
-	if err := bcrypt.CompareHashAndPassword([]byte(new.Password), []byte(payloads.Password)); err != nil {
+	if err := bcrypt.CompareHashAndPassword([]byte(new.Password), []byte(dto.Password)); err != nil {
 
 		return dto, errors.New("password incorrect")
 
 	}
+
 	_, err := s.adminRepository.UpdateProfile(dto)
 
 	if err != nil {
@@ -62,22 +75,26 @@ func (s *adminService) UpdateProfile(payloads adminDto.ProfileRequest) (adminDto
 }
 
 // TODO Uploud Image
-func (s *adminService) UpdateImage(payloads adminDto.ProfileRequest) (adminDto.ProfilDTO, error) {
+func (s *adminService) UpdateImage(payloads adminDto.ProfileRequest, file multipart.File) error {
+
+	cld, _ := cloudinary.NewFromURL(os.Getenv("CLOUDINARY_URL"))
+	ctx := context.Background()
+
+	result, errs := cld.Upload.Upload(ctx, file, uploader.UploadParams{})
+	if errs != nil {
+		return errs
+	}
 
 	temp := adminDto.ProfileRequest{
 		MedicalFacilitysId: payloads.MedicalFacilitysId,
-		Image:              payloads.Image,
-	}
-	res, err := s.adminRepository.UpdateImage(temp)
-
-	out := adminDto.ProfilDTO{
-		Image: res.Image,
+		Image:              result.SecureURL,
 	}
 
+	err := s.adminRepository.UpdateImage(temp)
 	if err != nil {
-		return out, err
+		return err
 	}
 
-	return out, nil
+	return nil
 
 }

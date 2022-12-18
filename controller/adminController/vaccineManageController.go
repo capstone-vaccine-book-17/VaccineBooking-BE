@@ -93,7 +93,6 @@ func (u *adminController) UpdateVaccine(c echo.Context) error {
 	if err := c.Bind(&payloads); err != nil {
 		return err
 	}
-
 	if err := c.Validate(&payloads); err != nil {
 		return c.JSON(http.StatusBadRequest, utils.Response{
 			Message: err.Error(),
@@ -108,7 +107,7 @@ func (u *adminController) UpdateVaccine(c echo.Context) error {
 		Expired:   payloads.Expired,
 	}
 
-	res, err := u.adminServ.UpdateVaccine(Vaccine,conv)
+	res, err := u.adminServ.UpdateVaccine(Vaccine, conv)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, utils.Response{
@@ -116,7 +115,6 @@ func (u *adminController) UpdateVaccine(c echo.Context) error {
 			Code:    http.StatusInternalServerError,
 		})
 	}
-
 	return c.JSON(http.StatusOK, utils.Response{
 		Message: "Update Berhasil Dilakukan",
 		Code:    http.StatusOK,
@@ -142,7 +140,7 @@ func (u *adminController) DeleteVaccine(c echo.Context) error {
 		VaccineID: uint(convId),
 	}
 
-	err = u.adminServ.DeleteVaccine(vaccine,conv)
+	err = u.adminServ.DeleteVaccine(vaccine, conv)
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, utils.Response{

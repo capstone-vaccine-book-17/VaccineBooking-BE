@@ -4,12 +4,8 @@ import (
 	"capstone_vaccine/dto/adminDto"
 	"capstone_vaccine/middleware"
 	"capstone_vaccine/utils"
-	"context"
 	"net/http"
-	"os"
 
-	"github.com/cloudinary/cloudinary-go"
-	"github.com/cloudinary/cloudinary-go/api/uploader"
 	"github.com/labstack/echo"
 )
 
@@ -61,12 +57,6 @@ func (u *adminController) UpdateProfile(c echo.Context) error {
 	if err := c.Bind(&payloads); err != nil {
 		return err
 	}
-	if payloads.NewPassword == "" {
-		payloads.NewPassword = payloads.Password
-
-	}
-
-	hash, _ := utils.HashBcrypt(payloads.NewPassword)
 
 	temp := adminDto.ProfileRequest{
 		AdminID:            conv_,
@@ -76,7 +66,7 @@ func (u *adminController) UpdateProfile(c echo.Context) error {
 		Address:            payloads.Address,
 		ResponsiblePerson:  payloads.ResponsiblePerson,
 		Username:           payloads.Username,
-		NewPassword:        hash,
+		NewPassword:        payloads.NewPassword,
 		Password:           payloads.Password,
 	}
 
@@ -98,22 +88,11 @@ func (u *adminController) UpdateProfile(c echo.Context) error {
 // Upload Image
 func (u *adminController) UpdateImage(c echo.Context) error {
 
-	cld, _ := cloudinary.NewFromURL(os.Getenv("CLOUDINARY_URL"))
 	medicalID, _ := middleware.ClaimData(c, "medicalID")
 	conv_medicalID := medicalID.(float64)
 	conv := uint(conv_medicalID)
-
 	fileHeader, _ := c.FormFile("image")
-
 	file, _ := fileHeader.Open()
-
-	ctx := context.Background()
-
-	result, err := cld.Upload.Upload(ctx, file, uploader.UploadParams{})
-
-	if err != nil {
-		return err
-	}
 
 	var payloads adminDto.ProfileRequest
 
@@ -123,9 +102,8 @@ func (u *adminController) UpdateImage(c echo.Context) error {
 
 	temp := adminDto.ProfileRequest{
 		MedicalFacilitysId: conv,
-		Image:              result.SecureURL,
 	}
-	res, err := u.adminServ.UpdateImage(temp)
+	err := u.adminServ.UpdateImage(temp, file)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, utils.Response{
@@ -137,6 +115,5 @@ func (u *adminController) UpdateImage(c echo.Context) error {
 	return c.JSON(http.StatusOK, utils.Response{
 		Message: "Successfully uploaded the file",
 		Code:    http.StatusOK,
-		Data:    res.Image,
 	})
 }
