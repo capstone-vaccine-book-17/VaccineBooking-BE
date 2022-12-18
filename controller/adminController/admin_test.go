@@ -1015,10 +1015,7 @@ func TestCreateMedical_InValid(t *testing.T) {
 
 				_ = json.NewDecoder(w.Result().Body).Decode(&resp)
 
-				// data := resp["data"]
-				// conv, _ := data.(map[string]interface{})
-
-				// assert.Equal(t, v.ExpectedBody.Name, conv["name"])
+				assert.Equal(t, v.ExpectedBody, resp["message"])
 			}
 		})
 	}
