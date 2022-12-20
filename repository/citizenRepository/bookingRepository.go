@@ -9,7 +9,7 @@ import (
 // TODO GET MAX QUEUE
 func (u *citizenRepository) GetMaxQueue(session_id uint) (citizenDto.MaxQueue, error) {
 	var booking citizenDto.MaxQueue
-	if err := u.db.Raw("SELECT max(queue) as total_q FROM `bookings` WHERE session_id = ?", session_id).Scan(&booking).Error; err != nil {
+	if err := u.db.Model(&model.Booking{}).Select("max(queue) as total_q").Where("session_id = ?", session_id).Find(&booking).Error; err != nil {
 		return booking, err
 	}
 
