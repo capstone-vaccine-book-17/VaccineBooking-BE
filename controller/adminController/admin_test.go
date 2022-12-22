@@ -36,12 +36,6 @@ var (
 	controller *adminController
 )
 
-func InitEcho() *echo.Echo {
-	e := echo.New()
-
-	return e
-}
-
 type JwtResponse struct {
 	Token string `json:"token"`
 }
