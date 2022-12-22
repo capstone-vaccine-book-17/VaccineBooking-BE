@@ -67,9 +67,9 @@ func (u *citizenRepository) RegisterCitizen(payloads citizenDto.RegisterDto) (ci
 		UpdatedAT: time.Now(),
 	}
 
-	errA := u.db.Create(&address).Error
-	if errA != nil {
-		return payloads, errA
+	err := u.db.Create(&address).Error
+	if err != nil {
+		return payloads, err
 	}
 
 	citizen := model.Citizen{
@@ -84,9 +84,9 @@ func (u *citizenRepository) RegisterCitizen(payloads citizenDto.RegisterDto) (ci
 		UpdatedAT: time.Now(),
 	}
 
-	errC := u.db.Create(&citizen).Error
-	if errC != nil {
-		return payloads, errC
+	err = u.db.Create(&citizen).Error
+	if err != nil {
+		return payloads, err
 	}
 
 	return payloads, nil
