@@ -9,6 +9,9 @@ import (
 	"github.com/labstack/echo"
 )
 
+const Proses string = "process"
+const Finish string = "selesai"
+
 // Get All Ticket
 func (u *citizenController) GetAllTicket(c echo.Context) error {
 	citizenID, _ := middleware.ClaimData(c, "citizenID")
@@ -37,9 +40,7 @@ func (u *citizenController) GetTicketOnProses(c echo.Context) error {
 	conv_citizenID := citizenID.(float64)
 	conv := uint(conv_citizenID)
 
-	status := "process"
-
-	res, err := u.citizenServ.GetTicketOnStatus(conv, status)
+	res, err := u.citizenServ.GetTicketOnStatus(conv, Proses)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, utils.Response{
@@ -61,9 +62,8 @@ func (u *citizenController) GetTicketOnFinish(c echo.Context) error {
 	conv_citizenID := citizenID.(float64)
 	conv := uint(conv_citizenID)
 
-	status := "selesai"
 
-	res, err := u.citizenServ.GetTicketOnStatus(conv, status)
+	res, err := u.citizenServ.GetTicketOnStatus(conv, Finish)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, utils.Response{
