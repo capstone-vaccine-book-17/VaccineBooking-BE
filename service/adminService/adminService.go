@@ -117,11 +117,6 @@ func (s *adminService) LoginAdmin(payloads adminDto.LoginDTO) (adminDto.LoginJWT
 // TODO DASHBOARD
 // TODO GET DASHBOARD
 func (s *adminService) GetDashboard(medicalId uint) (adminDto.CountDashboard, error) {
-	res, err := s.adminRepository.GetDashboard(medicalId)
+	return s.adminRepository.GetDashboard(medicalId)
 
-	if err != nil {
-		return res, err
-	}
-
-	return res, nil
 }

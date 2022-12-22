@@ -71,24 +71,14 @@ func (s *adminService) CreateBooking(payloads adminDto.BookingDto) (adminDto.Boo
 
 // TODO UPDATE BOOKING
 func (s *adminService) UpdateBooking(payloads adminDto.UpdateBooking) (adminDto.UpdateBooking, error) {
-	res, err := s.adminRepository.UpdateBooking(payloads)
+	return s.adminRepository.UpdateBooking(payloads)
 
-	if err != nil {
-		return res, err
-	}
-
-	return res, nil
 }
 
 // TODO GET ALL BOOKING
 func (s *adminService) GetAllBooking(medicalId uint) ([]adminDto.BookingAllDto, error) {
-	res, err := s.adminRepository.GetAllBooking(medicalId)
+	return s.adminRepository.GetAllBooking(medicalId)
 
-	if err != nil {
-		return nil, err
-	}
-
-	return res, nil
 }
 
 // TODO GET BOOKING BY ID
@@ -108,11 +98,6 @@ func (s *adminService) GetBookingById(payloads adminDto.BookingAllDto) (adminDto
 
 // TODO DELETE BOOKING
 func (s *adminService) DeleteBooking(payloads adminDto.BookingAllDto) error {
-	err := s.adminRepository.DeleteBooking(payloads)
+	return s.adminRepository.DeleteBooking(payloads)
 
-	if err != nil {
-		return err
-	}
-
-	return nil
 }

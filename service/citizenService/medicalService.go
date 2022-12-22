@@ -26,11 +26,6 @@ func (s *citizenService) GetMedicalByCity(payloads citizenDto.SearchKey) ([]citi
 
 // TODO GET MEDICAL BY ID
 func (s *citizenService) GetMedicalById(medicalID uint) (citizenDto.MedicalDto, error) {
-	res, err := s.citizenRepository.GetMedicalById(medicalID)
+	return s.citizenRepository.GetMedicalById(medicalID)
 
-	if err != nil {
-		return res, err
-	}
-
-	return res, nil
 }

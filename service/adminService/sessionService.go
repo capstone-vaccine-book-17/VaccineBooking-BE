@@ -115,11 +115,6 @@ func (s *adminService) UpdateSession(payloads adminDto.SessionRequestUpdate) (ad
 
 func (s *adminService) DeleteSession(payloads adminDto.SessionWithStatusDTO) error {
 
-	err := s.adminRepository.DeleteSession(payloads)
+	return s.adminRepository.DeleteSession(payloads)
 
-	if err != nil {
-		return err
-	}
-
-	return nil
 }

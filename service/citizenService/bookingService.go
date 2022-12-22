@@ -57,11 +57,6 @@ func (s *citizenService) CreateBooking(payloads citizenDto.BookingDto) (citizenD
 
 // TODO GET LAST BOOKING FOR TICKET
 func (s *citizenService) GetLastBooking(citizenId uint) (citizenDto.TicketBooking, error) {
-	res, err := s.citizenRepository.GetLastBooking(citizenId)
+	return s.citizenRepository.GetLastBooking(citizenId)
 
-	if err != nil {
-		return res, err
-	}
-
-	return res, nil
 }
