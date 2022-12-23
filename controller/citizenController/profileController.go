@@ -263,19 +263,19 @@ func (u *citizenController) UpdatePassword(c echo.Context) error {
 		CitizenID: conv,
 	}
 
-	res, _ := u.citizenServ.GetEmail(temp1)
+	check, _ := u.citizenServ.GetEmail(temp1)
 
-	errss := utils.CompareHash(res.Password, payloads.OldPassword)
-	if errss != nil {
+	err := utils.CompareHash(check.Password, payloads.OldPassword)
+	if err != nil {
 		return c.JSON(http.StatusBadRequest, utils.Response{
 			Message: "password incorrect",
 			Code:    http.StatusBadRequest,
 		})
 	}
 
-	res2, _ := u.citizenServ.GetEmail(temp1)
-	errsse := utils.CompareHash(res2.Password, payloads.NewPassword)
-	if errsse == nil {
+	old_pw, _ := u.citizenServ.GetEmail(temp1)
+	err = utils.CompareHash(old_pw.Password, payloads.NewPassword)
+	if err == nil {
 		return c.JSON(http.StatusBadRequest, utils.Response{
 			Message: "New password is the same as old password",
 			Code:    http.StatusBadRequest,
@@ -284,7 +284,7 @@ func (u *citizenController) UpdatePassword(c echo.Context) error {
 
 	hash, _ := utils.HashBcrypt(payloads.NewPassword)
 
-	err := utils.CompareHash(hash, payloads.ConfirmNewPassword)
+	err = utils.CompareHash(hash, payloads.ConfirmNewPassword)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, utils.Response{
 			Message: "confirmation New password is wrong",
