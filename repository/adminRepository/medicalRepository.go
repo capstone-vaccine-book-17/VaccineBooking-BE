@@ -18,9 +18,9 @@ func (u *adminRepository) CreateMedical(payloads adminDto.MedicalDto) (adminDto.
 		UpdatedAT: time.Now(),
 	}
 
-	errA := u.db.Create(&address).Error
-	if errA != nil {
-		return payloads, errA
+	err := u.db.Create(&address).Error
+	if err != nil {
+		return payloads, err
 	}
 
 	medical := model.MedicalFacilitys{
@@ -31,9 +31,9 @@ func (u *adminRepository) CreateMedical(payloads adminDto.MedicalDto) (adminDto.
 		UpdatedAT: time.Now(),
 	}
 
-	errM := u.db.Create(&medical).Error
-	if errM != nil {
-		return payloads, errM
+	err = u.db.Create(&medical).Error
+	if err != nil {
+		return payloads, err
 	}
 
 	return payloads, nil

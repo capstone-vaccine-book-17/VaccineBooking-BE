@@ -5,13 +5,7 @@ import "capstone_vaccine/dto/citizenDto"
 //TODO Create Family Member
 
 func (s *citizenService) CreateFamilyMember(payloads citizenDto.FamilyReq) error {
-	err := s.citizenRepository.CreateFamilyMember(payloads)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return s.citizenRepository.CreateFamilyMember(payloads)
 
 }
 
@@ -42,22 +36,11 @@ func (s *citizenService) GetFamilys(payloads citizenDto.FamilyReq) ([]citizenDto
 
 //TODO Delete Members
 func (s *citizenService) DeleteMember(payloads citizenDto.FamilylDTO) error {
-	err := s.citizenRepository.DeleteMember(payloads)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-
+	return s.citizenRepository.DeleteMember(payloads)
 }
 
 //TODO GET Detail Member
 func (s *citizenService) GetDetailMember(payload citizenDto.FamilylDTO) (citizenDto.FamilylDTO, error) {
-	res, err := s.citizenRepository.GetDetailMember(payload)
-	if err != nil {
-		return res, err
-	}
-	return res, err
+	return s.citizenRepository.GetDetailMember(payload)
 
 }

@@ -46,24 +46,13 @@ func (s *adminService) ViewAllVaccine(medicalId uint) ([]adminDto.VaccineDTO, er
 // TODO Update Vaccine
 func (s *adminService) UpdateVaccine(payloads adminDto.VaccineDTO, medicalId uint) (adminDto.VaccineDTO, error) {
 
-	res, err := s.adminRepository.UpdateVaccine(payloads, medicalId)
-
-	if err != nil {
-		return res, err
-	}
-
-	return res, nil
+	return s.adminRepository.UpdateVaccine(payloads, medicalId)
 }
 
 // TODO DELETE VACCINE
 func (s *adminService) DeleteVaccine(data adminDto.VaccineDTO, medicalId uint) error {
-	err := s.adminRepository.DeleteVaccine(data, medicalId)
+	return s.adminRepository.DeleteVaccine(data, medicalId)
 
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 // TODO GET VACCINE
