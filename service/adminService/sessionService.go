@@ -3,7 +3,6 @@ package adminService
 import (
 	"capstone_vaccine/dto/adminDto"
 	"errors"
-	"fmt"
 	"time"
 )
 
@@ -60,7 +59,6 @@ func (s *adminService) GetAllSession(medicalId uint) ([]adminDto.SessionWithStat
 			now, _ := time.Parse("15:04", string(timeFormat))
 			endTime, _ := time.Parse("15:04", res[i].EndTime)
 			if endTime.Before(now) {
-				fmt.Println(res[i].EndTime)
 				err := s.adminRepository.AutoUpdateSession(res[i].Date, res[i].EndTime)
 				if err != nil {
 					return res, err
