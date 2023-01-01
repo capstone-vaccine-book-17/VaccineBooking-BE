@@ -101,9 +101,9 @@ func (u *citizenController) DeleteMember(c echo.Context) error {
 	member := citizenDto.FamilylDTO{
 		FamilyId: uint(convId),
 	}
-	errs := u.citizenServ.DeleteMember(member)
+	err = u.citizenServ.DeleteMember(member)
 
-	if errs != nil {
+	if err != nil {
 		return c.JSON(http.StatusInternalServerError, utils.Response{
 			Message: err.Error(),
 			Code:    http.StatusInternalServerError,
@@ -132,9 +132,9 @@ func (u *citizenController) GetDetailMember(c echo.Context) error {
 	member := citizenDto.FamilylDTO{
 		FamilyId: uint(convId),
 	}
-	res, errs := u.citizenServ.GetDetailMember(member)
+	res, err := u.citizenServ.GetDetailMember(member)
 
-	if errs != nil {
+	if err != nil {
 		return c.JSON(http.StatusInternalServerError, utils.Response{
 			Message: err.Error(),
 			Code:    http.StatusInternalServerError,

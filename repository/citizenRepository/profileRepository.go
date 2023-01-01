@@ -50,8 +50,8 @@ func (u *citizenRepository) UpdateAddress(payloads citizenDto.AddressCitizenReq)
 
 	temp := citizenDto.AddressCitizenReq{}
 
-	if errh := u.db.Model(&model.Citizen{}).Select("citizens.*").Where("citizen_id=?", payloads.CitizenID).Find(&temp).Error; errh != nil {
-		return errh
+	if err := u.db.Model(&model.Citizen{}).Select("citizens.*").Where("citizen_id=?", payloads.CitizenID).Find(&temp).Error; err != nil {
+		return err
 	}
 
 	if err := u.db.Model(&model.Address{}).Where("address_id = ?", temp.AddressID).Updates(&model.Address{

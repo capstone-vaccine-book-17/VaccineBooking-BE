@@ -8,13 +8,8 @@ import (
 // TODO Get Profile
 func (s *citizenService) GetProfile(payloads citizenDto.ProfileReq) (citizenDto.ProfileDTO, error) {
 
-	res, err := s.citizenRepository.GetProfile(payloads)
+	return s.citizenRepository.GetProfile(payloads)
 
-	if err != nil {
-		return res, err
-	}
-
-	return res, nil
 }
 
 // TODO Update & Upload Image
@@ -69,60 +64,33 @@ func (s *citizenService) GetPersonalData(payload citizenDto.ProfileReq) ([]citiz
 // TODO Update Detail Address
 func (s *citizenService) UpdateAddress(payloads citizenDto.AddressCitizenReq) error {
 
-	err := s.citizenRepository.UpdateAddress(payloads)
+	return s.citizenRepository.UpdateAddress(payloads)
 
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 // TODO GET Detail Address
 func (s *citizenService) GetAddress(payload citizenDto.ProfileReq) (citizenDto.AddressResp, error) {
 
-	res, err := s.citizenRepository.GetAddress(payload)
-
-	if err != nil {
-		return res, err
-	}
-
-	return res, nil
+	return s.citizenRepository.GetAddress(payload)
 }
 
 // TODO Get Email
 func (s *citizenService) GetEmail(payloads citizenDto.ProfileReq) (citizenDto.LoginDto, error) {
 
-	res, err := s.citizenRepository.GetEmail(payloads)
+	return s.citizenRepository.GetEmail(payloads)
 
-	if err != nil {
-		return res, err
-	}
-
-	return res, nil
 }
 
 // TODO Update Email
 func (s *citizenService) UpdateEmail(payloads citizenDto.UpdateEmail) error {
 
-	err := s.citizenRepository.UpdateEmail(payloads)
+	return s.citizenRepository.UpdateEmail(payloads)
 
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 // TODO Update Password
 func (s *citizenService) UpdatePassword(payloads citizenDto.UpdatePassword) (citizenDto.LoginDto, error) {
 
-	res, err := s.citizenRepository.UpdatePassword(payloads)
-
-	if err != nil {
-		return res, err
-	}
-
-	return res, nil
+	return s.citizenRepository.UpdatePassword(payloads)
 
 }

@@ -35,10 +35,6 @@ func (s *adminService) CreateSession(payloads adminDto.SessionRequest) (adminDto
 	return res, nil
 }
 
-func InTimeSpan(start, end, check time.Time) bool {
-	return check.After(start) && check.Before(end)
-}
-
 // TODO GET ALL SESSION
 func (s *adminService) GetAllSession(medicalId uint) ([]adminDto.SessionWithStatusDTO, error) {
 
@@ -117,11 +113,6 @@ func (s *adminService) UpdateSession(payloads adminDto.SessionRequestUpdate) (ad
 
 func (s *adminService) DeleteSession(payloads adminDto.SessionWithStatusDTO) error {
 
-	err := s.adminRepository.DeleteSession(payloads)
+	return s.adminRepository.DeleteSession(payloads)
 
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
