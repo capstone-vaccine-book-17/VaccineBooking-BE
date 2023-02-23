@@ -9,7 +9,7 @@ require (
 	github.com/joho/godotenv v1.4.0
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/leekchan/accounting v1.0.0
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.8.1
 	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3
 	gorm.io/driver/mysql v1.4.4
 	gorm.io/gorm v1.24.1
@@ -33,12 +33,12 @@ require (
 	github.com/pkg/errors v0.8.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/shopspring/decimal v0.0.0-20180709203117-cd690d0c9e24 // indirect
-	github.com/stretchr/objx v0.1.0 // indirect
+	github.com/stretchr/objx v0.5.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.1 // indirect
 	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2 // indirect
 	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
