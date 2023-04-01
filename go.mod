@@ -12,7 +12,7 @@ require (
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3
 	gorm.io/driver/mysql v1.4.4
-	gorm.io/gorm v1.24.1
+	gorm.io/gorm v1.24.6
 )
 
 require (
